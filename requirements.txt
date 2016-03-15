@@ -1,2 +1,2 @@
 Flask==0.10.1
-pymesync==0.0.1
+pymesync==0.1.0
