@@ -11,5 +11,5 @@ $ source venv/bin/activate
 
 To run tests, do:
 ```
-(venv) $ sh test.sh
+(venv) $ nosetests
 ```
