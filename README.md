@@ -1,5 +1,7 @@
 # timesync-frontend-flask
 
+[![Build Status](https://travis-ci.org/osuosl/timesync-frontend-flask.svg?branch=develop)](https://travis-ci.org/osuosl/timesync-frontend-flask)
+
 Front-end webapp for the TimeSync API.
 
 To install requirements, do:
