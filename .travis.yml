@@ -1,0 +1,11 @@
+language: python
+
+python:
+    - "2.7"
+
+notificaions:
+    email: false
+
+script:
+    - flake8 app
+    - flake8 tests
