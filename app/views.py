@@ -23,7 +23,7 @@ def login():
         password = request.form['password']
 
         # Login to TimeSync
-        ts = pymesync.TimeSync(baseurl="http://timesync-staging.osuosl.org/v1")
+        ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'])
         token = ts.authenticate(username=username,
                                 password=password,
                                 auth_type="password")
