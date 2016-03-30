@@ -6,8 +6,9 @@
 
     <body>
         <form method="POST">
-            <p><input type="text" name="username" placeholder="username"></p>
-            <p><input type="password" name="password" placeholder="password"></p>
+            {{ form.csrf_token }}
+            <p>{{ form.username }}</p>
+            <p>{{ form.password }}</p>
             <p><input type="submit" value="Login"></p>
         </form>
     </body>

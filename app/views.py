@@ -1,7 +1,8 @@
-from flask import session, redirect, url_for, request, render_template
+from flask import session, redirect, url_for, render_template
 from app import app
 from datetime import timedelta
 import pymesync
+import forms
 
 
 # Expires users after 30 minutes OF UNACTIVITY
@@ -18,9 +19,12 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = forms.LoginForm()
+
+    # TODO: Flash message on invalid submission
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
 
         # Login to TimeSync
         ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'])
@@ -37,4 +41,4 @@ def login():
         session['ts'] = token
         return redirect(url_for('index'))
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)

@@ -9,13 +9,15 @@ class LoginTestCase(unittest.TestCase):
 
     def setUp(self):
         app.testing = True
+        app.config['WTF_CSRF_ENABLED'] = False
+
         self.client = app.test_client()
 
         # Application context
         self.ctx = app.test_request_context()
         self.ctx.push()
 
-        self.baseurl = 'http://timesync-staging.osuosl.org/v1'
+        self.baseurl = app.config['TIMESYNC_URL']
 
     def tearDown(self):
         self.ctx.pop()
