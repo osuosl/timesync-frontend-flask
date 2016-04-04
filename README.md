@@ -19,6 +19,13 @@ To run the app, you should first edit the configuration:
 communicate with.
 5. If you want to run it in debug mode, make sure you set `DEBUG` to `True`.
 
+To start the app, do:
+```
+(venv) $ python run.py
+```
+You can access the webpage at http://localhost:5000. The login page can be found
+at http://localhost:5000/login.
+
 To run tests, do:
 ```
 (venv) $ nosetests
