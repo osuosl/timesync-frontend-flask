@@ -12,4 +12,5 @@ install:
 script:
     - flake8 app
     - flake8 tests
+    - flake8 config.py.dist
     - nosetests
