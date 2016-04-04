@@ -73,5 +73,6 @@ class LoginTestCase(unittest.TestCase):
         assert self.sess['username'] == self.username
 
         # Make sure token is valid
-        ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'])
+        ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'],
+                               test=True)
         assert type(ts.token_expiration_time()) is datetime.datetime
