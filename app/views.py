@@ -1,4 +1,4 @@
-from flask import session, redirect, url_for, render_template
+from flask import session, redirect, url_for, request, render_template, flash
 from app import app
 from datetime import timedelta
 import pymesync
@@ -21,7 +21,6 @@ def index():
 def login():
     form = forms.LoginForm()
 
-    # TODO: Flash message on invalid submission
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -37,9 +36,11 @@ def login():
         if 'error' in token or 'pymesync error' in token:
             print token
             return 'There was an error.', 500
-
-        session['username'] = username
-        session['token'] = token['token']
-        return redirect(url_for('index'))
+        else:
+            session['username'] = username
+            session['token'] = token['token']
+            return redirect(url_for('index'))
+    elif request.method == 'POST':
+        flash('Invalid submission.')
 
     return render_template('login.html', form=form)
