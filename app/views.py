@@ -38,7 +38,7 @@ def login():
             return 'There was an error.', 500
 
         session['username'] = username
-        session['ts'] = token
+        session['token'] = token['token']
         return redirect(url_for('index'))
 
     return render_template('login.html', form=form)

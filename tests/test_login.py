@@ -67,11 +67,11 @@ class LoginTestCase(unittest.TestCase):
 
         # Make sure username and token stored in session
         assert 'username' in self.sess
-        assert 'ts' in self.sess
+        assert 'token' in self.sess
 
         # Make sure username is correct
         assert self.sess['username'] == self.username
 
         # Make sure token is valid
-        ts = pymesync.TimeSync(self.baseurl, token=self.sess['ts']['token'])
+        ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'])
         assert type(ts.token_expiration_time()) is datetime.datetime
