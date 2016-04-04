@@ -9,6 +9,9 @@ notificaions:
 install:
     - pip install -r requirements.txt
 
+before_script:
+    - mv config.py.dist config.py
+
 script:
     - flake8 app
     - flake8 tests
