@@ -15,5 +15,5 @@ before_script:
 script:
     - flake8 app
     - flake8 tests
-    - flake8 config.py.dist
+    - flake8 config.py
     - nosetests
