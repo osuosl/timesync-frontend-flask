@@ -19,6 +19,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    status = 200
     form = forms.LoginForm()
 
     if form.validate_on_submit():
@@ -42,5 +43,6 @@ def login():
             return redirect(url_for('index'))
     elif request.method == 'POST':
         flash('Invalid submission.')
+        status = 401
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form), status
