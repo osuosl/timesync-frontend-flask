@@ -22,6 +22,7 @@ def login():
     status = 200
     form = forms.LoginForm()
 
+    # If POST request and form valid, login user
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -33,16 +34,21 @@ def login():
                                 password=password,
                                 auth_type="password")
 
+        # If regular error, tell user error
         if 'error' in token:
             flash(token['text'])
             status = token['status']
+        # If pymesync error, tell user vague error
         elif 'pymesync error' in token:
             print token
             return 'There was an error.', 500
+        # Else success, redirect to index page
         else:
             session['username'] = username
             session['token'] = token['token']
             return redirect(url_for('index'))
+
+    # Else if POST request (meaning form invalid), notify user
     elif request.method == 'POST':
         flash('Invalid submission.')
         status = 401
