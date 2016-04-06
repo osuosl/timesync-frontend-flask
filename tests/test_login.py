@@ -8,7 +8,7 @@ import datetime
 class LoginTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.testing = True
+        app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
 
         self.client = app.test_client()

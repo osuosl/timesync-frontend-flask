@@ -28,7 +28,7 @@ def login():
 
         # Login to TimeSync
         ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
-                               test=app.testing)
+                               test=app.config['TESTING'])
         token = ts.authenticate(username=username,
                                 password=password,
                                 auth_type="password")
