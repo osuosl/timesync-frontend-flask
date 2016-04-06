@@ -33,8 +33,10 @@ def login():
                                 password=password,
                                 auth_type="password")
 
-        # TODO: Better error handling
-        if 'error' in token or 'pymesync error' in token:
+        if 'error' in token:
+            flash(token['text'])
+            status = token['status']
+        elif 'pymesync error' in token:
             print token
             return 'There was an error.', 500
         else:
