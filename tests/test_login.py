@@ -37,6 +37,22 @@ class LoginTestCase(unittest.TestCase):
 
         return res
 
+    def badLogin(self):
+        """Attempts login without a password, causing an error."""
+        username = "test"
+        password = ""
+
+        res = self.client.post(url_for('login'), data=dict(
+            username=username,
+            password=password
+        ), follow_redirects=True)
+
+        # Get session object
+        with self.client.session_transaction() as sess:
+            self.sess = sess
+
+        return res
+
     def test_url_endpoint(self):
         """Make sure the url endpoint for login exists."""
         url = url_for('login')
@@ -76,3 +92,10 @@ class LoginTestCase(unittest.TestCase):
         ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'],
                                test=True)
         assert type(ts.token_expiration_time()) is datetime.datetime
+
+    def test_invalid_login(self):
+        """Tests invalid login on bad form submission."""
+        res = self.badLogin()
+
+        assert res.status_code == 401
+        assert 'Invalid submission.' in res.get_data()
