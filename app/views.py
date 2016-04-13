@@ -56,6 +56,13 @@ def login():
     return render_template('login.html', form=form), status
 
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('token', None)
+    return redirect(url_for('index'))
+
+
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     # Check if logged in first
