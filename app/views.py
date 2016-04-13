@@ -46,7 +46,7 @@ def login():
         else:
             session['username'] = username
             session['token'] = token['token']
-            return redirect(url_for('index'))
+            return form.redirect(url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
     elif request.method == 'POST':
@@ -54,3 +54,34 @@ def login():
         status = 401
 
     return render_template('login.html', form=form), status
+
+
+@app.route('/submit', methods=['GET', 'POST'])
+def submit():
+    # Check if logged in first
+    if 'token' not in session and request.method == 'GET':
+        return redirect(url_for('login', next=request.url_rule))
+    elif 'token' not in session and request.method == 'POST':
+        return "Not logged in.", 401
+
+    form = forms.SubmitTimesForm()
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'], token=session['token'])
+
+    projects = ts.get_projects()
+
+    # Load the projects into a list of tuples
+    choices = []
+    for project in projects:
+        choices.append((project['name'], project['name']))
+    form.project.choices = choices
+
+    # If form submitted (POST)
+    # TODO: Use create_time to actually submit time
+    if form.validate_on_submit():
+        pass
+
+    # If not submitted (GET)
+
+    return render_template('submit.html', form=form)
