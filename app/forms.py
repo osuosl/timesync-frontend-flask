@@ -1,6 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, IntegerField, SelectField, \
-    DateField, HiddenField
+from wtforms import StringField, PasswordField, SelectField, DateField, \
+    HiddenField
 from wtforms.validators import DataRequired
 from urlparse import urlparse, urljoin
 from flask import request, url_for, redirect
@@ -45,7 +45,7 @@ class LoginForm(RedirectForm):
 
 class SubmitTimesForm(Form):
     user = StringField('User:', validators=[DataRequired()])
-    duration = IntegerField('Duration:', validators=[DataRequired()])
+    duration = StringField('Duration:', validators=[DataRequired()])
     project = SelectField('Project:', validators=[DataRequired()])
     date_worked = DateField('Date Worked:', format='%Y-%m-%d',
                             description='yyyy-mm-dd',
