@@ -24,7 +24,8 @@ To start the app, do:
 (venv) $ python run.py
 ```
 You can access the webpage at http://localhost:5000. The login page can be found
-at http://localhost:5000/login.
+at http://localhost:5000/login. To submit a time, visit
+http://localhost:5000/submit.
 
 To run tests, do:
 ```
