@@ -124,9 +124,14 @@ def submit():
         if issue_uri:
             time['issue_uri'] = issue_uri
 
-        print ts.create_time(time=time)
+        res = ts.create_time(time=time)
 
-        return str(date_worked.strftime('%Y-%m-%d'))
+        # TODO: Better error handling
+        if 'error' in res:
+            return "There was an error.", 500
+
+        flash("Time successfully submitted.")
+        return redirect(url_for('submit'))
 
     # If not submitted (GET)
 
