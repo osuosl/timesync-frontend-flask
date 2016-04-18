@@ -133,6 +133,14 @@ def submit():
         flash("Time successfully submitted.")
         return redirect(url_for('submit'))
 
+    # Flash any form errors
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("%s %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'error')
+
     # If not submitted (GET)
 
     return render_template('submit.html', form=form)
