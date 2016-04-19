@@ -19,8 +19,8 @@ def isLoggedIn():
 
     expire = ts.token_expiration_time()
 
-    # TODO: Better error handling
-    if type(expire) is dict and 'error' in expire:
+    if type(expire) is dict and ('error' in expire or
+                                 'pymesync error' in expire):
         return False
 
     if datetime.now() > expire and not app.config['TESTING']:
@@ -98,7 +98,7 @@ def submit():
     projects = ts.get_projects()
 
     # TODO: Better error handling
-    if 'error' in projects:
+    if 'error' in projects or 'pymesync error' in projects:
         return "There was an error.", 500
 
     # Load the projects into a list of tuples
@@ -149,7 +149,7 @@ def submit():
         res = ts.create_time(time=time)
 
         # TODO: Better error handling
-        if 'error' in res:
+        if 'error' in res or 'pymesync error' in res:
             return "There was an error.", 500
 
         flash("Time successfully submitted.")
