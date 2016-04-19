@@ -53,6 +53,15 @@ class LoginTestCase(unittest.TestCase):
 
         return res
 
+    def logout(self):
+        res = self.client.get(url_for('logout'))
+
+        # Get session object
+        with self.client.session_transaction() as sess:
+            self.sess = sess
+
+        return res
+
     def test_url_endpoint(self):
         """Make sure the url endpoint for login exists."""
         url = url_for('login')
@@ -99,3 +108,17 @@ class LoginTestCase(unittest.TestCase):
 
         assert res.status_code == 401
         assert 'Invalid submission.' in res.get_data()
+
+    def test_logout(self):
+        """Tests successful logout on form submission."""
+        res = self.logout()
+
+        assert res.status_code == 302
+
+    def test_session_destruction(self):
+        """Make sure the logout removes any session cookies."""
+        self.login()
+        self.logout()
+
+        assert 'username' not in self.sess
+        assert 'token' not in self.sess
