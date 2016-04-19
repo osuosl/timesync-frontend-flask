@@ -16,8 +16,6 @@ class SubmitTestCase(unittest.TestCase):
         self.ctx = app.test_request_context()
         self.ctx.push()
 
-        self.baseurl = app.config['TIMESYNC_URL']
-
     def tearDown(self):
         self.ctx.pop()
 
@@ -64,7 +62,7 @@ class SubmitTestCase(unittest.TestCase):
         assert endpoint == url_for('login')
 
     def test_form_fields(self):
-        """Tests the login page for correct form fields."""
+        """Tests the submit page for correct form fields."""
         self.login()
 
         res = self.client.get(url_for('submit'))
