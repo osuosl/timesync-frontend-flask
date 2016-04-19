@@ -38,9 +38,9 @@ class RedirectForm(Form):
 
 class LoginForm(RedirectForm):
     username = StringField('username', validators=[DataRequired()],
-                           render_kw={"placeholder": 'username'})
+                           render_kw={'placeholder': 'username'})
     password = PasswordField('password', validators=[DataRequired()],
-                             render_kw={"placeholder": 'password'})
+                             render_kw={'placeholder': 'password'})
 
 
 class SubmitTimesForm(Form):

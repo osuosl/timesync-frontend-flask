@@ -23,8 +23,8 @@ class LoginTestCase(unittest.TestCase):
         self.ctx.pop()
 
     def login(self):
-        self.username = "test"
-        self.password = "test"
+        self.username = 'test'
+        self.password = 'test'
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
@@ -39,8 +39,8 @@ class LoginTestCase(unittest.TestCase):
 
     def badLogin(self):
         """Attempts login without a password, causing an error."""
-        username = "test"
-        password = ""
+        username = 'test'
+        password = ''
 
         res = self.client.post(url_for('login'), data=dict(
             username=username,

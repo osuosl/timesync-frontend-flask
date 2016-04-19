@@ -15,7 +15,7 @@ def make_session_permanent():
 
 @app.route('/')
 def index():
-    return 'Welcome to timesync-frontend.'
+    return "Welcome to timesync-frontend."
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -33,7 +33,7 @@ def login():
                                test=app.config['TESTING'])
         token = ts.authenticate(username=username,
                                 password=password,
-                                auth_type="password")
+                                auth_type='password')
 
         # If regular error, tell user error
         if 'error' in token:
@@ -42,7 +42,7 @@ def login():
         # If pymesync error, tell user vague error
         elif 'pymesync error' in token:
             print token
-            return 'There was an error.', 500
+            return "There was an error.", 500
         # Else success, redirect to index page
         else:
             session['username'] = username
@@ -51,7 +51,7 @@ def login():
 
     # Else if POST request (meaning form invalid), notify user
     elif request.method == 'POST':
-        flash('Invalid submission.')
+        flash("Invalid submission.")
         status = 401
 
     return render_template('login.html', form=form), status

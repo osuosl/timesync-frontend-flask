@@ -22,8 +22,8 @@ class SubmitTestCase(unittest.TestCase):
         self.ctx.pop()
 
     def login(self):
-        self.username = "test"
-        self.password = "test"
+        self.username = 'test'
+        self.password = 'test'
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
