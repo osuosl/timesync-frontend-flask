@@ -23,8 +23,8 @@ class LoginTestCase(unittest.TestCase):
         self.ctx.pop()
 
     def login(self):
-        self.username = "test"
-        self.password = "test"
+        self.username = 'test'
+        self.password = 'test'
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
@@ -37,10 +37,10 @@ class LoginTestCase(unittest.TestCase):
 
         return res
 
-    def badLogin(self):
+    def bad_login(self):
         """Attempts login without a password, causing an error."""
-        username = "test"
-        password = ""
+        username = 'test'
+        password = ''
 
         res = self.client.post(url_for('login'), data=dict(
             username=username,
@@ -91,11 +91,11 @@ class LoginTestCase(unittest.TestCase):
         self.login()
 
         # Make sure username and token stored in session
-        assert 'username' in self.sess
+        assert 'user' in self.sess
         assert 'token' in self.sess
 
         # Make sure username is correct
-        assert self.sess['username'] == self.username
+        assert self.sess['user']['username'] == self.username
 
         # Make sure token is valid
         ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'],
@@ -104,7 +104,7 @@ class LoginTestCase(unittest.TestCase):
 
     def test_invalid_login(self):
         """Tests invalid login on bad form submission."""
-        res = self.badLogin()
+        res = self.bad_login()
 
         assert res.status_code == 401
         assert 'Invalid submission.' in res.get_data()

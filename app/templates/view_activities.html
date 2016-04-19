@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %} View Activities {% endblock %}
+
+{% block body%}
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Activity Name</th>
+                <th>Activity Slug</th>
+            </tr>
+        </thead>
+
+        {% for a in activities %}
+        <tr>
+        {% if is_admin %}
+            <td><a href="{{ url_for('edit_activity', slug=a['slug']) }}">EDIT</a></td>
+        {% else %}
+            <td></td>
+        {% endif %}
+            <td>{{ a['name'] }}</td>
+            <td>{{ a['slug'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

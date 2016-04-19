@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %} timesync-frontend {% endblock %}
+{% block imports %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+    <nav class="header">
+        <a href="{{ url_for('login', next=request.url_rule) }}">Login</a>
+        {% if is_logged_in %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </nav>
+
+    {% if is_logged_in %}
+        <div class="menu">
+            <a href="{{ url_for('create_time') }}">Submit Time</a>
+            <a href="{{ url_for('view_times') }}">View Times</a>
+            <br />
+            {% if is_admin %}
+                <a href="/admin">Admin</a>
+            {% else %}
+                <a href="{{ url_for('view_activities') }}">View Activities</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

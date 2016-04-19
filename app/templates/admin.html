@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %} Admin {% endblock %}
+{% block imports %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+    <nav class="header">
+        <a href="{{ url_for('login', next=request.url_rule) }}">Login</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+
+    <div class="menu">
+        {# TODO: Use url_for() when pages are implemented #}
+        <a href="/users/create">Create User</a>
+        <a href="/users">Get User</a>
+        <a href="/users/edit">Update User</a>
+        <a href="/users/delete">Delete User</a>
+        <br />
+        <a href="{{ url_for('create_activity') }}">Create Activity</a>
+        <a href="{{ url_for('view_activities') }}">View Activities</a>
+    </div>
+{% endblock %}
