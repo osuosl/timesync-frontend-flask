@@ -1,16 +1,33 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app
-from datetime import timedelta
+from datetime import datetime
 import pymesync
 import forms
 import re
 
 
-# Expires users after 30 minutes OF UNACTIVITY
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=30)
+def isLoggedIn():
+    """Checks if the user is logged in. Also checks token expiration time,
+        logging the user out if their token is expired."""
+
+    if 'token' not in session:
+        return False
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+
+    expire = ts.token_expiration_time()
+
+    # TODO: Better error handling
+    if type(expire) is dict and 'error' in expire:
+        return False
+
+    if datetime.now() > expire and not app.config['TESTING']:
+        logout()
+        return False
+
+    return True
 
 
 @app.route('/')
@@ -67,17 +84,22 @@ def logout():
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     # Check if logged in first
-    if 'token' not in session and request.method == 'GET':
+    if not isLoggedIn() and request.method == 'GET':
         return redirect(url_for('login', next=request.url_rule))
-    elif 'token' not in session and request.method == 'POST':
+    elif not isLoggedIn() and request.method == 'POST':
         return "Not logged in.", 401
 
     form = forms.SubmitTimesForm()
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
-                           test=app.config['TESTING'], token=session['token'])
+                           test=app.config['TESTING'],
+                           token=session['token'])
 
     projects = ts.get_projects()
+
+    # TODO: Better error handling
+    if 'error' in projects:
+        return "There was an error.", 500
 
     # Load the projects into a list of tuples
     choices = []
