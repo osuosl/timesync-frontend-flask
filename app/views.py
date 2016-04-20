@@ -32,7 +32,8 @@ def isLoggedIn():
 
 @app.route('/')
 def index():
-    return "Welcome to timesync-frontend."
+    isLoggedIn = 'token' in session
+    return render_template('index.html', isLoggedIn=isLoggedIn)
 
 
 @app.route('/login', methods=['GET', 'POST'])
