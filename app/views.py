@@ -84,10 +84,11 @@ def logout():
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     # Check if logged in first
-    if not isLoggedIn() and request.method == 'GET':
-        return redirect(url_for('login', next=request.url_rule))
-    elif not isLoggedIn() and request.method == 'POST':
-        return "Not logged in.", 401
+    if not isLoggedIn():
+        if request.method == 'GET':
+            return redirect(url_for('login', next=request.url_rule))
+        elif request.method == 'POST':
+            return "Not logged in.", 401
 
     form = forms.SubmitTimesForm()
 
