@@ -46,7 +46,7 @@ class IndexPageTestCase(unittest.TestCase):
     def test_unauthorized_menu_links(self):
         """Make sure unauthorized users can only see login link."""
         link = 'Login'
-        badLinks = ['Submit', 'Reports', 'Admin']
+        badLinks = ['Logout', 'Submit', 'Reports', 'Admin']
 
         res = self.client.get(url_for('index'))
 
@@ -59,7 +59,7 @@ class IndexPageTestCase(unittest.TestCase):
         """Tests the index page for correct menu links."""
         self.login()
 
-        links = ['Login', 'Submit', 'Reports']
+        links = ['Login', 'Logout', 'Submit', 'Reports']
         badLink = 'Admin'  # Test user shouldn't see link
 
         res = self.client.get(url_for('index'))

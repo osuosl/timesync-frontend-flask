@@ -7,7 +7,10 @@
 
 {% block body %}
     <nav class="header">
-        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('login', next=request.url_rule) }}">Login</a>
+        {% if isLoggedIn %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
     </nav>
 
     {% if isLoggedIn %}
