@@ -18,8 +18,9 @@
             <a href="{{ url_for('submit') }}">Submit</a>
             {# TODO: Change to url_for('reports') #}
             <a href="/reports">Reports</a>
+            {% if isAdmin %}
+                <a href="/admin">Admin</a>
+            {% endif %}
         </div>
     {% endif %}
-
-    {# TODO: Add Admin link for users with access #}
 {% endblock %}
