@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %} View Times {% endblock %}
+{% block body%}
+    <div class="filter-params">
+        <form method="POST">
+            {{ form.csrf_token}}
+            <p>{{ form.user.label }} {{ form.user }}</p>
+            <p>{{ form.projects.label }} {{ form.projects }} {{ form.projects.description }}</p>
+            <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description}} </p>
+            <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>
+            <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
+            <p><input type="submit" value="Submit">  <input type="reset" value="Clear"></p>
+        </form>
+    </div>
+    <div class="view-times">
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Duration</th>
+                <th>Date Worked</th>
+                <th>Projects</th>
+                <th>Activities</th>
+                <th>Issue URI</th>
+                <th>Additional Notes</th>
+            </tr>
+            {% for t in times %}
+            <tr>
+                <td>{{ t['user'] }}</td>
+                <td>{{ t['duration'] | hms_filter }}</td>
+                <td>{{ t['date_worked'] }}</td>
+                <td>{{ t['project'] | join('\n') }}</td>
+                <td>{{ t['activities'] | join('\n') }}</td>
+                <td>{{ t['issue_uri'] }}</td>
+                <td>{{ t['notes'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

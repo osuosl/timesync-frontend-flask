@@ -3,6 +3,7 @@ from app import app
 from datetime import timedelta
 import pymesync
 import forms
+import filters
 import re
 
 
@@ -144,3 +145,47 @@ def submit():
     # If not submitted (GET)
 
     return render_template('submit.html', form=form)
+
+@app.route('/report', methods=['GET', 'POST'])
+def report():
+    # Check if logged in first
+    if 'token' not in session and request.method == 'GET':
+        return redirect(url_for('login', next=request.url_rule))
+    elif 'token' not in session and request.method == 'POST':
+        return "Not logged in.", 401
+
+    form = forms.GenerateReportForm()
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'], token=session['token'])
+
+    query = dict()
+
+    if request.method == 'POST':
+        req_form = request.form
+
+        user = req_form['user']
+        projects = req_form['projects']
+        activities = req_form['activities']
+        start = req_form['start']
+        end = req_form['end']
+
+        if user:
+            query['user'] = [user]
+        if projects:
+            query['project'] = [p.strip() for p in projects.split(',')]
+        if activities:
+            query['activity'] = [a.strip() for a in activities.split(',')]
+        if start:
+            query['start'] = [start]
+        if end:
+            query['end'] = [end]
+
+    times = ts.get_times(query_parameters=query)
+
+    if 'error' in times or 'pymesync error' in times:
+        flash("Error")
+        flash(times['text'])
+        times = list()
+
+    return render_template('report.html', form=form, times=times)

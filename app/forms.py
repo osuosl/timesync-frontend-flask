@@ -56,3 +56,13 @@ class SubmitTimesForm(Form):
     notes = StringField('Notes:')
     issue_uri = StringField('Issue URI:',
                             description='E.g. http://www.github.com')
+
+class GenerateReportForm(Form):
+    # All optional
+    user = StringField('User:', default="")
+    projects = StringField('Project Slugs:', description='Comma separated',
+                           default="")
+    activities = StringField('Activity Slugs:', description='Comma separated',
+                             default="")
+    start = StringField('Start Date:', description='yyyy-mm-dd', default="")
+    end = StringField('End Date:', description='yyyy-mm-dd', default="")
