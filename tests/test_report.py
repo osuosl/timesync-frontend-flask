@@ -3,6 +3,7 @@ from app import app
 from flask import url_for
 from urlparse import urlparse
 
+
 class ReportTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -17,10 +18,8 @@ class ReportTestCase(unittest.TestCase):
 
         self.baseurl = app.config['TIMESYNC_URL']
 
-
     def tearDown(self):
         self.ctx.pop()
-
 
     def login(self):
         self.username = 'test'
@@ -36,26 +35,23 @@ class ReportTestCase(unittest.TestCase):
 
         return res
 
-
     def report(self):
         res = self.client.post(url_for('report'), data=dict(
-            user=""
-            project=""
-            activity=""
-            start=""
-            end=""
-            include_revisions=False
+            user="",
+            project="",
+            activity="",
+            start="",
+            end="",
+            include_revisions=False,
             include_deleted=False
         ), follow_redirects=True)
 
         return res
 
-
     def test_url_endpoint(self):
         """Make sure the url endpoint for report exists."""
         url = url_for('report')
         assert url == '/report'
-
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
@@ -63,7 +59,6 @@ class ReportTestCase(unittest.TestCase):
 
         res = self.client.get(url_for('report'))
         assert res.status_code == 200
-
 
     def test_login_redirect(self):
         """Make sure unauthorized users are redirected to login page"""
@@ -77,12 +72,10 @@ class ReportTestCase(unittest.TestCase):
         self.login()
 
         res = self.client.get(url_for('report'))
-        fields = ['form', 'input', 'User', 'Project', 'Activity',
-                  'Start', 'End', 'Include Revisions', 'Include Deleted']
+        fields = ['user', 'project', 'activity', 'start', 'end']
 
         for field in fields:
             assert field in res.get_data()
-
 
     def test_report(self):
         """Tests successful time query"""
@@ -90,10 +83,3 @@ class ReportTestCase(unittest.TestCase):
         res = self.report()
 
         assert res.status_code == 200
-
-
-    def test_unauthorized_report(self):
-        """Tests attempt to view times without logging in first"""
-        res = self.report()
-
-        assert res.status_code == 401

@@ -3,7 +3,6 @@ from app import app
 from datetime import timedelta
 import pymesync
 import forms
-import filters
 import re
 
 
@@ -146,14 +145,12 @@ def submit():
 
     return render_template('submit.html', form=form)
 
+
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     # Check if logged in first
-    if 'token' not in session and request.method == 'GET':
+    if 'token' not in session:
         return redirect(url_for('login', next=request.url_rule))
-    elif 'token' not in session and request.method == 'POST':
-        return "Not logged in.", 401
-
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])

@@ -57,6 +57,7 @@ class SubmitTimesForm(Form):
     issue_uri = StringField('Issue URI:',
                             description='E.g. http://www.github.com')
 
+
 class GenerateReportForm(Form):
     # All optional
     user = StringField('User:')
