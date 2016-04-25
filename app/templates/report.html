@@ -1,16 +1,34 @@
 {% extends "layout.html" %}
 
 {% block title %} View Times {% endblock %}
+
+{% block scripts %}
+<script>
+function clearForm(form)
+{
+    for (i = 0; i < form.elements.length; i++)
+    {
+        if (form.elements[i].type == "text")
+        {
+            form.elements[i].value = "";
+        }
+    }
+
+    form.submit();
+}
+</script>
+{% endblock %}
+
 {% block body%}
     <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token}}
             <p>{{ form.user.label }} {{ form.user }}</p>
-            <p>{{ form.projects.label }} {{ form.projects }} {{ form.projects.description }}</p>
-            <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description}} </p>
+            <p>{{ form.project.label }} {{ form.project }} {{ form.project.description }}</p>
+            <p>{{ form.activity.label }} {{ form.activity }} {{ form.activity.description}} </p>
             <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>
             <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
-            <p><input type="submit" value="Submit">  <input type="reset" value="Clear"></p>
+            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
         </form>
     </div>
     <div class="view-times">

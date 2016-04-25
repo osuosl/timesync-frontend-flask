@@ -154,19 +154,20 @@ def report():
     elif 'token' not in session and request.method == 'POST':
         return "Not logged in.", 401
 
-    form = forms.GenerateReportForm()
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
 
+    form = forms.GenerateReportForm()
+
     query = dict()
 
-    if request.method == 'POST':
+    if form.validate_on_submit():
         req_form = request.form
 
         user = req_form['user']
-        projects = req_form['projects']
-        activities = req_form['activities']
+        projects = req_form['project']
+        activities = req_form['activity']
         start = req_form['start']
         end = req_form['end']
 
@@ -181,11 +182,14 @@ def report():
         if end:
             query['end'] = [end]
 
+    elif request.method == 'POST' and not form.validate():
+        flash("Invalid form input")
+
     times = ts.get_times(query_parameters=query)
 
     if 'error' in times or 'pymesync error' in times:
         flash("Error")
-        flash(times['text'])
+        flash(times)
         times = list()
 
     return render_template('report.html', form=form, times=times)
