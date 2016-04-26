@@ -1,5 +1,6 @@
 import unittest
 from app import app
+from app import forms
 from flask import url_for
 from urlparse import urlparse
 
@@ -69,13 +70,12 @@ class ReportTestCase(unittest.TestCase):
 
     def test_form_fields(self):
         """Tests the report page for correct form fields"""
-        self.login()
+        form = forms.GenerateReportForm()
 
-        res = self.client.get(url_for('report'))
         fields = ['user', 'project', 'activity', 'start', 'end']
 
         for field in fields:
-            assert field in res.get_data()
+            assert field in form.data
 
     def test_report(self):
         """Tests successful time query"""
