@@ -6,3 +6,4 @@ RUN yum -y install python-pip python-devel libffi-devel
 
 COPY requirements.txt /opt/
 RUN pip install -r /opt/requirements.txt
+RUN echo 'source /opt/code/dockerfiles/startup.sh' >> /root/.bashrc
