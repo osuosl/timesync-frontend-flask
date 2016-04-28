@@ -2,11 +2,9 @@
 
 {% block title %} View Times {% endblock %}
 
-{% block imports %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/tableSort.js') }}"></script>
-{% endblock %}
-
 {% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/tableSort.js') }}"></script>
+
 <script>
 function clearForm(form)
 {
