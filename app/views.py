@@ -53,7 +53,8 @@ def index():
             print user
             return "There was an error.", 500
 
-        isAdmin = user['site_admin']
+        if type(user) is dict:
+            isAdmin = user['site_admin']
 
     return render_template('index.html', isLoggedIn=isLoggedIn,
                                          isAdmin=isAdmin)
