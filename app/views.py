@@ -1,9 +1,28 @@
 from flask import session, redirect, url_for, request, render_template, flash
-from app import app
+from app import app, redis
 from datetime import timedelta
 import pymesync
 import forms
 import re
+
+
+def token_name(user):
+    return '{}:token'.format(user)
+
+
+def is_logged_in():
+    """Checks if the user is logged in. Also checks token expiration time,
+       logging the user out if their token is expired."""
+
+    if 'user' not in session:
+        return False
+
+    # If not in redis database, key has expired
+    if not redis.exists(token_name(session['user'])):
+        logout()  # Remove 'user' from session
+        return False
+
+    return True
 
 
 # Expires users after 30 minutes OF UNACTIVITY
@@ -45,8 +64,13 @@ def login():
             return "There was an error.", 500
         # Else success, redirect to index page
         else:
-            session['username'] = username
-            session['token'] = token['token']
+            # Add a key to the redis database under the user's name and
+            # set it to the token, then set the expiry time
+            redis.set(token_name(username), token['token'])
+            redis.expireat(token_name(username), ts.token_expiration_time())
+
+            session['user'] = username
+
             return form.redirect(url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
@@ -59,23 +83,29 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
-    session.pop('token', None)
+    # If currently logged in, remove the user's token from the database
+    if 'user' in session:
+        redis.delete(token_name(session['user']))
+
+        session.pop('user', None)
+
     return redirect(url_for('index'))
 
 
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     # Check if logged in first
-    if 'token' not in session and request.method == 'GET':
-        return redirect(url_for('login', next=request.url_rule))
-    elif 'token' not in session and request.method == 'POST':
-        return "Not logged in.", 401
+    if not is_logged_in():
+        if request.method == 'GET':
+            return redirect(url_for('login', next=request.url_rule))
+        elif request.method == 'POST':
+            return "Not logged in.", 401
 
     form = forms.SubmitTimesForm()
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
-                           test=app.config['TESTING'], token=session['token'])
+                           test=app.config['TESTING'],
+                           token=redis.get(token_name(session['user'])))
 
     projects = ts.get_projects()
 
