@@ -11,6 +11,7 @@ install:
 
 before_script:
     - mv config.py.dist config.py
+    - echo "TESTING = True" >> config.py
 
 script:
     - flake8 app

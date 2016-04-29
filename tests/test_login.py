@@ -1,5 +1,5 @@
 import unittest
-from app import app
+from app import app, redis
 from flask import url_for
 import pymesync
 import datetime
@@ -91,14 +91,14 @@ class LoginTestCase(unittest.TestCase):
         self.login()
 
         # Make sure username and token stored in session
-        assert 'username' in self.sess
-        assert 'token' in self.sess
+        assert 'user' in self.sess
 
         # Make sure username is correct
-        assert self.sess['username'] == self.username
+        assert self.sess['user'] == self.username
 
         # Make sure token is valid
-        ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'],
+        ts = pymesync.TimeSync(self.baseurl,
+                               redis.get('{}:token'.format(self.username)),
                                test=True)
         assert type(ts.token_expiration_time()) is datetime.datetime
 

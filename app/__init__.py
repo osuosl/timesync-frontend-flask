@@ -1,9 +1,9 @@
 from flask import Flask
-from redis import StrictRedis
+from app import redis_wrapper
 
 app = Flask(__name__)
 app.config.from_object('config')
 
-redis = StrictRedis(host='redis')
+redis = redis_wrapper.RedisWrapper(app.config['TESTING'])
 
 from app import views  # NOQA flake8 ignore
