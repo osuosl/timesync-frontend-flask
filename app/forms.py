@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
     HiddenField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 from urlparse import urlparse, urljoin
 from flask import request, url_for, redirect
 
@@ -56,3 +56,14 @@ class SubmitTimesForm(Form):
     notes = StringField('Notes:')
     issue_uri = StringField('Issue URI:',
                             description='E.g. http://www.github.com')
+
+
+class GenerateReportForm(Form):
+    # All optional
+    user = StringField('User:')
+    project = StringField('Project Slugs:', description='Comma separated')
+    activity = StringField('Activity Slugs:', description='Comma separated')
+    start = DateField('Start Date:', format="%Y-%m-%d",
+                      description='yyyy-mm-dd', validators=[Optional()])
+    end = DateField('End Date:', format="%Y-%m-%d",
+                    description='yyyy-mm-dd', validators=[Optional()])

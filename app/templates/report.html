@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %} View Times {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/tableSort.js') }}"></script>
+
+<script>
+function clearForm(form)
+{
+    for (i = 0; i < form.elements.length; i++)
+    {
+        if (form.elements[i].type == "text")
+        {
+            form.elements[i].value = "";
+        }
+    }
+
+    form.submit();
+}
+</script>
+{% endblock %}
+
+{% block body%}
+    <div class="filter-params">
+        <form method="POST">
+            {{ form.csrf_token}}
+            <p>{{ form.user.label }} {{ form.user }}</p>
+            <p>{{ form.project.label }} {{ form.project }} {{ form.project.description }}</p>
+            <p>{{ form.activity.label }} {{ form.activity }} {{ form.activity.description}} </p>
+            <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>
+            <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
+            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
+        </form>
+    </div>
+    <div class="view-times">
+        <table>
+            <thead>
+                <tr>
+                    <th class="alpha">User</th>
+                    <th class="hms">Duration</th>
+                    <th class="date">Date Worked</th>
+                    <th class="list">Projects</th>
+                    <th class="list">Activities</th>
+                    <th>Issue URI</th>
+                    <th>Additional Notes</th>
+                </tr>
+            </thead>
+
+            {% for t in times %}
+            <tr>
+                <td>{{ t['user'] }}</td>
+                <td>{{ t['duration'] | hms_filter }}</td>
+                <td>{{ t['date_worked'] }}</td>
+                <td>{{ t['project'] | join(' ') }}</td>
+                <td>{{ t['activities'] | join(' ') }}</td>
+                <td>{{ t['issue_uri'] }}</td>
+                <td>{{ t['notes'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
