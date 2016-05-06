@@ -172,7 +172,7 @@ def submit():
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     # Check if logged in first
-    if 'token' not in session:
+    if not isLoggedIn():
         return redirect(url_for('login', next=request.url_rule))
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
