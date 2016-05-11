@@ -57,7 +57,7 @@ def index():
             isAdmin = user['site_admin']
 
     return render_template('index.html', isLoggedIn=loggedIn,
-                                         isAdmin=isAdmin)
+                           isAdmin=isAdmin)
 
 
 @app.route('/login', methods=['GET', 'POST'])
