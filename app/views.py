@@ -30,9 +30,34 @@ def isLoggedIn():
     return True
 
 
+def getUser():
+    if not isLoggedIn():
+        return {'error': "Not logged in."}
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+    user = ts.get_users(username=session['username'])
+
+    return user
+
+
 @app.route('/')
 def index():
-    return "Welcome to timesync-frontend."
+    isAdmin = False
+    loggedIn = isLoggedIn()
+
+    if loggedIn:
+        user = getUser()
+        if 'error' in user or 'pymesync error' in user:
+            print user
+            return "There was an error.", 500
+
+        if type(user) is dict:
+            isAdmin = user['site_admin']
+
+    return render_template('index.html', isLoggedIn=loggedIn,
+                           isAdmin=isAdmin)
 
 
 @app.route('/login', methods=['GET', 'POST'])

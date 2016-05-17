@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %} timesync-frontend {% endblock %}
+{% block imports %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+    <nav class="header">
+        <a href="{{ url_for('login', next=request.url_rule) }}">Login</a>
+        {% if isLoggedIn %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </nav>
+
+    {% if isLoggedIn %}
+        <div class="menu">
+            <a href="{{ url_for('submit') }}">Submit</a>
+            <a href="{{ url_for('report') }}">Reports</a>
+            {% if isAdmin %}
+                <a href="/admin">Admin</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
