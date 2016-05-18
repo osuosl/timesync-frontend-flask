@@ -39,6 +39,11 @@ def getUser():
                            token=session['token'])
     user = ts.get_users(username=session['username'])
 
+    if (type(user) is list and session['username'] == 'admin' and
+            app.config['TESTING']):
+
+        user[0]['site_admin'] = True
+
     return user
 
 
@@ -245,6 +250,7 @@ def report():
 
     return render_template('report.html', form=form, times=times)
 
+
 @app.route('/admin')
 def admin():
     # Check if logged in first
@@ -261,6 +267,8 @@ def admin():
 
     if type(user) is dict:
         isAdmin = user['site_admin']
+    elif type(user) is list:
+        isAdmin = user[0]['site_admin']
 
     if not isAdmin:
         return "You cannot access this page.", 401
