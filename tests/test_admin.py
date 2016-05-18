@@ -1,6 +1,7 @@
 import unittest
 from app import app
 from flask import url_for
+from urlparse import urlparse
 
 
 class AdminTestCase(unittest.TestCase):
@@ -55,22 +56,24 @@ class AdminTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
+        self.adminLogin()
+
         res = self.client.get(url_for('admin'))
         assert res.status_code == 200
 
-    def test_unauthorized_links(self):
-        """Make sure non-admin users can't see admin links."""
+    def test_login_redirect(self):
+        """Make sure unauthorized users are redirected to login page."""
+        adminRes = self.client.get(url_for('admin'))
+        endpoint = urlparse(adminRes.location).path
+
+        assert endpoint == url_for('login')
+
+    def test_unauthorized_response(self):
+        """Make sure non-admin users can't access the page."""
         self.login()
 
-        link = 'Get User'
-        badLinks = ['Create User', 'Update User', 'Delete User']
-
         res = self.client.get(url_for('admin'))
-
-        assert link in res.get_data()
-
-        for badLink in badLinks:
-            assert badLink not in res.get_data()
+        assert res.status_code == 401
 
     def test_links(self):
         """Test the admin page for correct links."""
