@@ -137,7 +137,7 @@ function makeAllSortable()
     {
         makeSortable(tables[i]);
 
-        sortTable(tables[i], 2, -1); // Initial sort by most recent
+        sortTable(tables[i], 3, -1); // Initial sort by most recent
     }
 }
 
