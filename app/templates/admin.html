@@ -6,6 +6,11 @@
 {% endblock %}
 
 {% block body %}
+    <nav class="header">
+        <a href="{{ url_for('login', next=request.url_rule) }}">Login</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+
     <div class="menu">
         {# TODO: Use url_for() when pages are implemented #}
         <a href="/create-user">Create User</a>
