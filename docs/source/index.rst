@@ -12,6 +12,7 @@ Contents:
     :maxdepth: 2
 
     usage
+    devvin
 
 
 Indices and tables
