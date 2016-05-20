@@ -46,6 +46,27 @@ def get_user():
     return user
 
 
+def getProjects(username):
+    if not isLoggedIn():
+        return [{'error': "Not logged in."}]
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+    projects = ts.get_projects()
+
+    userProjects = []
+
+    # Get each project the user has access to
+    for project in projects:
+        if 'users' in project and username in project['users']:
+            userProjects.append(project)
+        elif 'owner' in project and username == project['owner']:
+            userProjects.append(project)
+
+    return userProjects
+
+
 @app.route('/')
 def index():
     is_admin = False
@@ -93,6 +114,16 @@ def login():
         else:
             session['username'] = username
             session['token'] = token['token']
+
+            projects = getProjects(username)
+
+            # TODO: Better error handling
+            if projects and 'error' in projects[0]:
+                print projects
+                return "There was an error.", 500
+
+            session['projects'] = projects
+
             return form.redirect(url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
