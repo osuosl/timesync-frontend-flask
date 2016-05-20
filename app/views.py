@@ -94,8 +94,11 @@ def login():
             session['token'] = token['token']
             user = get_user(username)
 
+            if type(user) is list:
+                user = user[0]
+
             # TODO: Better error handling
-            if 'error' in session['user']:
+            if 'error' in user:
                 print user
                 return "There was an error.", 500
 
