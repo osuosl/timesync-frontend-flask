@@ -67,3 +67,7 @@ class FilterTimesForm(Form):
                       description='yyyy-mm-dd', validators=[Optional()])
     end = DateField('End Date:', format="%Y-%m-%d",
                     description='yyyy-mm-dd', validators=[Optional()])
+
+class CreateActivityForm(Form):
+    name = StringField('Activity Name:')
+    slug = StringField('Activity Slug:')

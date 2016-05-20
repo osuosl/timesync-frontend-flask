@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %} Create Activity {% endblock %}
+{% block body %}
+    <form method="POST">
+        {{ form.csrf_token }}
+        <p>{{ form.name.label }} {{ form.name }}</p>
+        <p>{{ form.slug.label }} {{ form.slug }}</p>
+        <p><input type="submit" value="Submit"></p?>
+    </form>
+{% endblock %}
