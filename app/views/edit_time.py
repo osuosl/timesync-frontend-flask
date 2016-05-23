@@ -28,6 +28,9 @@ def edit_time():
 
     time = ts.get_times({'uuid': uuid})
 
+    if ts.test:
+        time = time[0]
+
     if 'error' in time or 'pymesync error' in time:
         return 'There was an error', 500
 
@@ -99,5 +102,3 @@ def edit_time():
             ), 'error')
 
     return render_template('create_time.html', form=form)
-
-

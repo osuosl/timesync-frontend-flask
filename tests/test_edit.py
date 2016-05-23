@@ -20,13 +20,13 @@ class EditTestCase(unittest.TestCase):
         self.ctx.pop()
 
     def login(self):
-        self.username = 'test'
+        self.username = 'userone'
         self.password = 'test'
 
-        res = self.client.post(url_for('login'), data={
-            "username": self.username,
-            "password": self.password
-        }, follow_redirects=True)
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.username,
+            password=self.password
+        ), follow_redirects=True)
 
         with self.client.session_transaction() as sess:
             self.sess = sess
@@ -73,4 +73,3 @@ class EditTestCase(unittest.TestCase):
         res = self.edit()
 
         assert res.status_code == 200
-        assert urlparse(res.location).path == url_for('report')
