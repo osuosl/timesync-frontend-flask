@@ -322,5 +322,86 @@ def create_activity():
         return redirect(url_for('admin'))
 
     # If GET
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("%s %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'error')
+
+    return render_template('create_activity.html', form=form)
+
+
+@app.route('/edit-activity', methods=['GET', 'POST'])
+def edit_activity():
+    # Check if logged in first
+    if not isLoggedIn():
+        return redirect(url_for('login', next=request.url_rule))
+
+    # Check if the user is an admin and deny access if not
+    isAdmin = False
+    user = getUser()
+
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return "There was an error.", 500
+
+    if type(user) is dict:
+        isAdmin = user['site_admin']
+    elif type(user) is list:
+        isAdmin = user[0]['site_admin']
+
+    if not isAdmin:
+        return "You cannot access this page.", 401
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'], token=session['token'])
+
+    slug = request.args.get('slug') if not ts.test else 'test'
+
+    activity = ts.get_activities(query_parameters={"slug": slug})
+
+    if 'error' in activity or 'pymesync error' in activity:
+        return 'There was an error', 500
+
+    activity_data = {
+        "name": activity['name'],
+        "slug": activity['slug']
+    }
+
+    form = forms.CreateActivityForm(data=activity_data)
+
+    if form.validate_on_submit():
+        req_form = request.form
+
+        # To preserve the old slug so we can call update_activity()
+        old_slug = slug
+
+        name = req_form['name']
+        slug = req_form['slug']
+
+        activity_update = dict()
+
+        if name != activity_data['name']:
+            activity_update['name'] = name
+        if slug != activity_data['slug']:
+            activity_update['slug'] = slug
+
+        res = ts.update_activity(activity=activity_update, slug=old_slug)
+
+        if 'error' in res or 'pymesync error' in res:
+            print res
+            return 'There was an error', 500
+
+        return redirect(url_for('admin'))
+
+    # If GET
+
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("%s %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'error')
 
     return render_template('create_activity.html', form=form)
