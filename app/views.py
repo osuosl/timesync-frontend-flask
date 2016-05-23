@@ -273,3 +273,54 @@ def admin():
         return "You cannot access this page.", 401
 
     return render_template('admin.html')
+
+
+@app.route('/create-activity', methods=['GET', 'POST'])
+def create_activity():
+    # Check if logged in first
+    if not isLoggedIn():
+        return redirect(url_for('login', next=request.url_rule))
+
+    # Check if the user is an admin and deny access if not
+    isAdmin = False
+    user = getUser()
+
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return "There was an error.", 500
+
+    if type(user) is dict:
+        isAdmin = user['site_admin']
+    elif type(user) is list:
+        isAdmin = user[0]['site_admin']
+
+    if not isAdmin:
+        return "You cannot access this page.", 401
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'], token=session['token'])
+
+    form = forms.CreateActivityForm()
+
+    if form.validate_on_submit():
+        req_form = request.form
+
+        name = req_form['name']
+        slug = req_form['slug']
+
+        activity = {
+            "name": name,
+            "slug": slug
+        }
+
+        res = ts.create_activity(activity=activity)
+
+        if 'error' in res or 'pymesync error' in res:
+            return "There was an error", 500
+
+        flash('Activity successfully created')
+        return redirect(url_for('admin'))
+
+    # If GET
+
+    return render_template('create_activity.html', form=form)
