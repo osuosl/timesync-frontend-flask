@@ -37,7 +37,7 @@ class LoginTestCase(unittest.TestCase):
 
         return res
 
-    def badLogin(self):
+    def bad_login(self):
         """Attempts login without a password, causing an error."""
         username = 'test'
         password = ''
@@ -104,7 +104,7 @@ class LoginTestCase(unittest.TestCase):
 
     def test_invalid_login(self):
         """Tests invalid login on bad form submission."""
-        res = self.badLogin()
+        res = self.bad_login()
 
         assert res.status_code == 401
         assert 'Invalid submission.' in res.get_data()
