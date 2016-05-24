@@ -39,9 +39,8 @@ def getUser():
                            token=session['token'])
     user = ts.get_users(username=session['username'])
 
-    if (type(user) is list and session['username'] == 'admin' and
-            app.config['TESTING']):
-
+    # If in testing mode and the username is admin, allow admin access
+    if app.config['TESTING'] and session['username'] == 'admin':
         user[0]['site_admin'] = True
 
     return user
