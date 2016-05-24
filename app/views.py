@@ -361,6 +361,9 @@ def edit_activity():
 
     activity = ts.get_activities(query_parameters={"slug": slug})
 
+    if ts.test:
+        activity = activity[0]
+
     if 'error' in activity or 'pymesync error' in activity:
         return 'There was an error', 500
 

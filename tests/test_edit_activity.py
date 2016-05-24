@@ -5,7 +5,7 @@ from flask import url_for
 from urlparse import urlparse
 
 
-class CreateActivityTestCase(unittest.TestCase):
+class EditActivityTestCase(unittest.TestCase):
 
     def setUp(self):
         app.config['TESTING'] = True
@@ -13,7 +13,6 @@ class CreateActivityTestCase(unittest.TestCase):
 
         self.client = app.test_client()
 
-        # Application context
         self.ctx = app.test_request_context()
         self.ctx.push()
 
@@ -29,7 +28,6 @@ class CreateActivityTestCase(unittest.TestCase):
             password=self.password
         ), follow_redirects=True)
 
-        # Get session object
         with self.client.session_transaction() as sess:
             self.sess = sess
 
@@ -44,61 +42,48 @@ class CreateActivityTestCase(unittest.TestCase):
             password=self.password
         ), follow_redirects=True)
 
-        # Get session object
         with self.client.session_transaction() as sess:
             self.sess = sess
 
         return res
 
-    def create_activity(self):
-        return self.client.post(url_for('create_activity'), data=dict(
-            name='asdf',
-            slug='asdf'
-        ), follow_redirects=True)
+    def edit_activity(self):
+        return self.client.post(url_for('edit_activity'), data={
+            "name": "asdf"
+        }, follow_redirects=True)
 
     def test_url_endpoint(self):
-        """Make sure the url endpoint for create_activity exists."""
-        url = url_for('create_activity')
-        assert url == '/create-activity'
+        """Make sure the url endpoint for edit exists."""
+        url = url_for('edit_activity')
+        assert url == '/edit-activity'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
         self.login_admin()
 
-        res = self.client.get(url_for('create_activity'))
+        res = self.client.get(url_for('edit_activity'))
         assert res.status_code == 200
 
     def test_login_redirect(self):
-        """Make sure unauthorized users are redirected to login page."""
-        res = self.client.get(url_for('create_activity'))
-        endpoint = urlparse(res.location).path
+        """Make sure unauthorized users are redirected to login page"""
+        edit_res = self.client.get(url_for('edit_activity'))
+        endpoint = urlparse(edit_res.location).path
 
         assert endpoint == url_for('login')
 
     def test_form_fields(self):
-        """Tests the submit page for correct form fields."""
-        self.login_admin()
-
+        """Tests the edit page for correct form fields"""
         form = forms.CreateActivityForm()
+
         fields = ['name', 'slug']
 
         for field in fields:
             assert field in form.data
 
-    def test_submit(self):
-        """Tests successful time submission."""
+    def test_edit_activity(self):
+        """Tests successful update"""
         self.login_admin()
-        res = self.create_activity()
+        res = self.edit_activity()
 
         print res.status_code
-
         assert res.status_code == 200
-
-    def test_unauthorized_submit(self):
-        """Tests submission without logging in first."""
-        self.login_user()
-        res = self.create_activity()
-
-        print res.status_code
-
-        assert res.status_code == 401
