@@ -90,9 +90,10 @@ class LoginTestCase(unittest.TestCase):
         """Makes sure the login creates a session cookie."""
         self.login()
 
-        # Make sure username and token stored in session
+        # Make sure username, token, and projects stored in session
         assert 'username' in self.sess
         assert 'token' in self.sess
+        assert 'projects' in self.sess
 
         # Make sure username is correct
         assert self.sess['username'] == self.username
