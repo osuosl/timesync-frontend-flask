@@ -6,7 +6,7 @@ import forms
 import re
 
 
-def is_logged_in():
+def isLoggedIn():
     """Checks if the user is logged in. Also checks token expiration time,
         logging the user out if their token is expired."""
 
@@ -30,8 +30,8 @@ def is_logged_in():
     return True
 
 
-def get_user():
-    if not is_logged_in():
+def getUser():
+    if not isLoggedIn():
         return {'error': "Not logged in."}
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
@@ -48,20 +48,20 @@ def get_user():
 
 @app.route('/')
 def index():
-    is_admin = False
-    loggedIn = is_logged_in()
+    isAdmin = False
+    loggedIn = isLoggedIn()
 
     if loggedIn:
-        user = get_user()
+        user = getUser()
         if 'error' in user or 'pymesync error' in user:
             print user
             return "There was an error.", 500
 
         if type(user) is dict:
-            is_admin = user['site_admin']
+            isAdmin = user['site_admin']
 
-    return render_template('index.html', is_logged_in=loggedIn,
-                           is_admin=is_admin)
+    return render_template('index.html', isLoggedIn=loggedIn,
+                           isAdmin=isAdmin)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -113,7 +113,7 @@ def logout():
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
     # Check if logged in first
-    if not is_logged_in():
+    if not isLoggedIn():
         if request.method == 'GET':
             return redirect(url_for('login', next=request.url_rule))
         elif request.method == 'POST':
@@ -201,7 +201,7 @@ def submit():
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     # Check if logged in first
-    if not is_logged_in():
+    if not isLoggedIn():
         return redirect(url_for('login', next=request.url_rule))
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],

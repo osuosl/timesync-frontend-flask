@@ -3,10 +3,10 @@
 {% block title %} View Times {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/tableSort.js') }}"></script>
 
 <script>
-function clear_form(form)
+function clearForm(form)
 {
     for (i = 0; i < form.elements.length; i++)
     {
@@ -30,7 +30,7 @@ function clear_form(form)
             <p>{{ form.activity.label }} {{ form.activity }} {{ form.activity.description}} </p>
             <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>
             <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
-            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clear_form(this.form);"></p>
+            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
         </form>
     </div>
     <div class="view-times">

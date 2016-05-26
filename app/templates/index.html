@@ -8,16 +8,16 @@
 {% block body %}
     <nav class="header">
         <a href="{{ url_for('login', next=request.url_rule) }}">Login</a>
-        {% if is_logged_in %}
+        {% if isLoggedIn %}
             <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
     </nav>
 
-    {% if is_logged_in %}
+    {% if isLoggedIn %}
         <div class="menu">
             <a href="{{ url_for('submit') }}">Submit</a>
             <a href="{{ url_for('report') }}">Reports</a>
-            {% if is_admin %}
+            {% if isAdmin %}
                 <a href="/admin">Admin</a>
             {% endif %}
         </div>
