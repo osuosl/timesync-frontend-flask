@@ -39,6 +39,10 @@ def getUser():
                            token=session['token'])
     user = ts.get_users(username=session['username'])
 
+    # If in testing mode and the username is admin, allow admin access
+    if app.config['TESTING'] and session['username'] == 'admin':
+        user[0]['site_admin'] = True
+
     return user
 
 
@@ -244,3 +248,28 @@ def report():
         times = list()
 
     return render_template('report.html', form=form, times=times)
+
+
+@app.route('/admin')
+def admin():
+    # Check if logged in first
+    if not isLoggedIn():
+        return redirect(url_for('login', next=request.url_rule))
+
+    # Check if the user is an admin and deny access if not
+    isAdmin = False
+    user = getUser()
+
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return "There was an error.", 500
+
+    if type(user) is dict:
+        isAdmin = user['site_admin']
+    elif type(user) is list:
+        isAdmin = user[0]['site_admin']
+
+    if not isAdmin:
+        return "You cannot access this page.", 401
+
+    return render_template('admin.html')
