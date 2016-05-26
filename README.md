@@ -54,3 +54,10 @@ To run tests, do:
 ```
 (venv) $ nosetests
 ```
+
+To build documentation, do:
+```
+(venv) $ cd docs
+(venv) $ make html
+(venv) $ <browser> build/html/index.html
+```
