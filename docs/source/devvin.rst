@@ -11,7 +11,7 @@ timesync-frontend-flask. Welcome!
 Tools and Libraries
 -------------------
 
-This is a complete list of external tools that timesync-frontend-flask uses as well
+This is a complete list of tools that timesync-frontend-flask uses as well
 as brief descriptions of their use and links to in-depth tutorials.
 
 Flask
@@ -55,7 +55,55 @@ receive data back from it.
 High-Level Design
 -----------------
 
+Views
+'''''
 
+Flask apps are split into *views*. Each view handles a specific URL endpoint.
+
+For example, the `login` view handles the `/login` endpoint and it supports
+the `GET` and `POST` methods. If `GET` request is sent to the endpoint, the `login`
+view renders a template containing an HTML form with username and password fields 
+for the user to enter their credentials.
+
+When the user submits the form. a `POST` request
+is sent to the `/login` endpoint containing the user's login credentials. The
+`login` view then handles the `POST` request by taking the login credentials
+and sending them to TimeSync. After that, the `login` view might redirect the user
+to the index page (The `/` endpoint).
+
+Each view corresponds to a different TimeSync action 
+(Adding/Updating/Viewing/Deleting times/projects/activities/users). However,
+the pages to Add/Update/Delete projects/activities/users are restricted to site
+admins only, and the only users who are allowed to update times are the same users
+that submitted the time.
+
+The Session
+'''''''''''
+
+Flask sessions are used to store persistent information such as TimeSync tokens
+and user-specific project permissions. Session objects persist on the server side,
+although TimeSync tokens are set to expire 30 minutes after they are issued.
+
+Session encryption is currently a work-in-progress.
+
+Template Layout
+'''''''''''''''
+
+Every template that is used in this project should inherit from the master
+template in :code:`app/templates/layout.html`.
+
+A brief description of what each block does:
+
+========== ===============================================
+Block Name                   Description
+========== ===============================================
+title      The page title as it appears in the web browser
+imports    Non-script imports such as stylesheets
+scripts    Both imported scripts and inline scripts
+body       The body of the webpage
+========== ===============================================
+
+Other static page elements go in the :code:`app/static/` folder.
 
 Style Guidelines
 ----------------
@@ -64,3 +112,10 @@ This codebase adheres to the `PEP 8`_ standard. Make sure your code
 passes inspection by :code:`flake8` before you submit a pull request!
 
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008/
+
+Testing
+-------
+
+Writing comprehensive unit tests is good practice. All of the tests for
+timesync-frontend-flask are located in the :code:`tests/` directory, and you can run
+them all at once by running :code:`nosetests` inside the project root directory.
