@@ -253,12 +253,12 @@ def report():
 @app.route('/admin')
 def admin():
     # Check if logged in first
-    if not isLoggedIn():
+    if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
     # Check if the user is an admin and deny access if not
     isAdmin = False
-    user = getUser()
+    user = get_user()
 
     if 'error' in user or 'pymesync error' in user:
         print user
@@ -273,3 +273,36 @@ def admin():
         return "You cannot access this page.", 401
 
     return render_template('admin.html')
+
+@app.route('/activities', methods=['GET', 'POST'])
+def create_activities():
+    if not is_logged_in():
+        return redirect(url_for('login', next=request.url_rule))
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+
+    form = forms.ActivityForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        slug = form.slug.data
+
+        activity = {
+                "name": name,
+                "slug": slug
+            }
+
+        res = ts.create_activity(activity=activity)
+
+        # TODO: Better error handling
+        if 'error' in res:
+            return res['error'], 500
+        elif 'pymesync error' in res:
+            return res['pymesync error'],  500
+
+        flash("Activity successfully submitted.")
+        return redirect(url_for('activities'))
+
+    return render_template('activities.html', form=form)

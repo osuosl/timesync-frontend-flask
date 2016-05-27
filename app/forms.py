@@ -67,3 +67,7 @@ class GenerateReportForm(Form):
                       description='yyyy-mm-dd', validators=[Optional()])
     end = DateField('End Date:', format="%Y-%m-%d",
                     description='yyyy-mm-dd', validators=[Optional()])
+
+class ActivityForm(Form):
+    name = StringField('Name:')
+    slug = StringField('Slug:')
