@@ -357,6 +357,8 @@ def edit_activity():
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
 
+    form = forms.CreateActivityForm()
+
     slug = request.args.get('slug') if not ts.test else 'test'
 
     activity = ts.get_activities(query_parameters={"slug": slug})
@@ -365,14 +367,8 @@ def edit_activity():
         activity = activity[0]
 
     if 'error' in activity or 'pymesync error' in activity:
+        print activity
         return 'There was an error', 500
-
-    activity_data = {
-        "name": activity['name'],
-        "slug": activity['slug']
-    }
-
-    form = forms.CreateActivityForm(data=activity_data)
 
     if form.validate_on_submit():
         req_form = request.form
@@ -385,20 +381,24 @@ def edit_activity():
 
         activity_update = dict()
 
-        if name != activity_data['name']:
+        if name != activity['name']:
             activity_update['name'] = name
-        if slug != activity_data['slug']:
+        if slug != activity['slug']:
             activity_update['slug'] = slug
 
         res = ts.update_activity(activity=activity_update, slug=old_slug)
 
         if 'error' in res or 'pymesync error' in res:
             print res
+            print activity_update
             return 'There was an error', 500
 
-        return redirect(url_for('admin'))
+        return redirect(url_for('view_activities'))
 
     # If GET
+
+    form.name.data = activity['name']
+    form.slug.data = activity['slug']
 
     for field, errors in form.errors.items():
         for error in errors:
@@ -408,3 +408,33 @@ def edit_activity():
             ), 'error')
 
     return render_template('create_activity.html', form=form)
+
+
+@app.route('/view-activities', methods=['GET'])
+def view_activities():
+    # Check if logged in first
+    if not isLoggedIn():
+        return redirect(url_for('login', next=request.url_rule))
+
+    is_admin = False
+    user = getUser()
+
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return "There was an error.", 500
+
+    if type(user) is dict:
+        is_admin = user['site_admin']
+    elif type(user) is list:
+        is_admin = user[0]['site_admin']
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'], token=session['token'])
+
+    activities = ts.get_activities()
+
+    if 'error' in activities or 'pymesync error' in activities:
+        print activities
+        return "There was an error.", 500
+
+    return render_template('view_activities.html', activities=activities, is_admin=is_admin)
