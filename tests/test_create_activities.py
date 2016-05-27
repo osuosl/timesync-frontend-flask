@@ -73,4 +73,5 @@ class SubmitTestCase(unittest.TestCase):
         res = self.client.post(url_for('activities'), data=dict(name="sleeping",
             slug="sleep"), follow_redirects=True)
 
+        print res.status_code
         assert res.status_code == 401

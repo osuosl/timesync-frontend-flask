@@ -275,7 +275,7 @@ def admin():
     return render_template('admin.html')
 
 @app.route('/activities', methods=['GET', 'POST'])
-def create_activities():
+def activities():
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
@@ -298,9 +298,9 @@ def create_activities():
 
         # TODO: Better error handling
         if 'error' in res:
-            return res['error'], 500
+            return "Error: " + res['error'], 500
         elif 'pymesync error' in res:
-            return res['pymesync error'],  500
+            return "Pymesync error: " + res['pymesync error'],  500
 
         flash("Activity successfully submitted.")
         return redirect(url_for('activities'))
