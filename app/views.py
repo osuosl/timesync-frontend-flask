@@ -432,7 +432,7 @@ def view_activities():
         is_admin = user[0]['site_admin']
 
     if not is_admin:
-        return "Unauthorized user", 401
+        return "You cannot access this page.", 401
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
