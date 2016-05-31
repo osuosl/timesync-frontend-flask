@@ -278,23 +278,23 @@ def admin():
 @app.route('/create-activity', methods=['GET', 'POST'])
 def create_activity():
     # Check if logged in first
-    if not isLoggedIn():
+    if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
     # Check if the user is an admin and deny access if not
-    isAdmin = False
-    user = getUser()
+    is_admin = False
+    user = get_user()
 
     if 'error' in user or 'pymesync error' in user:
         print user
         return "There was an error.", 500
 
     if type(user) is dict:
-        isAdmin = user['site_admin']
+        is_admin = user['site_admin']
     elif type(user) is list:
-        isAdmin = user[0]['site_admin']
+        is_admin = user[0]['site_admin']
 
-    if not isAdmin:
+    if not is_admin:
         return "You cannot access this page.", 401
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
@@ -335,23 +335,23 @@ def create_activity():
 @app.route('/edit-activity', methods=['GET', 'POST'])
 def edit_activity():
     # Check if logged in first
-    if not isLoggedIn():
+    if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
     # Check if the user is an admin and deny access if not
-    isAdmin = False
-    user = getUser()
+    is_admin = False
+    user = get_user()
 
     if 'error' in user or 'pymesync error' in user:
         print user
         return "There was an error.", 500
 
     if type(user) is dict:
-        isAdmin = user['site_admin']
+        is_admin = user['site_admin']
     elif type(user) is list:
-        isAdmin = user[0]['site_admin']
+        is_admin = user[0]['site_admin']
 
-    if not isAdmin:
+    if not is_admin:
         return "You cannot access this page.", 401
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
@@ -416,11 +416,11 @@ def edit_activity():
 @app.route('/view-activities', methods=['GET'])
 def view_activities():
     # Check if logged in first
-    if not isLoggedIn():
+    if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
     is_admin = False
-    user = getUser()
+    user = get_user()
 
     if 'error' in user or 'pymesync error' in user:
         print user
