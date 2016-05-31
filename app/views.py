@@ -286,7 +286,7 @@ def activities():
                            test=app.config['TESTING'],
                            token=session['token'])
 
-    form = forms.ActivityForm()
+    form = forms.CreateActivityForm()
 
     if form.validate_on_submit():
         name = form.name.data
@@ -308,4 +308,54 @@ def activities():
         flash("Activity successfully submitted.")
         return redirect(url_for('activities'))
 
-    return render_template('activities.html', form=form)
+    return render_template('create_activities.html', form=form)
+
+@app.route('/activities/edit', methods=['GET', 'POST'])
+def edit_activities():
+    if not is_logged_in():
+        if request.method == 'GET':
+            return redirect(url_for('login', next=request.url_rule))
+        elif request.method == 'POST':
+            return "Not logged in.", 401
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+
+    form = forms.EditActivityForm()
+
+    activities = ts.get_activities()
+
+    if 'error' in activities:
+        return "Error: " + activities['error'], 500
+    elif 'pymesync error' in activities:
+        return "Pymesync error: " + activities['pymesync error'],  500
+
+    choices = []
+    for activity in activities:
+        choices.append((activity['slug'], activity['slug']))
+    form.slug.choices = choices
+
+    if form.validate_on_submit():
+        slug = form.slug.data
+        name = form.name.data
+        updated_slug = form.updated_slug.data
+
+        activity = {}
+        if name:
+            activity['name'] = name
+        if updated_slug:
+            activity['slug'] = updated_slug
+
+        res = ts.update_activity(activity=activity, slug=slug)
+
+        # TODO: Better error handling
+        if 'error' in res:
+            return "Error: " + res['error'] + " Text: " + res['text'], 500
+        elif 'pymesync error' in res:
+            return "Pymesync error: " + res['pymesync error'],  500
+
+        flash("Activity successfully updated.")
+        return redirect(url_for('edit_activities'))
+
+    return render_template('edit_activities.html', form=form)
