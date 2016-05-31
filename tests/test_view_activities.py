@@ -7,7 +7,7 @@ from urlparse import urlparse
 class ViewActivitiesTestCase(unittest.TestCase):
 
     def setUp(self):
-        
+
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
 
@@ -61,7 +61,7 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
         self.login_admin()
 
-        res = self.client.get('view_activities')
+        res = self.client.get(url_for('view_activities'))
         assert res.status_code == 200
 
     def test_login_redirect(self):
@@ -74,9 +74,9 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
     def test_unauthorized_user(self):
         """Make sure unauthorized users are refused access"""
-        
+
         self.login_user()
 
         res = self.client.get(url_for('view_activities'))
-        
+
         assert res.status_code == 401

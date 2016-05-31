@@ -383,7 +383,7 @@ def edit_activity():
 
         if name != activity['name']:
             activity_update['name'] = name
-        if slug != activity['slug']:
+        if not ts.test and slug != activity['slug']:
             activity_update['slug'] = slug
 
         res = ts.update_activity(activity=activity_update, slug=old_slug)
@@ -398,7 +398,10 @@ def edit_activity():
     # If GET
 
     form.name.data = activity['name']
-    form.slug.data = activity['slug']
+    if ts.test:
+        form.slug.data = activity['slugs'][0]
+    else:
+        form.slug.data = activity['slug']
 
     for field, errors in form.errors.items():
         for error in errors:
@@ -428,6 +431,9 @@ def view_activities():
     elif type(user) is list:
         is_admin = user[0]['site_admin']
 
+    if not is_admin:
+        return "Unauthorized user", 401
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
 
@@ -437,4 +443,5 @@ def view_activities():
         print activities
         return "There was an error.", 500
 
-    return render_template('view_activities.html', activities=activities, is_admin=is_admin)
+    return render_template('view_activities.html', activities=activities,
+                           is_admin=is_admin)

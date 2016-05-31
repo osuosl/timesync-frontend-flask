@@ -48,8 +48,9 @@ class EditActivityTestCase(unittest.TestCase):
         return res
 
     def edit_activity(self):
-        return self.client.post(url_for('edit_activity'), data={
-            "name": "asdf"
+        return self.client.post(url_for('edit_activity', slug='test'), data={
+            "name": "asdf",
+            "slug": "test"
         }, follow_redirects=True)
 
     def test_url_endpoint(self):
@@ -85,5 +86,4 @@ class EditActivityTestCase(unittest.TestCase):
         self.login_admin()
         res = self.edit_activity()
 
-        print res.status_code
         assert res.status_code == 200
