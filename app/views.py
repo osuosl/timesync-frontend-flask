@@ -277,7 +277,10 @@ def admin():
 @app.route('/activities', methods=['GET', 'POST'])
 def activities():
     if not is_logged_in():
-        return redirect(url_for('login', next=request.url_rule))
+        if request.method == 'GET':
+            return redirect(url_for('login', next=request.url_rule))
+        elif request.method == 'POST':
+            return "Not logged in.", 401
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
