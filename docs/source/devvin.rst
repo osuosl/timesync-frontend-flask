@@ -110,7 +110,11 @@ Style Guidelines
 ----------------
 
 This codebase adheres to the `PEP 8`_ standard. Make sure your code
-passes inspection by :code:`flake8` before you submit a pull request!
+passes inspection by running the following command from the project root:
+
+.. code-block:: none
+
+    (venv) $ flake8 app && flake8 tests
 
 .. _PEP 8: https://www.python.org/dev/peps/pep-0008/
 
@@ -119,4 +123,8 @@ Testing
 
 Writing comprehensive unit tests is good practice. All of the tests for
 timesync-frontend-flask are located in the :code:`tests/` directory, and you can run
-them all at once by running :code:`nosetests` inside the project root directory.
+them all at once by running this command from the project root:
+
+.. code-block:: none
+
+    (venv) $ nosetests
