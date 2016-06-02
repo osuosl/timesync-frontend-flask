@@ -36,11 +36,12 @@ WTForms
 '''''''
 
 `WTForms`_ is the library we use to create and handle HTML forms. It provides
-neat features like form validation and `CSRF`_ protection. The Flask-WTF
+neat features like form validation and `CSRF`_ protection. The `Flask-WTF`_ module
 allows for easy integration with Flask.
 
 .. _WTForms: http://wtforms.readthedocs.io/en/latest/index.html
 .. _CSRF: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29
+.. _Flask-WTF: https://flask-wtf.readthedocs.io/en/latest/
 
 Pymesync
 ''''''''
