@@ -53,9 +53,11 @@ def index():
 
     if logged_in:
         user = get_user()
-        if 'error' in user or 'pymesync error' in user:
-            print user
-            return "There was an error.", 500
+        if 'error' in user:
+            flash("Error: " + user["error"] + "\nText: " + user["text"])
+        elif 'pymesync error' in user:
+            flash("Error: " + user["pymesync error"] + "\nText: " +
+                  user["text"])
 
         if type(user) is dict:
             is_admin = user['site_admin']
@@ -128,8 +130,11 @@ def create_time():
     projects = ts.get_projects()
 
     # TODO: Better error handling
-    if 'error' in projects or 'pymesync error' in projects:
-        return "There was an error.", 500
+    if 'error' in projects:
+        flash("Error: " + projects["error"] + "\nText: " + projects["text"])
+    elif 'pymesync error' in projects:
+        flash("Error: " + projects["pymesync error"] + "\nText: " +
+              projects["text"])
 
     # Load the projects into a list of tuples
     choices = []
@@ -179,8 +184,11 @@ def create_time():
         res = ts.create_time(time=time)
 
         # TODO: Better error handling
-        if 'error' in res or 'pymesync error' in res:
-            return "There was an error.", 500
+        if 'error' in res:
+            flash("Error: " + res["error"] + "\nText: " + res["text"])
+        elif 'pymesync error' in res:
+            flash("Error: " + res["pymesync error"] + "\nText: " +
+                  res["text"])
 
         flash("Time successfully submitted.")
         return redirect(url_for('index'))
@@ -242,8 +250,13 @@ def view_times():
     times = ts.get_times(query_parameters=query)
 
     # Show any errors
-    if 'error' in times or 'pymesync error' in times:
-        flash("Error")
+    if 'error' in times:
+        flash("Error: " + times["error"] + "\nText: " + times["text"])
+        flash(times)
+        times = list()
+    elif 'pymesync error' in times:
+        flash("Error: " + times["pymesync error"] + "\nText: " +
+              times["text"])
         flash(times)
         times = list()
 
@@ -260,9 +273,11 @@ def admin():
     is_admin = False
     user = get_user()
 
-    if 'error' in user or 'pymesync error' in user:
-        print user
-        return "There was an error.", 500
+    if 'error' in user:
+        flash("Error: " + user["error"] + "\nText: " + user["text"])
+    elif 'pymesync error' in user:
+        flash("Error: " + user["pymesync error"] + "\nText: " +
+              user["text"])
 
     if type(user) is dict:
         is_admin = user['site_admin']
