@@ -49,9 +49,9 @@ def get_user():
 @app.route('/')
 def index():
     is_admin = False
-    loggedIn = is_logged_in()
+    logged_in = is_logged_in()
 
-    if loggedIn:
+    if logged_in:
         user = get_user()
         if 'error' in user or 'pymesync error' in user:
             print user
@@ -60,7 +60,7 @@ def index():
         if type(user) is dict:
             is_admin = user['site_admin']
 
-    return render_template('index.html', is_logged_in=loggedIn,
+    return render_template('index.html', is_logged_in=logged_in,
                            is_admin=is_admin)
 
 
@@ -110,8 +110,8 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
+@app.route('/times/create', methods=['GET', 'POST'])
+def create_time():
     # Check if logged in first
     if not is_logged_in():
         if request.method == 'GET':
@@ -119,7 +119,7 @@ def submit():
         elif request.method == 'POST':
             return "Not logged in.", 401
 
-    form = forms.SubmitTimesForm()
+    form = forms.CreateTimeForm()
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
@@ -183,7 +183,7 @@ def submit():
             return "There was an error.", 500
 
         flash("Time successfully submitted.")
-        return redirect(url_for('submit'))
+        return redirect(url_for('index'))
 
     # Flash any form errors
     for field, errors in form.errors.items():
@@ -195,11 +195,11 @@ def submit():
 
     # If not submitted (GET)
 
-    return render_template('submit.html', form=form)
+    return render_template('create_time.html', form=form)
 
 
-@app.route('/report', methods=['GET', 'POST'])
-def report():
+@app.route('/times', methods=['GET', 'POST'])
+def view_times():
     # Check if logged in first
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
@@ -208,7 +208,7 @@ def report():
                            test=app.config['TESTING'], token=session['token'])
 
     # Form for filter parameters
-    form = forms.GenerateReportForm()
+    form = forms.FilterTimesForm()
 
     # Dictionary to store filter parameters
     query = dict()
@@ -247,7 +247,7 @@ def report():
         flash(times)
         times = list()
 
-    return render_template('report.html', form=form, times=times)
+    return render_template('view_times.html', form=form, times=times)
 
 
 @app.route('/admin')
