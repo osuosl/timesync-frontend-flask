@@ -32,15 +32,20 @@ def is_logged_in():
 
 def get_user(username):
     if not is_logged_in():
-        return {'error': "Not logged in."}
+        print "Error: Not logged in."
+        return {}
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
                            token=session['token'])
     user = ts.get_users(username=username)
 
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return {}
+
     # If in testing mode and the username is admin, allow admin access
-    if app.config['TESTING'] and session['username'] == 'admin':
+    if app.config['TESTING'] and user[0]['username'] == 'admin':
         user[0]['site_admin'] = True
 
     return user
@@ -53,8 +58,7 @@ def index():
 
     if loggedIn:
         user = get_user(session['user']['username'])
-        if 'error' in user or 'pymesync error' in user:
-            print user
+        if not user:
             return "There was an error.", 500
 
         if type(user) is dict:
@@ -98,8 +102,7 @@ def login():
                 user = user[0]
 
             # TODO: Better error handling
-            if 'error' in user:
-                print user
+            if not user:
                 return "There was an error.", 500
 
             session['user'] = user
