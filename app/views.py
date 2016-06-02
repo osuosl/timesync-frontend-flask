@@ -30,20 +30,28 @@ def is_logged_in():
     return True
 
 
-def get_user():
+def get_user(username):
     if not is_logged_in():
-        return {'error': "Not logged in."}
+        print "Error: Not logged in."
+        return {}
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
                            token=session['token'])
-    user = ts.get_users(username=session['username'])
+    user = ts.get_users(username=username)
+
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return {}
 
     # If in testing mode and the username is admin, allow admin access
-    if app.config['TESTING'] and session['username'] == 'admin':
+    if app.config['TESTING'] and user[0]['username'] == 'admin':
         user[0]['site_admin'] = True
 
-    return user
+    if type(user) is list:
+        return user[0]
+    else:
+        return user
 
 
 @app.route('/')
@@ -52,13 +60,11 @@ def index():
     loggedIn = is_logged_in()
 
     if loggedIn:
-        user = get_user()
-        if 'error' in user or 'pymesync error' in user:
-            print user
+        user = get_user(session['user']['username'])
+        if not user:
             return "There was an error.", 500
 
-        if type(user) is dict:
-            is_admin = user['site_admin']
+        is_admin = user['site_admin']
 
     return render_template('index.html', is_logged_in=loggedIn,
                            is_admin=is_admin)
@@ -91,8 +97,15 @@ def login():
             return "There was an error.", 500
         # Else success, redirect to index page
         else:
-            session['username'] = username
             session['token'] = token['token']
+            user = get_user(username)
+
+            # TODO: Better error handling
+            if not user:
+                return "There was an error.", 500
+
+            session['user'] = user
+
             return form.redirect(url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
@@ -258,16 +271,13 @@ def admin():
 
     # Check if the user is an admin and deny access if not
     is_admin = False
-    user = get_user()
+    user = get_user(session['user']['username'])
 
     if 'error' in user or 'pymesync error' in user:
         print user
         return "There was an error.", 500
 
-    if type(user) is dict:
-        is_admin = user['site_admin']
-    elif type(user) is list:
-        is_admin = user[0]['site_admin']
+    is_admin = user['site_admin']
 
     if not is_admin:
         return "You cannot access this page.", 401
