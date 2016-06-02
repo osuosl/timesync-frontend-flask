@@ -4,7 +4,7 @@
 
   Please list the issue this fixes in the PR
 -->
-fixes issue #xx
+Fixes #xx
 
 ## Changes in this PR.
 <!--
