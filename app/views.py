@@ -48,7 +48,10 @@ def get_user(username):
     if app.config['TESTING'] and user[0]['username'] == 'admin':
         user[0]['site_admin'] = True
 
-    return user
+    if type(user) is list:
+        return user[0]
+    else:
+        return user
 
 
 @app.route('/')
@@ -61,8 +64,7 @@ def index():
         if not user:
             return "There was an error.", 500
 
-        if type(user) is dict:
-            is_admin = user['site_admin']
+        is_admin = user['site_admin']
 
     return render_template('index.html', is_logged_in=loggedIn,
                            is_admin=is_admin)
@@ -97,9 +99,6 @@ def login():
         else:
             session['token'] = token['token']
             user = get_user(username)
-
-            if type(user) is list:
-                user = user[0]
 
             # TODO: Better error handling
             if not user:
@@ -278,10 +277,7 @@ def admin():
         print user
         return "There was an error.", 500
 
-    if type(user) is dict:
-        is_admin = user['site_admin']
-    elif type(user) is list:
-        is_admin = user[0]['site_admin']
+    is_admin = user['site_admin']
 
     if not is_admin:
         return "You cannot access this page.", 401
