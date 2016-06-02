@@ -43,7 +43,7 @@ class LoginForm(RedirectForm):
                              render_kw={'placeholder': 'password'})
 
 
-class SubmitTimesForm(Form):
+class CreateTimeForm(Form):
     user = StringField('User:', validators=[DataRequired()])
     duration = StringField('Duration:', validators=[DataRequired()])
     project = SelectField('Project:', validators=[DataRequired()])
@@ -58,7 +58,7 @@ class SubmitTimesForm(Form):
                             description='E.g. http://www.github.com')
 
 
-class GenerateReportForm(Form):
+class FilterTimesForm(Form):
     # All optional
     user = StringField('User:')
     project = StringField('Project Slugs:', description='Comma separated')

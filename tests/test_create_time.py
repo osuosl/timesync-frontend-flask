@@ -34,8 +34,8 @@ class SubmitTestCase(unittest.TestCase):
 
         return res
 
-    def submit(self):
-        return self.client.post(url_for('submit'), data=dict(
+    def create_time(self):
+        return self.client.post(url_for('create_time'), data=dict(
             user="test",
             duration="3",
             project="timesync-node",
@@ -44,20 +44,20 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_url_endpoint(self):
         """Make sure the url endpoint for submit exists."""
-        url = url_for('submit')
-        assert url == '/submit'
+        url = url_for('create_time')
+        assert url == '/times/create'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
         self.login()
 
-        res = self.client.get(url_for('submit'))
+        res = self.client.get(url_for('create_time'))
         assert res.status_code == 200
 
     def test_login_redirect(self):
         """Make sure unauthorized users are redirected to login page."""
-        submitRes = self.client.get(url_for('submit'))
-        endpoint = urlparse(submitRes.location).path
+        res = self.client.get(url_for('create_time'))
+        endpoint = urlparse(res.location).path
 
         assert endpoint == url_for('login')
 
@@ -65,7 +65,7 @@ class SubmitTestCase(unittest.TestCase):
         """Tests the submit page for correct form fields."""
         self.login()
 
-        res = self.client.get(url_for('submit'))
+        res = self.client.get(url_for('create_time'))
         fields = ['form', 'input', 'User', 'Duration', 'Project',
                   'Activities', 'Date Worked', 'Notes', 'Issue URI']
 
@@ -75,12 +75,12 @@ class SubmitTestCase(unittest.TestCase):
     def test_submit(self):
         """Tests successful time submission."""
         self.login()
-        res = self.submit()
+        res = self.create_time()
 
         assert res.status_code == 200
 
     def test_unauthorized_submit(self):
         """Tests submission without logging in first."""
-        res = self.submit()
+        res = self.create_time()
 
         assert res.status_code == 401

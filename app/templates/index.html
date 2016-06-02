@@ -15,8 +15,8 @@
 
     {% if is_logged_in %}
         <div class="menu">
-            <a href="{{ url_for('submit') }}">Submit</a>
-            <a href="{{ url_for('report') }}">Reports</a>
+            <a href="{{ url_for('create_time') }}">Submit Time</a>
+            <a href="{{ url_for('view_times') }}">View Times</a>
             {% if is_admin %}
                 <a href="/admin">Admin</a>
             {% endif %}
