@@ -47,7 +47,7 @@ def get_user():
 
 
 def getProjects(username):
-    if not isLoggedIn():
+    if not is_logged_in():
         return [{'error': "Not logged in."}]
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
