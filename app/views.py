@@ -61,8 +61,6 @@ def getProjects(username):
     for project in projects:
         if 'users' in project and username in project['users']:
             userProjects.append(project)
-        elif 'owner' in project and username == project['owner']:
-            userProjects.append(project)
 
     return userProjects
 
