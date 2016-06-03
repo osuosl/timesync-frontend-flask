@@ -208,7 +208,7 @@ def create_time():
 @app.route('/times/edit', methods=['GET', 'POST'])
 def edit_time():
     # Check if logged in first
-    if not isLoggedIn():
+    if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
@@ -254,7 +254,7 @@ def edit_time():
     if time['issue_uri']:
         time_data['issue_uri'] = str(time['issue_uri'])
 
-    form = forms.SubmitTimesForm(data=time_data)
+    form = forms.CreateTimeForm(data=time_data)
 
     form.project.choices = choices
 
@@ -288,6 +288,8 @@ def edit_time():
         res = ts.update_time(uuid=uuid, time=time_update)
 
         if 'error' in res or 'pymesync error' in res:
+            print time_update
+            print res
             return 'There was an error', 500
 
         flash("Time successfully updated")

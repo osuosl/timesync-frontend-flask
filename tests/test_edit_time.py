@@ -34,32 +34,32 @@ class EditTestCase(unittest.TestCase):
         return res
 
     def edit(self):
-        return self.client.post(url_for('edit'), data={
+        return self.client.post(url_for('edit_time'), data={
             "date_worked": '2016-05-20'
         }, follow_redirects=True)
 
     def test_url_endpoint(self):
         """Make sure the url endpoint for edit exists."""
-        url = url_for('edit')
-        assert url == '/edit'
+        url = url_for('edit_time')
+        assert url == '/times/edit'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
         self.login()
 
-        res = self.client.get(url_for('edit'))
+        res = self.client.get(url_for('edit_time'))
         assert res.status_code == 200
 
     def test_login_redirect(self):
         """Make sure unauthorized users are redirected to login page"""
-        edit_res = self.client.get(url_for('edit'))
+        edit_res = self.client.get(url_for('edit_time'))
         endpoint = urlparse(edit_res.location).path
 
         assert endpoint == url_for('login')
 
     def test_form_fields(self):
         """Tests the edit page for correct form fields"""
-        form = forms.SubmitTimesForm()
+        form = forms.CreateTimeForm()
 
         fields = ['user', 'duration', 'project', 'date_worked', 'activities',
                   'notes', 'issue_uri']
