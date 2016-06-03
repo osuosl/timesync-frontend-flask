@@ -56,7 +56,7 @@ class EditActivityTestCase(unittest.TestCase):
     def test_url_endpoint(self):
         """Make sure the url endpoint for edit exists."""
         url = url_for('edit_activity')
-        assert url == '/edit-activity'
+        assert url == '/activities/edit'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

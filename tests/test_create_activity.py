@@ -59,7 +59,7 @@ class CreateActivityTestCase(unittest.TestCase):
     def test_url_endpoint(self):
         """Make sure the url endpoint for create_activity exists."""
         url = url_for('create_activity')
-        assert url == '/create-activity'
+        assert url == '/activities/create'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

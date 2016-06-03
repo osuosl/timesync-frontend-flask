@@ -54,7 +54,7 @@ class ViewActivitiesTestCase(unittest.TestCase):
         """Make sure the url endpoint for view_activities exists"""
 
         url = url_for('view_activities')
-        assert url == '/view-activities'
+        assert url == '/activities'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

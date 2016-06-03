@@ -275,7 +275,7 @@ def admin():
     return render_template('admin.html')
 
 
-@app.route('/create-activity', methods=['GET', 'POST'])
+@app.route('/activities/create', methods=['GET', 'POST'])
 def create_activity():
     # Check if logged in first
     if not is_logged_in():
@@ -332,7 +332,7 @@ def create_activity():
     return render_template('create_activity.html', form=form)
 
 
-@app.route('/edit-activity', methods=['GET', 'POST'])
+@app.route('/activities/edit', methods=['GET', 'POST'])
 def edit_activity():
     # Check if logged in first
     if not is_logged_in():
@@ -413,7 +413,7 @@ def edit_activity():
     return render_template('create_activity.html', form=form)
 
 
-@app.route('/view-activities', methods=['GET'])
+@app.route('/activities', methods=['GET'])
 def view_activities():
     # Check if logged in first
     if not is_logged_in():
