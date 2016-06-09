@@ -134,7 +134,8 @@ def create_time():
     if 'error' in projects:
         flash("Error: " + projects["error"] + " - " + projects["text"])
     elif 'pymesync error' in projects:
-        flash("Error: " + projects["pymesync error"] + " - " + projects["text"])
+        flash("Error: " + projects["pymesync error"] + " - " +
+              projects["text"])
 
     # Load the projects into a list of tuples
     choices = []
