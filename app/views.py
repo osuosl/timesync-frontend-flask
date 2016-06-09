@@ -53,11 +53,12 @@ def index():
 
     if logged_in:
         user = get_user()
+
+        # Show any errors
         if 'error' in user:
-            flash("Error: " + user["error"] + "\nText: " + user["text"])
+            flash("Error: " + user["error"] + " - " + user["text"])
         elif 'pymesync error' in user:
-            flash("Error: " + user["pymesync error"] + "\nText: " +
-                  user["text"])
+            flash("Error: " + user["pymesync error"] + " - " + user["text"])
 
         if type(user) is dict:
             is_admin = user['site_admin']
@@ -85,12 +86,12 @@ def login():
 
         # If regular error, tell user error
         if 'error' in token:
-            flash(token['text'])
+            flash("Error: " + token['error'] + " - " + token['text'])
             status = token['status']
-        # If pymesync error, tell user vague error
+        # If pymesync error, tell user error
         elif 'pymesync error' in token:
             print token
-            return "There was an error.", 500
+            flash("Error: " + token['pymesync error'] + " - " + token['text'])
         # Else success, redirect to index page
         else:
             session['username'] = username
@@ -129,12 +130,11 @@ def create_time():
 
     projects = ts.get_projects()
 
-    # TODO: Better error handling
+    # Show any errors
     if 'error' in projects:
-        flash("Error: " + projects["error"] + "\nText: " + projects["text"])
+        flash("Error: " + projects["error"] + " - " + projects["text"])
     elif 'pymesync error' in projects:
-        flash("Error: " + projects["pymesync error"] + "\nText: " +
-              projects["text"])
+        flash("Error: " + projects["pymesync error"] + " - " + projects["text"])
 
     # Load the projects into a list of tuples
     choices = []
@@ -183,12 +183,11 @@ def create_time():
 
         res = ts.create_time(time=time)
 
-        # TODO: Better error handling
+        # Show any errors
         if 'error' in res:
-            flash("Error: " + res["error"] + "\nText: " + res["text"])
+            flash("Error: " + res["error"] + " - " + res["text"])
         elif 'pymesync error' in res:
-            flash("Error: " + res["pymesync error"] + "\nText: " +
-                  res["text"])
+            flash("Error: " + res["pymesync error"] + " - " + res["text"])
 
         flash("Time successfully submitted.")
         return redirect(url_for('index'))
@@ -251,12 +250,11 @@ def view_times():
 
     # Show any errors
     if 'error' in times:
-        flash("Error: " + times["error"] + "\nText: " + times["text"])
+        flash("Error: " + times["error"] + " - " + times["text"])
         flash(times)
         times = list()
     elif 'pymesync error' in times:
-        flash("Error: " + times["pymesync error"] + "\nText: " +
-              times["text"])
+        flash("Error: " + times["pymesync error"] + " - " + times["text"])
         flash(times)
         times = list()
 
@@ -273,11 +271,11 @@ def admin():
     is_admin = False
     user = get_user()
 
+    # Show any errors
     if 'error' in user:
-        flash("Error: " + user["error"] + "\nText: " + user["text"])
+        flash("Error: " + user["error"] + " - " + user["text"])
     elif 'pymesync error' in user:
-        flash("Error: " + user["pymesync error"] + "\nText: " +
-              user["text"])
+        flash("Error: " + user["pymesync error"] + " - " + user["text"])
 
     if type(user) is dict:
         is_admin = user['site_admin']
