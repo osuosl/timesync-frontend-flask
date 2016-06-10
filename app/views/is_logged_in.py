@@ -1,8 +1,9 @@
-from flask import session, redirect, url_for, request, render_template, flash
-from app import app, forms
+from flask import session
+from app import app
+from app.views.logout import logout
 from datetime import datetime
 import pymesync
-import re
+
 
 def is_logged_in():
     """Checks if the user is logged in. Also checks token expiration time,

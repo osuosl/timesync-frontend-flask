@@ -1,9 +1,9 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 from app.views.is_logged_in import is_logged_in
-from datetime import datetime
 import pymesync
 import re
+
 
 @app.route('/times/create', methods=['GET', 'POST'])
 def create_time():

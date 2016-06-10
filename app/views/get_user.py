@@ -1,9 +1,7 @@
-from flask import session, redirect, url_for, request, render_template, flash
-from app import app, forms
+from flask import session
+from app import app
 from app.views.is_logged_in import is_logged_in
-from datetime import datetime
 import pymesync
-import re
 
 
 def get_user():

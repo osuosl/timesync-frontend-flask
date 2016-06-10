@@ -1,8 +1,7 @@
-from flask import session, redirect, url_for, request, render_template, flash
+from flask import session, url_for, request, render_template, flash
 from app import app, forms
-from datetime import datetime
 import pymesync
-import re
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
