@@ -1,5 +1,7 @@
 import unittest
 from app import app
+from app.views import *
+from app.views.get_user import get_user
 from flask import url_for
 from urlparse import urlparse
 
