@@ -48,9 +48,16 @@ def get_user():
 
 def error_message(array):
     if 'error' in array:
-        flash("Error: " + array["error"] + " - " + error["text"])
+        flash("Error: " + array["error"] + " - " + array["text"])
+        # There was an error
+        return True
     elif 'pymesync error' in array:
         flash("Error: " + array["pymesync error"] + " - " + array["text"])
+        # There was an error
+        return True
+
+    # No error
+    return False
 
 
 @app.route('/')
@@ -63,12 +70,6 @@ def index():
 
         # Show any errors
         error_message(user)
-        """
-        if 'error' in user:
-            flash("Error: " + user["error"] + " - " + user["text"])
-        elif 'pymesync error' in user:
-            flash("Error: " + user["pymesync error"] + " - " + user["text"])
-        """
 
         if type(user) is dict:
             is_admin = user['site_admin']
@@ -253,12 +254,7 @@ def view_times():
     times = ts.get_times(query_parameters=query)
 
     # Show any errors
-    if 'error' in times:
-        flash("Error: " + times["error"] + " - " + times["text"])
-        flash(times)
-        times = list()
-    elif 'pymesync error' in times:
-        flash("Error: " + times["pymesync error"] + " - " + times["text"])
+    if error_message(times):
         flash(times)
         times = list()
 
