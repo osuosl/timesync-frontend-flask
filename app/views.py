@@ -46,6 +46,13 @@ def get_user():
     return user
 
 
+def error_message(array):
+    if 'error' in array:
+        flash("Error: " + array["error"] + " - " + error["text"])
+    elif 'pymesync error' in array:
+        flash("Error: " + array["pymesync error"] + " - " + array["text"])
+
+
 @app.route('/')
 def index():
     is_admin = False
@@ -55,10 +62,13 @@ def index():
         user = get_user()
 
         # Show any errors
+        error_message(user)
+        """
         if 'error' in user:
             flash("Error: " + user["error"] + " - " + user["text"])
         elif 'pymesync error' in user:
             flash("Error: " + user["pymesync error"] + " - " + user["text"])
+        """
 
         if type(user) is dict:
             is_admin = user['site_admin']
@@ -131,11 +141,7 @@ def create_time():
     projects = ts.get_projects()
 
     # Show any errors
-    if 'error' in projects:
-        flash("Error: " + projects["error"] + " - " + projects["text"])
-    elif 'pymesync error' in projects:
-        flash("Error: " + projects["pymesync error"] + " - " +
-              projects["text"])
+    error_message(projects)
 
     # Load the projects into a list of tuples
     choices = []
@@ -185,10 +191,7 @@ def create_time():
         res = ts.create_time(time=time)
 
         # Show any errors
-        if 'error' in res:
-            flash("Error: " + res["error"] + " - " + res["text"])
-        elif 'pymesync error' in res:
-            flash("Error: " + res["pymesync error"] + " - " + res["text"])
+        error_message(res)
 
         flash("Time successfully submitted.")
         return redirect(url_for('index'))
@@ -273,10 +276,7 @@ def admin():
     user = get_user()
 
     # Show any errors
-    if 'error' in user:
-        flash("Error: " + user["error"] + " - " + user["text"])
-    elif 'pymesync error' in user:
-        flash("Error: " + user["pymesync error"] + " - " + user["text"])
+    error_message(user)
 
     if type(user) is dict:
         is_admin = user['site_admin']
