@@ -1,7 +1,6 @@
 from flask import render_template
 from app import app
-from app.views.is_logged_in import is_logged_in
-from app.views.get_user import get_user
+from app.util import get_user, is_logged_in
 
 
 @app.route('/')

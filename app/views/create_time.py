@@ -1,6 +1,6 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.views.is_logged_in import is_logged_in
+from app.util import is_logged_in
 import pymesync
 import re
 
