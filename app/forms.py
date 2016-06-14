@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    BooleanField
+    BooleanField, HiddenField
 from wtforms.validators import DataRequired, Optional
 
 
@@ -9,6 +9,10 @@ class LoginForm(Form):
                            render_kw={'placeholder': 'username'})
     password = PasswordField('password', validators=[DataRequired()],
                              render_kw={'placeholder': 'password'})
+
+
+class ConfirmDeleteForm(Form):
+    uuid = HiddenField()
 
 
 class CreateTimeForm(Form):
