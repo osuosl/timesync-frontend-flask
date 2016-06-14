@@ -214,6 +214,8 @@ def edit_time():
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
 
+    user = get_user()
+
     projects = ts.get_projects()
 
     # TODO: Better error handling
@@ -234,7 +236,7 @@ def edit_time():
     if 'error' in time or 'pymesync error' in time:
         return 'There was an error', 500
 
-    if time['user'] != session['username']:
+    if time['user'] != user['username'] and not user['site_admin']:
         return "Permission denied", 500
 
     time_data = {
@@ -315,6 +317,8 @@ def view_times():
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
 
+    user = get_user()
+
     # Form for filter parameters
     form = forms.FilterTimesForm()
 
@@ -356,7 +360,7 @@ def view_times():
         times = list()
 
     return render_template('view_times.html', form=form, times=times,
-                           user=session['username'])
+                           user=user['username'], admin=user['site_admin'])
 
 
 @app.route('/admin')
