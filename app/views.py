@@ -96,13 +96,12 @@ def login():
                                 auth_type='password')
 
         # If regular error, tell user error
+        error_message(token)
         if 'error' in token:
-            flash("Error: " + token['error'] + " - " + token['text'])
             status = token['status']
         # If pymesync error, tell user error
         elif 'pymesync error' in token:
             print token
-            flash("Error: " + token['pymesync error'] + " - " + token['text'])
         # Else success, redirect to index page
         else:
             session['username'] = username
