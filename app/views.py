@@ -326,7 +326,7 @@ def view_times():
     if form.validate_on_submit():
         req_form = request.form
 
-        user = req_form['user']
+        username = req_form['user']
         projects = req_form['project']
         activities = req_form['activity']
         start = req_form['start']
@@ -334,7 +334,7 @@ def view_times():
 
         # Only using filter parameters that have been supplied
         if user:
-            query['user'] = [user]
+            query['user'] = [username]
         if projects:
             query['project'] = [p.strip() for p in projects.split(',')]
         if activities:
