@@ -16,18 +16,24 @@ def delete_time():
 
     uuid = request.args.get('time')
 
+    if not uuid and request.method == 'GET':
+        return 'UUID not found', 404
+
     time = ts.get_times({"uuid": uuid})[0]
 
     user = session['user']
 
     if time['user'] != user['username'] and not user['site_admin']:
-        return "Permission Denied", 500
+        return 'Permission Denied', 500
 
     # Form to confirm deletion
     form = forms.ConfirmDeleteForm(uuid=uuid)
 
     if form.validate_on_submit():
         req_form = request.form
+
+        if 'uuid' not in req_form:
+            return 'UUID not found', 404
 
         uuid = req_form['uuid']
         response = ts.delete_time(uuid=uuid)

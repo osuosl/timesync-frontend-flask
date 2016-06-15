@@ -1,7 +1,8 @@
 import unittest
-from app import app
+from app import app, filters
 from flask import url_for
 from urlparse import urlparse
+import pymesync
 
 
 class DeleteTimeTestCase(unittest.TestCase):
@@ -21,7 +22,7 @@ class DeleteTimeTestCase(unittest.TestCase):
         self.ctx.pop()
 
     def login_user(self):
-        self.username = 'test'
+        self.username = 'unauthorized'
         self.password = 'test'
 
         res = self.client.post(url_for('login'), data=dict(
@@ -49,7 +50,12 @@ class DeleteTimeTestCase(unittest.TestCase):
         return res
 
     def get_page(self):
-        res = self.client.get(url_for('delete_time', uuid='test'))
+        res = self.client.get(url_for('delete_time', time='test'))
+
+        return res
+
+    def get_page_no_uuid(self):
+        res = self.client.get(url_for('delete_time'))
 
         return res
 
@@ -57,6 +63,12 @@ class DeleteTimeTestCase(unittest.TestCase):
         res = self.client.post(url_for('delete_time'), data=dict(
             uuid="test"
         ), follow_redirects=True)
+
+        return res
+
+    def delete_time_no_uuid(self):
+        res = self.client.post(url_for('delete_time'), data=dict(),
+                               follow_redirects=True)
 
         return res
 
@@ -68,8 +80,8 @@ class DeleteTimeTestCase(unittest.TestCase):
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
         self.login_admin()
-
         res = self.get_page()
+
         assert res.status_code == 200
 
     def test_login_redirect(self):
@@ -85,3 +97,47 @@ class DeleteTimeTestCase(unittest.TestCase):
         res = self.get_page()
 
         assert res.status_code == 500
+
+    def test_get_page(self):
+        """Make sure that the page is correct"""
+        self.login_admin()
+        res = self.get_page()
+        page_data = res.data
+
+        assert 'time-info' in page_data
+        assert 'confirm-delete' in page_data
+        assert url_for('view_times') in page_data
+
+        ts = pymesync.TimeSync(baseurl='test', test=True)
+        ts.authenticate('test', 'test', 'password')
+        ref_time = ts.get_times({"uuid": "test"})[0]
+
+        assert ref_time['uuid'] in page_data
+        assert ref_time['user'] in page_data
+        assert filters.hms_filter(ref_time['duration']) in page_data
+        assert ref_time['date_worked'] in page_data
+        assert ' '.join(ref_time['project']) in page_data
+        assert ' '.join(ref_time['activities']) in page_data
+        assert ref_time['issue_uri'] in page_data
+        assert ref_time['notes'] in page_data
+
+    def test_get_page_no_uuid(self):
+        """Make sure that trying to get the page without a UUID fails"""
+        self.login_admin()
+        res = self.get_page_no_uuid()
+
+        assert res.status_code == 404
+
+    def test_delete_time(self):
+        """Test deleting a time"""
+        self.login_admin()
+        res = self.delete_time()
+
+        assert 'Deletion successful' in res.data
+
+    def test_delete_time_no_uuid(self):
+        """Test deleting a time without putting a UUID in the query string"""
+        self.login_admin()
+        res = self.delete_time_no_uuid()
+
+        assert res.status_code == 404
