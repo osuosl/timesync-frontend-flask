@@ -1,6 +1,5 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from datetime import datetime
 import pymesync
 from app.util import is_logged_in, get_user
 
