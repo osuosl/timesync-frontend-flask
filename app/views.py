@@ -43,7 +43,7 @@ def get_user():
     if app.config['TESTING'] and session['username'] == 'admin':
         user[0]['site_admin'] = True
 
-    return user
+    return user[0]
 
 
 def to_readable_time(seconds):
@@ -224,14 +224,11 @@ def edit_time():
 
     choices = []
     for project in projects:
-        choices.append((project['name'], project['name']))
+        choices.append((project['slugs'][0], project['name']))
 
     uuid = request.args.get('time') if not ts.test else 'test'
 
-    time = ts.get_times({'uuid': uuid})
-
-    if ts.test:
-        time = time[0]
+    time = ts.get_times({'uuid': uuid})[0]
 
     if 'error' in time or 'pymesync error' in time:
         return 'There was an error', 500
@@ -267,7 +264,7 @@ def edit_time():
         duration = req_form['duration']
         project = req_form['project']
         date_worked = req_form['date_worked']
-        activities = req_form['activities'].split(',')
+        activities = [a.strip() for a in req_form['activities'].split(',')]
         notes = req_form['notes']
         issue_uri = req_form['issue_uri']
 
