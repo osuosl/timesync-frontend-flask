@@ -43,7 +43,7 @@ def get_user():
     if app.config['TESTING'] and session['username'] == 'admin':
         user[0]['site_admin'] = True
 
-    return user
+    return user[0]
 
 
 @app.route('/')
@@ -361,10 +361,7 @@ def edit_activity():
 
     slug = request.args.get('slug') if not ts.test else 'test'
 
-    activity = ts.get_activities(query_parameters={"slug": slug})
-
-    if ts.test:
-        activity = activity[0]
+    activity = ts.get_activities(query_parameters={"slug": slug})[0]
 
     if 'error' in activity or 'pymesync error' in activity:
         print activity
@@ -399,7 +396,7 @@ def edit_activity():
 
     form.name.data = activity['name']
     if ts.test:
-        form.slug.data = activity['slugs'][0]
+        form.slug.data = activity['slug'][0]
     else:
         form.slug.data = activity['slug']
 
@@ -430,9 +427,6 @@ def view_activities():
         is_admin = user['site_admin']
     elif type(user) is list:
         is_admin = user[0]['site_admin']
-
-    if not is_admin:
-        return "You cannot access this page.", 401
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])

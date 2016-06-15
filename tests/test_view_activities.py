@@ -52,13 +52,11 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
     def test_url_endpoint(self):
         """Make sure the url endpoint for view_activities exists"""
-
         url = url_for('view_activities')
         assert url == '/activities'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-
         self.login_admin()
 
         res = self.client.get(url_for('view_activities'))
@@ -66,17 +64,25 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
     def test_login_redirect(self):
         """Make sure people who aren't logged in are redirected to login"""
-
         res = self.client.get(url_for('view_activities'))
         endpoint = urlparse(res.location).path
 
         assert endpoint == url_for('login')
 
-    def test_unauthorized_user(self):
-        """Make sure unauthorized users are refused access"""
+    def test_admin_links(self):
+        """Make sure that admins can view and access the edit page"""
+        self.login_admin()
 
+        res = self.client.get(url_for('view_activities'))
+
+        assert res.status_code == 200
+        assert url_for('edit_activity') in res.data
+
+    def test_unauthorized_user(self):
+        """Make sure unauthorized users can view, but not edit"""
         self.login_user()
 
         res = self.client.get(url_for('view_activities'))
 
-        assert res.status_code == 401
+        assert res.status_code == 200
+        assert url_for('edit_activity') not in res.data
