@@ -1,6 +1,6 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in
+from app.util import is_logged_in, error_message
 import pymesync
 import re
 
@@ -22,9 +22,7 @@ def create_time():
 
     projects = ts.get_projects()
 
-    # TODO: Better error handling
-    if 'error' in projects or 'pymesync error' in projects:
-        return projects['error'] + " " + projects['text'], 500
+    error_message(projects)
 
     # Load the projects into a list of tuples
     choices = []
@@ -73,9 +71,7 @@ def create_time():
 
         res = ts.create_time(time=time)
 
-        # TODO: Better error handling
-        if 'error' in res or 'pymesync error' in res:
-            return res['error'] + " " + res['text'], 500
+        error_message(res)
 
         flash("Time successfully submitted.")
         return redirect(url_for('index'))
@@ -89,5 +85,4 @@ def create_time():
             ), 'error')
 
     # If not submitted (GET)
-
     return render_template('create_time.html', form=form)

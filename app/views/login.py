@@ -1,6 +1,6 @@
 from flask import session, url_for, request, render_template, flash
 from app import app, forms
-from app.util import get_user
+from app.util import get_user, error_message
 import pymesync
 
 
@@ -22,13 +22,9 @@ def login():
                                 auth_type='password')
 
         # If regular error, tell user error
+        error_message(token)
         if 'error' in token:
-            flash(token['text'])
             status = token['status']
-        # If pymesync error, tell user vague error
-        elif 'pymesync error' in token:
-            print token
-            return "There was an error.", 500
         # Else success, redirect to index page
         else:
             session['token'] = token['token']

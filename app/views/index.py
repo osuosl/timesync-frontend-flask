@@ -1,6 +1,6 @@
 from flask import render_template, session
 from app import app
-from app.util import is_logged_in
+from app.util import get_user, is_logged_in, error_message
 
 
 @app.route('/')
