@@ -1,6 +1,6 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message
+from app.util import is_logged_in, get_user, error_message
 import pymesync
 
 
@@ -12,6 +12,11 @@ def view_times():
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
+
+    user = get_user()
+
+    if 'error' in user or 'pymesync error' in user:
+        return 'There was an error.', 500
 
     # Form for filter parameters
     form = forms.FilterTimesForm()
@@ -53,4 +58,5 @@ def view_times():
         flash(times)
         times = list()
 
-    return render_template('view_times.html', form=form, times=times)
+    return render_template('view_times.html', form=form, times=times,
+                           user=user['username'], admin=user['site_admin'])
