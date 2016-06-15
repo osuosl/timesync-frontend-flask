@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, flash
 from app import app
 from app.views.logout import logout
 from datetime import datetime
@@ -43,3 +43,17 @@ def is_logged_in():
         return False
 
     return True
+
+
+def error_message(array):
+    if 'error' in array:
+        flash("Error: " + array["error"] + " - " + array["text"])
+        # There was an error
+        return True
+    elif 'pymesync error' in array:
+        flash("Error: " + array["pymesync error"] + " - " + array["text"])
+        # There was an error
+        return True
+
+    # No error
+    return False

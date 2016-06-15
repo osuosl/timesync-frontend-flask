@@ -1,6 +1,6 @@
 from flask import redirect, url_for, request, render_template
 from app import app
-from app.util import get_user, is_logged_in
+from app.util import get_user, is_logged_in, error_message
 
 
 @app.route('/admin')
@@ -13,9 +13,7 @@ def admin():
     is_admin = False
     user = get_user()
 
-    if 'error' in user or 'pymesync error' in user:
-        print user
-        return "There was an error.", 500
+    error_message(user)
 
     if type(user) is dict:
         is_admin = user['site_admin']
