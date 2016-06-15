@@ -77,5 +77,3 @@ def edit_activity():
             ), 'error')
 
     return render_template('create_activity.html', form=form)
-
-

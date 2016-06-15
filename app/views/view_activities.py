@@ -1,4 +1,4 @@
-from flask import session, redirect, url_for, request, render_template, flash
+from flask import session, redirect, url_for, request, render_template
 from app import app
 import pymesync
 from app.util import is_logged_in, get_user
