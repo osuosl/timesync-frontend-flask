@@ -1,6 +1,5 @@
 import unittest
-from app import app
-from app import forms
+from app import app, forms
 from flask import url_for
 from urlparse import urlparse
 
