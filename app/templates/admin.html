@@ -14,8 +14,6 @@
     <div class="menu">
         {# TODO: Use url_for() when pages are implemented #}
         <a href="/users/create">Create User</a>
-        <a href="/users">Get User</a>
-        <a href="/users/edit">Update User</a>
-        <a href="/users/delete">Delete User</a>
+        <a href="{{ url_for('view_users') }}">View Users</a>
     </div>
 {% endblock %}

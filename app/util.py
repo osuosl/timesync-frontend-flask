@@ -18,7 +18,7 @@ def get_user():
     if app.config['TESTING'] and session['username'] == 'admin':
         user[0]['site_admin'] = True
 
-    return user
+    return user[0]
 
 
 def is_logged_in():

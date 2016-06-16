@@ -18,6 +18,13 @@ function clearForm(form)
 
     form.submit();
 }
+
+window.onload = function() {
+    var timeTable = document.body.getElementsByTagName('table')[0];
+
+    makeSortable(timeTable, 1);
+    sortTable(timeTable, 2, -1);  // Initial sort by most recent
+};
 </script>
 {% endblock %}
 

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %} View Users {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+
+<script>
+window.onload = function() {
+    var userTable = document.body.getElementsByTagName('table')[0];
+
+    makeSortable(userTable, -1);
+    sortTable(userTable, 2, 1);  // Initial sort by username, ascending
+};
+</script>
+{% endblock %}
+
+{% block body %}
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="alpha">Username</th>
+                <th class="alpha">Display Name</th>
+                <th class="alpha">Site Admin?</th>
+                <th class="alpha">Site Spectator?</th>
+                <th class="alpha">Site Manager?</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+
+        {% for u in users %}
+        <tr>
+        {% if is_admin %}
+            <td><a href="/users/delete">DELETE</a></td> <!-- WILL BE CHANGED LATER -->
+            <td><a href="/users/edit">EDIT</a></td> <!-- WILL BE CHANGED LATER -->
+        {% else %}
+            <td></td>
+            <td></td>
+        {% endif %}
+            <td>{{ u['username'] }}</td>
+            <td>{{ u['display_name'] }}</td>
+            <td>{{ u['site_admin'] | bool_filter }}</td>
+            <td>{{ u['site_spectator'] | bool_filter }}</td>
+            <td>{{ u['site_manager'] | bool_filter }}</td>
+            <td>{{ u['email'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
