@@ -52,14 +52,25 @@ def is_logged_in():
 
 
 def error_message(array):
-    if 'error' in array:
-        flash("Error: " + array["error"] + " - " + array["text"])
-        # There was an error
-        return True
-    elif 'pymesync error' in array:
-        flash("Error: " + array["pymesync error"] + " - " + array["text"])
-        # There was an error
-        return True
+    if array is dict:
+        if 'error' in array:
+            flash("Error: " + array["error"] + " - " + array["text"])
+            # There was an error
+            return True
+        elif 'pymesync error' in array:
+            flash("Error: " + array["pymesync error"] + " - " + array["text"])
+            # There was an error
+            return True
+    elif array is list:
+        if 'error' in array[0]:
+            flash("Error: " + array[0]["error"] + " - " + array[0]["text"])
+            # There was an error
+            return True
+        elif 'pymesync error' in array:
+            flash("Error: " + array[0]["pymesync error"] + " - " +
+                  array[0]["text"])
+            # There was an error
+            return True
 
     # No error
     return False
