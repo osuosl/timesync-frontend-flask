@@ -60,17 +60,19 @@ Views
 '''''
 
 Flask apps are split into *views*. Each view handles a specific URL endpoint.
+Each view is separated into its own file inside the :code:`app/views/` directory.
 
-For example, the `login` view handles the `/login` endpoint and it supports
-the `GET` and `POST` methods. If `GET` request is sent to the endpoint, the `login`
-view renders a template containing an HTML form with username and password fields 
-for the user to enter their credentials.
+For example, the :code:`login()` view handles the :code:`/login` endpoint and
+it supports the :code:`GET` and :code:`POST` methods. If :code:`GET` request
+is sent to the endpoint, the :code:`login` view renders a template containing
+an HTML form with username and password fields for the user to enter their
+credentials.
 
-When the user submits the form. a `POST` request
-is sent to the `/login` endpoint containing the user's login credentials. The
-`login` view then handles the `POST` request by taking the login credentials
-and sending them to TimeSync. After that, the `login` view might redirect the user
-to the index page (The `/` endpoint).
+When the user submits the form. a :code:`POST` request is sent to the
+:code:`/login` endpoint containing the user's login credentials. The
+:code:`login` view then handles the :code:`POST` request by taking the login
+credentials and sending them to TimeSync. After that, the :code:`login` view
+might redirect the user to the index page (The :code:`/` endpoint).
 
 Each view corresponds to a different TimeSync action 
 (Adding/Updating/Viewing/Deleting times/projects/activities/users). However,
