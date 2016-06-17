@@ -2,7 +2,7 @@ from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 from datetime import datetime
 import pymesync
-from app.util import is_logged_in, get_user, to_readable_time, error_message
+from app.util import is_logged_in, to_readable_time, error_message
 
 
 @app.route('/times/edit', methods=['GET', 'POST'])
