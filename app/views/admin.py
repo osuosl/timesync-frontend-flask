@@ -1,4 +1,4 @@
-from flask import redirect, url_for, request, render_template
+from flask import redirect, url_for, request, render_template, session
 from app import app
 from app.util import get_user, is_logged_in
 
@@ -11,16 +11,12 @@ def admin():
 
     # Check if the user is an admin and deny access if not
     is_admin = False
-    user = get_user()
+    user = session['user']
 
-    if 'error' in user or 'pymesync error' in user:
-        print user
+    if not user:
         return "There was an error.", 500
 
-    if type(user) is dict:
-        is_admin = user['site_admin']
-    elif type(user) is list:
-        is_admin = user[0]['site_admin']
+    is_admin = user['site_admin']
 
     if not is_admin:
         return "You cannot access this page.", 401
