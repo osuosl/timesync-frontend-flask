@@ -21,8 +21,22 @@ class DeleteTimeTestCase(unittest.TestCase):
     def tearDown(self):
         self.ctx.pop()
 
-    def login_user(self):
+    def login_unauthorized(self):
         self.username = 'unauthorized'
+        self.password = 'test'
+
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.username,
+            password=self.password
+        ), follow_redirects=True)
+
+        with self.client.session_transaction() as sess:
+            self.sess = sess
+
+        return res
+
+    def login_user(self):
+        self.username = 'userone'
         self.password = 'test'
 
         res = self.client.post(url_for('login'), data=dict(
@@ -91,9 +105,23 @@ class DeleteTimeTestCase(unittest.TestCase):
 
         assert endpoint == url_for('login')
 
-    def test_access_denied(self):
-        """Make sure unauthorized users are denied access"""
+    def test_get_page_admin(self):
+        """Make sure that site admins are allowed to acces the page"""
+        self.login_admin()
+        res = self.get_page()
+
+        assert res.status_code == 200
+
+    def test_get_page_user(self):
+        """Make sure that users that own the time have access"""
         self.login_user()
+        res = self.get_page()
+
+        assert res.status_code == 200
+
+    def test_get_page_unauthorized(self):
+        """Make sure unauthorized users are denied access"""
+        self.login_unauthorized()
         res = self.get_page()
 
         assert res.status_code == 500
@@ -128,12 +156,26 @@ class DeleteTimeTestCase(unittest.TestCase):
 
         assert res.status_code == 404
 
-    def test_delete_time(self):
-        """Test deleting a time"""
+    def test_delete_time_admin(self):
+        """Test deleting a time as an admin"""
         self.login_admin()
         res = self.delete_time()
 
         assert 'Deletion successful' in res.data
+
+    def test_delete_time_user(self):
+        """Test deleting a time as the user that owns the time"""
+        self.login_user()
+        res = self.delete_time()
+
+        assert 'Deletion successful' in res.data
+
+    def test_delete_time_unauthorized(self):
+        """Test deleting a time as an unauthorized user"""
+        self.login_unauthorized()
+        res = self.delete_time()
+
+        assert res.status_code == 500
 
     def test_delete_time_no_uuid(self):
         """Test deleting a time without putting a UUID in the query string"""
