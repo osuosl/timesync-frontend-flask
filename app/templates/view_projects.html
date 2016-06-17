@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %} View Projects {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+
+<script>
+window.onload = function() {
+    var projectTable = document.body.getElementsByTagName('table')[0];
+
+    makeSortable(projectTable, 1);
+    sortTable(projectTable, 2, 1);  // Initial sort by name, ascending
+}
+</script>
+{% endblock %}
+
+{% block body %}
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="alpha">Name</th>
+                <th class="list">Slugs</th>
+                <th>URI</th>
+                <th>Users</th>
+            </tr>
+        </thead>
+
+        {% for p in projects %}
+        <tr>
+        {% if is_admin %}
+            <td><a href="/projects/delete">DELETE</a>
+            <td><a href="/projects/edit">EDIT</a>
+        {% else %}
+            <td></td>
+            <td></td>
+        {% endif %}
+            <td>{{ p['name'] }}</td>
+            <td>{{ p['slugs'] | join(' ') }}</td>
+            <td>{{ p['uri'] }}</td>
+            <td>{{ p['users'] | perm_filter }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
