@@ -1,8 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, SelectField, DateField, \
-    HiddenField
+from wtforms import StringField, PasswordField, SelectField, DateField
 from wtforms.validators import DataRequired, Optional
-from urlparse import urlparse, urljoin
 
 
 class LoginForm(Form):
