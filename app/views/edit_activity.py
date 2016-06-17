@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, get_user
+from app.util import is_logged_in, error_message
 
 
 @app.route('/activities/edit', methods=['GET', 'POST'])
@@ -12,10 +12,9 @@ def edit_activity():
 
     # Check if the user is an admin and deny access if not
     is_admin = False
-    user = get_user()
+    user = session['user']
 
-    if 'error' in user or 'pymesync error' in user:
-        print user
+    if not user:
         return "There was an error.", 500
 
     is_admin = user['site_admin']
@@ -30,11 +29,11 @@ def edit_activity():
 
     slug = request.args.get('slug')
 
-    activity = ts.get_activities(query_parameters={"slug": slug})[0]
+    activities = ts.get_activities(query_parameters={"slug": slug})
 
-    if 'error' in activity or 'pymesync error' in activity:
-        print activity
-        return 'There was an error', 500
+    error_message(activities)
+
+    activity = activities[0]
 
     if form.validate_on_submit():
         req_form = request.form
@@ -54,10 +53,7 @@ def edit_activity():
 
         res = ts.update_activity(activity=activity_update, slug=old_slug)
 
-        if 'error' in res or 'pymesync error' in res:
-            print res
-            print activity_update
-            return 'There was an error', 500
+        error_message(res)
 
         return redirect(url_for('view_activities'))
 

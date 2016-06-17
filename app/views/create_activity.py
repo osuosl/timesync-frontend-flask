@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, get_user
+from app.util import is_logged_in, error_message
 
 
 @app.route('/activities/create', methods=['GET', 'POST'])
@@ -12,11 +12,10 @@ def create_activity():
 
     # Check if the user is an admin and deny access if not
     is_admin = False
-    user = get_user()
+    user = session['user']
 
-    if 'error' in user or 'pymesync error' in user:
-        print user
-        return "There was an error.", 500
+    if not user:
+        return 'There was an error', 500
 
     is_admin = user['site_admin']
 
@@ -41,8 +40,7 @@ def create_activity():
 
         res = ts.create_activity(activity=activity)
 
-        if 'error' in res or 'pymesync error' in res:
-            return "There was an error", 500
+        error_message(res)
 
         flash('Activity successfully created')
         return redirect(url_for('admin'))

@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template
 from app import app
 import pymesync
-from app.util import is_logged_in, get_user
+from app.util import is_logged_in, error_message
 
 
 @app.route('/activities', methods=['GET'])
@@ -11,10 +11,9 @@ def view_activities():
         return redirect(url_for('login', next=request.url_rule))
 
     is_admin = False
-    user = get_user()
+    user = session['user']
 
-    if 'error' in user or 'pymesync error' in user:
-        print user
+    if not user:
         return "There was an error.", 500
 
     is_admin = user['site_admin']
@@ -24,9 +23,7 @@ def view_activities():
 
     activities = ts.get_activities()
 
-    if 'error' in activities or 'pymesync error' in activities:
-        print activities
-        return "There was an error.", 500
+    error_message(activities)
 
     return render_template('view_activities.html', activities=activities,
                            is_admin=is_admin)
