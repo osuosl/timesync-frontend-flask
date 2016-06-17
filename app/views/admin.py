@@ -1,6 +1,6 @@
 from flask import redirect, url_for, request, render_template, session
 from app import app
-from app.util import get_user, is_logged_in
+from app.util import is_logged_in
 
 
 @app.route('/admin')
