@@ -13,6 +13,11 @@ def view_times():
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=session['token'])
 
+    user = session['user']
+
+    if not user:
+        return 'There was an error.', 500
+
     # Form for filter parameters
     form = forms.FilterTimesForm()
 
@@ -23,15 +28,15 @@ def view_times():
     if form.validate_on_submit():
         req_form = request.form
 
-        user = req_form['user']
+        username = req_form['user']
         projects = req_form['project']
         activities = req_form['activity']
         start = req_form['start']
         end = req_form['end']
 
         # Only using filter parameters that have been supplied
-        if user:
-            query['user'] = [user]
+        if username:
+            query['user'] = [username]
         if projects:
             query['project'] = [p.strip() for p in projects.split(',')]
         if activities:
@@ -49,8 +54,6 @@ def view_times():
 
     # Show any errors
     error_message(times)
-    if 'error' in times or 'pymesync error' in times:
-        flash(times)
-        times = list()
 
-    return render_template('view_times.html', form=form, times=times)
+    return render_template('view_times.html', form=form, times=times,
+                           user=user['username'], admin=user['site_admin'])

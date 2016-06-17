@@ -74,3 +74,10 @@ def error_message(array):
 
     # No error
     return False
+
+
+def to_readable_time(seconds):
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+
+    return '{}h{}m'.format(hours, minutes)
