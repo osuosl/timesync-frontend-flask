@@ -91,7 +91,7 @@ function sortTable(table, col, direction)
     }
 }
 
-function makeSortable(table)
+function makeSortable(table, startingDirection)
 {
     var tableHead = Array.prototype.slice.call(table.tHead.rows, 0);
 
@@ -114,11 +114,11 @@ function makeSortable(table)
         tableHead[0].cells[i].style.cursor = "pointer";
 
         // Closure to keep track of current sort direction
-        function tableClosure (i) {
-            var direction = 1;
+        function tableClosure(i) {
+            var direction = startingDirection;
 
             tableHead[0].cells[i].addEventListener('click',
-                function () {
+                function() {
                     sortTable(table, i, direction);
 
                     direction *= -1; // Switch directions
@@ -128,17 +128,3 @@ function makeSortable(table)
         tableClosure(i);
     }
 }
-
-function makeAllSortable()
-{
-    var tables = document.body.getElementsByTagName('table');
-
-    for (var i = 0; i < tables.length; i++)
-    {
-        makeSortable(tables[i]);
-
-        sortTable(tables[i], 2, -1); // Initial sort by most recent
-    }
-}
-
-window.onload = makeAllSortable;
