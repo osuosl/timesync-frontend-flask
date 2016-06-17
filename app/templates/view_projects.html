@@ -40,7 +40,7 @@ window.onload = function() {
             <td>{{ p['name'] }}</td>
             <td>{{ p['slugs'] | join(' ') }}</td>
             <td>{{ p['uri'] }}</td>
-            <td>{{ p['users'] | perm_filter }}</td>
+            <td>{{ p['users'] | perm_filter | join('<br />') | safe }}</td>
         </tr>
         {% endfor %}
     </table>

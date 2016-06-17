@@ -16,7 +16,7 @@ class ViewProjectsTestCase(unittest.TestCase):
         self.ctx = app.test_request_context()
         self.ctx.push()
 
-        self.baseurl = app.c9onfig['TIMESYNC_URL']
+        self.baseurl = app.config['TIMESYNC_URL']
 
     def tearDown(self):
         self.ctx.pop()
