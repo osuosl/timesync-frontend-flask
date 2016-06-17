@@ -1,6 +1,6 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in
+from app.util import is_logged_in, error_message
 import pymesync
 
 
@@ -48,8 +48,8 @@ def view_times():
     times = ts.get_times(query_parameters=query)
 
     # Show any errors
+    error_message(times)
     if 'error' in times or 'pymesync error' in times:
-        flash("Error")
         flash(times)
         times = list()
 

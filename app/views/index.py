@@ -1,6 +1,6 @@
-from flask import render_template
+from flask import render_template, session
 from app import app
-from app.util import get_user, is_logged_in
+from app.util import is_logged_in
 
 
 @app.route('/')
@@ -9,9 +9,8 @@ def index():
     logged_in = is_logged_in()
 
     if logged_in:
-        user = get_user()
-        if 'error' in user or 'pymesync error' in user:
-            print user
+        user = session['user']
+        if not user:
             return "There was an error.", 500
 
         is_admin = user['site_admin']

@@ -91,11 +91,11 @@ class LoginTestCase(unittest.TestCase):
         self.login()
 
         # Make sure username and token stored in session
-        assert 'username' in self.sess
+        assert 'user' in self.sess
         assert 'token' in self.sess
 
         # Make sure username is correct
-        assert self.sess['username'] == self.username
+        assert self.sess['user']['username'] == self.username
 
         # Make sure token is valid
         ts = pymesync.TimeSync(self.baseurl, token=self.sess['token'],
