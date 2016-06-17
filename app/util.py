@@ -5,18 +5,24 @@ from datetime import datetime
 import pymesync
 
 
-def get_user():
+def get_user(username):
     if not is_logged_in():
-        return {'error': "Not logged in."}
+        print "Error: Not logged in"
+        return {}
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
                            token=session['token'])
-    user = ts.get_users(username=session['username'])
+
+    user = ts.get_users(username=username)[0]
+
+    if 'error' in user or 'pymesync error' in user:
+        print user
+        return {}
 
     # If in testing mode and the username is admin, allow admin access
-    if app.config['TESTING'] and session['username'] == 'admin':
-        user[0]['site_admin'] = True
+    if app.config['TESTING'] and user['username'] == 'admin':
+        user['site_admin'] = True
 
     return user
 

@@ -1,5 +1,6 @@
 from flask import session, url_for, request, render_template, flash
 from app import app, forms
+from app.util import get_user
 import pymesync
 
 
@@ -30,8 +31,15 @@ def login():
             return "There was an error.", 500
         # Else success, redirect to index page
         else:
-            session['username'] = username
             session['token'] = token['token']
+
+            user = get_user(username)
+
+            if not user:
+                return 'There was an error.', 500
+
+            session['user'] = user
+
             return form.redirect(url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
