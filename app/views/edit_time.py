@@ -2,7 +2,7 @@ from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 from datetime import datetime
 import pymesync
-from app.util import is_logged_in, get_user, to_readable_time
+from app.util import is_logged_in, get_user, to_readable_time, error_message
 
 
 @app.route('/times/edit', methods=['GET', 'POST'])
@@ -16,11 +16,12 @@ def edit_time():
 
     projects = ts.get_projects()
 
-    user = get_user()
+    user = session['user']
 
-    # TODO: Better error handling
-    if 'error' in projects or 'pymesync error' in projects:
-        return "There was an error.", 500
+    if not user:
+        return 'There was an error.', 500
+
+    error_message(projects)
 
     choices = []
     for project in projects:
@@ -28,11 +29,11 @@ def edit_time():
 
     uuid = request.args.get('time')
 
-    time = ts.get_times({'uuid': uuid})[0]
+    times = ts.get_times({'uuid': uuid})
 
-    if 'error' in time or 'pymesync error' in time:
-        print time
-        return 'There was an error', 500
+    error_message(times)
+
+    time = times[0]
 
     if time['user'] != user['username'] and not user['site_admin']:
         return "Permission denied", 500
@@ -87,9 +88,7 @@ def edit_time():
 
         res = ts.update_time(uuid=uuid, time=time_update)
 
-        if 'error' in res or 'pymesync error' in res:
-            print res
-            return 'There was an error', 500
+        error_message(res)
 
         flash("Time successfully updated")
         return redirect(url_for('view_times'))

@@ -24,7 +24,7 @@ def get_user(username):
     if app.config['TESTING'] and user['username'] == 'admin':
         user['site_admin'] = True
 
-    return user[0]
+    return user
 
 
 def is_logged_in():
