@@ -17,8 +17,11 @@
         <div class="menu">
             <a href="{{ url_for('create_time') }}">Submit Time</a>
             <a href="{{ url_for('view_times') }}">View Times</a>
+            <br />
             {% if is_admin %}
-                <a href="/admin">Admin</a>
+            <a href="{{ url_for('admin') }}">Admin</a>
+            {% else %}
+                <a href="{{ url_for('view_users') }}">View Users</a>
             {% endif %}
         </div>
     {% endif %}
