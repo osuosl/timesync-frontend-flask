@@ -1,4 +1,4 @@
-.. _usage:
+.. _install:
 
 Timesync-Frontend-Flask - Web Frontend for Timesync
 ===================================================
