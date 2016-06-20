@@ -63,7 +63,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_form_fields(self):
         """Tests the view_users page for correct form fields"""
-        form = forms.FilterusersForm()
+        form = forms.FilterUsersForm()
 
         fields = ['username']
 

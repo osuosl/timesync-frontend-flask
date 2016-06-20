@@ -50,7 +50,7 @@ function clearForm(form)
 
             {% for t in times %}
             <tr>
-            {% if t['user'] == user %}
+            {% if t['user'] == user or admin %}
                 <td><a href="{{ url_for('edit_time', time=t['uuid']) }}">EDIT</a></td>
             {% else %}
                 <td></td>
