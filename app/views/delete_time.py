@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, get_user
+from app.util import is_logged_in, error_message
 
 
 @app.route('/times/delete', methods=['GET', 'POST'])
@@ -37,17 +37,12 @@ def delete_time():
         uuid = req_form['uuid']
         response = ts.delete_time(uuid=uuid)
 
-        if 'error' in response or 'pymesync error' in response:
-            flash('Error')
-            flash(response)
-        else:
+        if not error_message(response):
             flash('Deletion successful')
 
         return redirect(url_for('view_times'))
 
-    if 'error' in time or 'pymesync error' in time:
-        flash('Error')
-        flash(time)
+    if error_message(time):
         time = dict()
 
     return render_template('delete_time.html', form=form, time=time)
