@@ -24,6 +24,9 @@ def view_times():
     # Dictionary to store filter parameters
     query = dict()
 
+    # List of times
+    times = list()
+
     # If the form has been submitted and validated use the form's parameters
     if form.validate_on_submit():
         req_form = request.form
@@ -46,14 +49,15 @@ def view_times():
         if end:
             query['end'] = [end]
 
+        times = ts.get_times(query_parameters=query)
+
+        # Show any errors
+        if error_message(times):
+            times = list()
+
     # If the form's parameters are not valid, tell the user
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
 
-    times = ts.get_times(query_parameters=query)
-
-    # Show any errors
-    error_message(times)
-
     return render_template('view_times.html', form=form, times=times,
-                           user=user['username'], admin=user['site_admin'])
+                           user=user['username'], is_admin=user['site_admin'])

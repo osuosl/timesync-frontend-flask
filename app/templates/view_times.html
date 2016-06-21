@@ -16,7 +16,10 @@ function clearForm(form)
         }
     }
 
-    form.submit();
+    var oldBody = document.getElementsByTagName('tbody')[0];
+    var newBody = document.createElement('tbody');
+
+    oldBody.parentNode.replaceChild(newBody, oldBody);
 }
 </script>
 {% endblock %}
@@ -48,22 +51,24 @@ function clearForm(form)
                 </tr>
             </thead>
 
-            {% for t in times %}
-            <tr>
-            {% if t['user'] == user or admin %}
-                <td><a href="{{ url_for('edit_time', time=t['uuid']) }}">EDIT</a></td>
-            {% else %}
-                <td></td>
-            {% endif %}
-                <td>{{ t['user'] }}</td>
-                <td>{{ t['duration'] | hms_filter }}</td>
-                <td>{{ t['date_worked'] }}</td>
-                <td>{{ t['project'] | join(' ') }}</td>
-                <td>{{ t['activities'] | join(' ') }}</td>
-                <td>{{ t['issue_uri'] }}</td>
-                <td>{{ t['notes'] }}</td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                {% for t in times %}
+                <tr>
+                {% if t['user'] == user or is_admin %}
+                    <td><a href="{{ url_for('edit_time', time=t['uuid']) }}">EDIT</a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                    <td>{{ t['user'] }}</td>
+                    <td>{{ t['duration'] | hms_filter }}</td>
+                    <td>{{ t['date_worked'] }}</td>
+                    <td>{{ t['project'] | join(' ') }}</td>
+                    <td>{{ t['activities'] | join(' ') }}</td>
+                    <td>{{ t['issue_uri'] }}</td>
+                    <td>{{ t['notes'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endblock %}
