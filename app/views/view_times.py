@@ -36,7 +36,7 @@ def view_times():
 
         # Only using filter parameters that have been supplied
         if username:
-            query['user'] = [username]
+            query['user'] = [u.strip() for u in username.split(',')]
         if projects:
             query['project'] = [p.strip() for p in projects.split(',')]
         if activities:
