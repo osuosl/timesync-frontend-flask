@@ -32,7 +32,10 @@ def view_users():
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
 
-    users = ts.get_users(username=query)
+    if 'username' in query:
+        users = ts.get_users(username=query['username'])
+    else:
+        users = ts.get_users()
 
     # Show any errors
     error_message(users)
