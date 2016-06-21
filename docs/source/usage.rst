@@ -37,7 +37,7 @@ Submitting a Time
 -----------------
 
 To submit a time, click on :underline:`Submit Time`. After you're finished
-filling out the form, hit "Submit" to submit the time to TimeSync.
+filling out the form, click "Submit" to submit the time to TimeSync.
 
 .. image:: _static/submit_time.png
     :alt: Example time submission
@@ -99,13 +99,9 @@ Editing Times
 
 In order to edit a time you must either be the user that submitted the time
 or you must be a site admin. To edit a time, find it on the View Times
-page then click the :underline:`EDIT` link next to the entry.
-
-.. image:: _static/edit_time_link.png
-    :alt: The link to get to the edit time page
-
-You'll be taken to a page similar to the Submit Time page but with the form
-that has already been partially filled in with the the time entry's current data.
+page then click the :underline:`EDIT` link next to the entry. You'll be taken
+to a page similar to the Submit Time page but with a form that has already been
+partially filled in with the the time entry's current data.
 
 .. image:: _static/edit_time_before.png
     :alt: The edit time page
@@ -115,3 +111,53 @@ that has already been partially filled in with the the time entry's current data
 
 After you're done editing the time entry, click "Submit" to submit your
 changes.
+
+The Admin Page
+--------------
+
+Site admins can access the admin control panel from the index page by clicking
+on the :underline:`Admin` link in the center of the page.
+
+.. image:: _static/admin.png
+    :alt: The admin page
+
+This page provides site admins with links to create, view, edit, and delete
+TimeSync objects. 
+
+Creating an Activity
+--------------------
+
+To create an activity, click the :underline:`Create Activity` link on the
+Admin control panel.
+
+.. image:: _static/create_activity.png
+    :alt: The create activity page
+
+============= ===================================
+ Field Name               Description
+============= ===================================
+Activity Name The unique name of the new activity
+Activity Slug The unique slug of the new activity
+============= ===================================
+
+Viewing Activities
+------------------
+
+The :underline:`View Activities` page can be accessed from the admin control
+panel (If you're a site admin) or the index page (If you're a regular user).
+
+.. image:: _static/view_activities.png
+    :alt: The view activities page
+
+Editing Activities
+------------------
+
+To edit an activity, click on the :underline:`EDIT` link next to the activity
+that you wish to edit. After you're done editing the activity, click "Submit"
+to submit your changes.
+
+.. image:: _static/edit_activity_before.png
+    :alt: The edit activity page
+
+.. image:: _static/edit_activity_after.png
+    :alt: The edit activity page
