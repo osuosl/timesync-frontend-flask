@@ -27,7 +27,7 @@ class CreateTimeForm(Form):
 
 class FilterTimesForm(Form):
     # All optional
-    user = StringField('User:', description='Comma separated')
+    user = StringField('Users:', description='Comma separated')
     project = StringField('Project Slugs:', description='Comma separated')
     activity = StringField('Activity Slugs:', description='Comma separated')
     start = DateField('Start Date:', format="%Y-%m-%d",
