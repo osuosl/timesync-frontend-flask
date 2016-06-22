@@ -80,3 +80,7 @@ class CreateUserForm(Form):
 
 class FilterUsersForm(Form):
     username = StringField('Username:')
+
+
+class ConfirmDeleteForm(Form):
+    ts_object = HiddenField()

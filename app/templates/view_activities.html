@@ -30,22 +30,27 @@ window.onload = function()
             <thead>
                 <tr>
                     <th></th>
-                    <th class="alpha">Activity Name</th>
-                    <th class="alpha">Activity Slug</th>
+                    <th></th>
+                    <th>Activity Name</th>
+                    <th>Activity Slug</th>
                 </tr>
             </thead>
 
-            {% for a in activities %}
-            <tr>
-            {% if is_admin %}
-                <td><a href="{{ url_for('edit_activity', slug=a['slug']) }}">EDIT</a></td>
-            {% else %}
-                <td></td>
-            {% endif %}
-                <td>{{ a['name'] }}</td>
-                <td>{{ a['slug'] }}</td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                {% for a in activities %}
+                <tr>
+                {% if is_admin %}
+                    <td><a href="{{ url_for('delete_activity', slug=a['slug']) }}">DELETE</a></td>
+                    <td><a href="{{ url_for('edit_activity', slug=a['slug']) }}">EDIT</a></td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
+                    <td>{{ a['name'] }}</td>
+                    <td>{{ a['slug'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endblock %}
