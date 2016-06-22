@@ -1,5 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, SelectField, DateField
+from wtforms import StringField, PasswordField, SelectField, DateField, \
+    BooleanField
 from wtforms.validators import DataRequired, Optional
 
 
@@ -39,3 +40,18 @@ class FilterTimesForm(Form):
 class CreateActivityForm(Form):
     name = StringField('Activity Name:')
     slug = StringField('Activity Slug:')
+
+
+class CreateUserForm(Form):
+    username = StringField('Username:')
+    password = PasswordField('Password:')
+    display_name = StringField('Display Name:')
+    email = StringField('Email:')
+    site_admin = BooleanField('Site Admin:')
+    site_spectator = BooleanField('Site Spectator:')
+    site_manager = BooleanField('Site Manager:')
+    active = BooleanField('Active:')
+
+
+class FilterUsersForm(Form):
+    username = StringField('Username:')

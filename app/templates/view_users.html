@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %} View Users {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+
+<script>
+function clearForm(form)
+{
+    for (var i = 0; i < form.elements.length; i++)
+    {
+        if (form.elements[i].type == "text")
+        {
+            form.elements[i].value = "";
+        }
+    }
+
+    form.submit();
+}
+</script>
+{% endblock %}
+
+{% block body%}
+    <div class="filter-params">
+        <form method="POST">
+            {{ form.csrf_token}}
+            <p>{{ form.username.label }} {{ form.username }}</p>
+            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
+        </form>
+    </div>
+    <div class="view-times">
+        <table>
+            <thead>
+                <tr>
+                    <th class="alpha">Username</th>
+                    <th>Display Name</th>
+                    <th>Email</th>
+                    <th>Site Admin</th>
+                    <th>Site Manager</th>
+                    <th>Site Spectator</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+
+            {% for u in users %}
+            <tr>
+                <td>{{ u['username'] }}</td>
+                <td>{{ u['display_name'] }}</td>
+                <td>{{ u['email'] }}</td>
+                <td>{{ u['site_admin'] }}</td>
+                <td>{{ u['site_manager'] }}</td>
+                <td>{{ u['site_spectator'] }}</td>
+                <td>{{ u['active'] }}</td>
+                {% if u['username'] == user or admin %}
+                    <td><a href="{{ url_for('edit_user', username=u['username']) }}">EDIT</a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
