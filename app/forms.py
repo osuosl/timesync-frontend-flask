@@ -42,6 +42,11 @@ class CreateActivityForm(Form):
     slug = StringField('Activity Slug:')
 
 
+class FilterActivitiesForm(Form):
+    # Optional
+    slug = StringField('Activity Slug:')
+
+
 class CreateUserForm(Form):
     username = StringField('Username:')
     password = PasswordField('Password:')

@@ -4,22 +4,15 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
-function clearForm(form)
+window.onload = function()
 {
-    for (i = 0; i < form.elements.length; i++)
-    {
-        if (form.elements[i].type == "text")
-        {
-            form.elements[i].value = "";
-        }
-    }
-
-    var oldBody = document.getElementsByTagName('tbody')[0];
-    var newBody = document.createElement('tbody');
-
-    oldBody.parentNode.replaceChild(newBody, oldBody);
+    // Make the table sortable and sort it by most recent
+    var timesTable = document.body.getElementsByTagName("table")[0];
+    makeSortable(timesTable);
+    sortTable(timesTable, 3, -1);
 }
 </script>
 {% endblock %}
@@ -33,7 +26,7 @@ function clearForm(form)
             <p>{{ form.activity.label }} {{ form.activity }} {{ form.activity.description}} </p>
             <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>
             <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
-            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
+            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);"></p>
         </form>
     </div>
     <div class="view-times">
