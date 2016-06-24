@@ -121,10 +121,6 @@ class DeleteUserTestCase(unittest.TestCase):
         assert ref_user['display_name'] in page_data
         assert ref_user['username'] in page_data
         assert ref_user['email'] in page_data
-        #assert ref_user['site_admin'] in page_data
-        #assert ref_user['site_manager'] in page_data
-        #assert ref_user['site_spectator'] in page_data
-        #assert ref_user['active'] in page_data
 
     def test_get_page_no_username(self):
         """Make sure that trying to get the page without a username fails"""
