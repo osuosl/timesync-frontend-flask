@@ -31,7 +31,7 @@ def create_user():
 
         error_message(res)
 
-        flash("Time successfully submitted.")
+        flash("User successfully submitted.")
         return redirect(url_for('create_user'))
 
     # Flash any form errors

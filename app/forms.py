@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    BooleanField
+    BooleanField, HiddenField
 from wtforms.validators import DataRequired, Optional
 
 
@@ -55,3 +55,6 @@ class CreateUserForm(Form):
 
 class FilterUsersForm(Form):
     username = StringField('Username:')
+
+class ConfirmDeleteForm(Form):
+    ts_object = HiddenField()
