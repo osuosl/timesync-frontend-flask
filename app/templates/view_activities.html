@@ -10,21 +10,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
 {% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
-
-<script>
-$(document).ready(function() {
-    var tableSelector = "#view-activities table";
-    var perPage = 10
-
-    addPagination(tableSelector, perPage);
-    makeSortable(tableSelector, perPage, 1, "asc");
-});
-</script>
-{% endblock %}
-
 {% block body%}
     {% if user['site_admin'] or user['site_manager'] %}
         <div class="create-link">
@@ -70,4 +55,19 @@ $(document).ready(function() {
             </tbody>
         </table>
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+    var tableSelector = "#view-activities table";
+    var perPage = 10
+
+    addPagination(tableSelector, perPage);
+    makeSortable(tableSelector, perPage, 1, "asc");
+});
+</script>
 {% endblock %}

@@ -10,22 +10,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
 {% endblock %}
 
-{% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
-
-<script>
-$(document).ready(function() {
-    var tableSelector = "#view-users table";
-    var perPage = 10;
-    var view_user_times_root = "{{ url_for('view_user_times') }}";
-
-    addPagination(tableSelector, perPage);
-    makeSortable(tableSelector, perPage, 0, "asc");
-});
-</script>
-{% endblock %}
-
 {% block body%}
     {% if is_admin %}
         <div class="create-link">
@@ -80,4 +64,20 @@ $(document).ready(function() {
             {% endfor %}
         </table>
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+    var tableSelector = "#view-users table";
+    var perPage = 10;
+    var view_user_times_root = "{{ url_for('view_user_times') }}";
+
+    addPagination(tableSelector, perPage);
+    makeSortable(tableSelector, perPage, 0, "asc");
+});
+</script>
 {% endblock %}
