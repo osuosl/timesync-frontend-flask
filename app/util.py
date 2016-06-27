@@ -27,6 +27,31 @@ def get_user(username):
     return user
 
 
+def get_projects(username):
+    if not is_logged_in():
+        print "Error: Not logged in"
+        return []
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+
+    projects = ts.get_projects()
+
+    if 'error' in projects:
+        print projects['error']
+        return []
+
+    user_projects = []
+
+    # Get each project the user has access to
+    for project in projects:
+        if 'users' in project and username in project['users']:
+            user_projects.append(project)
+
+    return user_projects
+
+
 def is_logged_in():
     """Checks if the user is logged in. Also checks token expiration time,
         logging the user out if their token is expired."""
