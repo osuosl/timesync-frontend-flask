@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    SelectMultipleField
+    SelectMultipleField, BooleanField, HiddenField
 from wtforms.validators import DataRequired, Optional
 
 
@@ -57,3 +57,18 @@ class FilterProjectsForm(Form):
     members = StringField('Members')
     managers = StringField('Managers')
     spectators = StringField('Spectators')
+
+
+class CreateUserForm(Form):
+    username = StringField('Username:')
+    password = PasswordField('Password:')
+    display_name = StringField('Display Name:')
+    email = StringField('Email:')
+    site_admin = BooleanField('Site Admin:')
+    site_spectator = BooleanField('Site Spectator:')
+    site_manager = BooleanField('Site Manager:')
+    active = BooleanField('Active:')
+
+
+class FilterUsersForm(Form):
+    username = StringField('Username:')
