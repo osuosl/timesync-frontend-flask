@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %} View Projects {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+
+<script>
+function clearForm(form)
+{
+    for (var i = 0; i < form.elements.length; i++)
+    {
+        if (form.elements[i].type == "text")
+        {
+            form.elements[i].value = "";
+        }
+    }
+    form.submit();
+}
+</script>
+{% endblock %}
+{% block body %}
+    <div class="filter-params">
+        <form method="POST">
+            {{ form.csrf_token }}
+            <p>{{ form.name.label }} {{ form.name }}</p>
+            <p>{{ form.slugs.label }} {{ form.slugs }}</p>
+            <p>{{ form.members.label }} {{ form.members }}</p>
+            <p>{{ form.managers.label }} {{ form.managers }}</p>
+            <p>{{ form.spectators.label }} {{ form.spectators }}</p>
+            <p><input type="submit" value="Submit"></p>
+        </form>
+    </div>
+        <div class="view-times">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="alpha">Name</th>
+                    <th class="list">Slugs</th>
+                    <th class="list">Members</th>
+                    <th class="list">Managers</th>
+                    <th class="list">Spectators</th>
+                    <th>URI</th>
+                </tr>
+            </thead>
+
+            {% for p in projects %}
+            <tr>
+                <td>{{ p['name'] }}</td>
+                <td>{{ p['slugs'] | join(' ') }}</td>
+                <td>{{ p['members'] | join(' ') }}</td>
+                <td>{{ p['managers'] | join(' ') }}</td>
+                <td>{{ p['spectators'] | join(' ') }}</td>
+                <td>{{ p['uri'] }}</td>
+                {% if admin %}
+                    <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
+                {% else %}
+                    {% for manager in p['managers'] %}
+                        {% if manager == user or admin %}
+                            <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+</div>
+{% endblock %}

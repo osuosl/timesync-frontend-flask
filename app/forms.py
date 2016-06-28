@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    BooleanField
+    SelectMultipleField
 from wtforms.validators import DataRequired, Optional
 
 
@@ -28,7 +28,7 @@ class CreateTimeForm(Form):
 
 class FilterTimesForm(Form):
     # All optional
-    user = StringField('Users:', description='Comma separated')
+    user = StringField('User:')
     project = StringField('Project Slugs:', description='Comma separated')
     activity = StringField('Activity Slugs:', description='Comma separated')
     start = DateField('Start Date:', format="%Y-%m-%d",
@@ -42,16 +42,18 @@ class CreateActivityForm(Form):
     slug = StringField('Activity Slug:')
 
 
-class CreateUserForm(Form):
-    username = StringField('Username:')
-    password = PasswordField('Password:')
-    display_name = StringField('Display Name:')
-    email = StringField('Email:')
-    site_admin = BooleanField('Site Admin:')
-    site_spectator = BooleanField('Site Spectator:')
-    site_manager = BooleanField('Site Manager:')
-    active = BooleanField('Active:')
+class CreateProjectForm(Form):
+    uri = StringField('URI:')
+    name = StringField('Name:')
+    slugs = StringField('Slugs:')
+    members = SelectMultipleField('Members')
+    managers = SelectMultipleField('Managers')
+    spectators = SelectMultipleField('Spectators')
 
 
-class FilterUsersForm(Form):
-    username = StringField('Username:')
+class FilterProjectsForm(Form):
+    name = StringField('Name:')
+    slugs = StringField('Slugs:')
+    members = StringField('Members')
+    managers = StringField('Managers')
+    spectators = StringField('Spectators')
