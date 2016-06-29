@@ -11,10 +11,6 @@ class LoginForm(Form):
                              render_kw={'placeholder': 'password'})
 
 
-class ConfirmDeleteForm(Form):
-    uuid = HiddenField()
-
-
 class CreateTimeForm(Form):
     user = StringField('User:', validators=[DataRequired()])
     duration = StringField('Duration:', validators=[DataRequired()])
