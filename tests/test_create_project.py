@@ -46,7 +46,7 @@ class SubmitTestCase(unittest.TestCase):
     def test_url_endpoint(self):
         """Make sure the url endpoint for submit exists."""
         url = url_for('create_project')
-        assert url == '/projects/create'
+        assert url == '/projects/create/'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

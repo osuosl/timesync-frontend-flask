@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
     SelectMultipleField, BooleanField
-from wtforms.validators import DataRequired, Optional
+from wtforms.validators import DataRequired, Optional, URL
 
 
 class LoginForm(Form):
@@ -43,7 +43,7 @@ class CreateActivityForm(Form):
 
 
 class CreateProjectForm(Form):
-    uri = StringField('URI:')
+    uri = StringField('URI:', validators=[URL()])
     name = StringField('Name:')
     slugs = StringField('Slugs:')
     members = SelectMultipleField('Members')

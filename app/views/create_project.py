@@ -5,7 +5,7 @@ import pymesync
 import re
 
 
-@app.route('/projects/create', methods=['GET', 'POST'])
+@app.route('/projects/create/', methods=['GET', 'POST'])
 def create_project():
     if not is_logged_in():
         if request.method == 'GET':
@@ -26,6 +26,9 @@ def create_project():
     for user in users:
         usernames.append((user['username'], user['display_name']))
 
+    # Fill the multi-select boxes with usernames
+    # In order to be able to select users for each permission, you must have a
+    # list of users
     form.members.choices = usernames
     form.managers.choices = usernames
     form.spectators.choices = usernames
@@ -69,6 +72,12 @@ def create_project():
 
         flash("Project successfully submitted.")
         return redirect(url_for('create_project'))
+
+        # Flash any form errors
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash("{0} {1}".format(getattr(form, field).label.text, error),
+                  'error')
 
     return render_template('create_project.html', form=form,
                            usernames=usernames)

@@ -5,7 +5,7 @@ import pymesync
 import re
 
 
-@app.route('/projects', methods=['GET', 'POST'])
+@app.route('/projects/', methods=['GET', 'POST'])
 def view_projects():
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))

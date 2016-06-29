@@ -51,7 +51,7 @@ class ReportTestCase(unittest.TestCase):
     def test_url_endpoint(self):
         """Make sure the url endpoint for view_projects exists."""
         url = url_for('view_projects')
-        assert url == '/projects'
+        assert url == '/projects/'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

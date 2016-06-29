@@ -5,7 +5,7 @@ import pymesync
 import re
 
 
-@app.route('/projects/edit', methods=['GET', 'POST'])
+@app.route('/projects/edit/', methods=['GET', 'POST'])
 def edit_project():
     if not is_logged_in():
         if request.method == 'GET':
