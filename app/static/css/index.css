@@ -1,8 +1,11 @@
-nav {
-    text-align: right;
-    padding-right: 20px;
+.icon-block {
+    padding: 0 15px;
+}
+.icon-block .material-icons {
+    font-size: inherit;
 }
 
+<<<<<<< HEAD:app/static/css/index.css
 .menu {
     /* Center vertically */
     margin: auto;
@@ -11,9 +14,18 @@ nav {
     height: 100px;
     line-height: 100px;
     text-align: center;
+=======
+footer,
+header,
+.container {
+    padding-left: 240px;
+>>>>>>> Add sidebar, reorganize file structure:app/css/index.scss
 }
 
-.menu a {
-    font-size: 2em;
-    padding-right: 10px;
+@media only screen and (max-width : 992px) {
+    footer,
+    header,
+    .container {
+        padding-left: 0;
+    }
 }
