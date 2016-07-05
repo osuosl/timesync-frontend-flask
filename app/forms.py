@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    SelectMultipleField, BooleanField
+    BooleanField, HiddenField, SelectMultipleField
 from wtforms.validators import DataRequired, Optional, URL
 
 
@@ -9,6 +9,10 @@ class LoginForm(Form):
                            render_kw={'placeholder': 'username'})
     password = PasswordField('password', validators=[DataRequired()],
                              render_kw={'placeholder': 'password'})
+
+
+class ConfirmDeleteForm(Form):
+    uuid = HiddenField()
 
 
 class CreateTimeForm(Form):
@@ -57,6 +61,11 @@ class FilterProjectsForm(Form):
     members = StringField('Members')
     managers = StringField('Managers')
     spectators = StringField('Spectators')
+
+
+class FilterActivitiesForm(Form):
+    # Optional
+    slug = StringField('Activity Slug:')
 
 
 class CreateUserForm(Form):

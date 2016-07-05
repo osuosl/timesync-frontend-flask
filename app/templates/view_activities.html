@@ -2,26 +2,50 @@
 
 {% block title %} View Activities {% endblock %}
 
-{% block body%}
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Activity Name</th>
-                <th>Activity Slug</th>
-            </tr>
-        </thead>
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
-        {% for a in activities %}
-        <tr>
-        {% if is_admin %}
-            <td><a href="{{ url_for('edit_activity', slug=a['slug']) }}">EDIT</a></td>
-        {% else %}
-            <td></td>
-        {% endif %}
-            <td>{{ a['name'] }}</td>
-            <td>{{ a['slug'] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<script>
+window.onload = function()
+{
+    // Make the table sortable and sort it alphabetically by name
+    var activitiesTable = document.body.getElementsByTagName("table")[0];
+    makeSortable(activitiesTable);
+    sortTable(activitiesTable, 1, 1);
+}
+</script>
+{% endblock %}
+
+{% block body%}
+    <div class="filter-params">
+        <form method="POST">
+            {{ form.csrf_token }}
+            <p>{{ form.slug.label }} {{ form.slug }}</p>
+            <p><input type="submit" value="Submit"> <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
+        </form>
+    </div>
+    <div class="view-activities">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="alpha">Activity Name</th>
+                    <th class="alpha">Activity Slug</th>
+                </tr>
+            </thead>
+
+            {% for a in activities %}
+            <tr>
+            {% if is_admin %}
+                <td><a href="{{ url_for('edit_activity', slug=a['slug']) }}">EDIT</a></td>
+            {% else %}
+                <td></td>
+            {% endif %}
+                <td>{{ a['name'] }}</td>
+                <td>{{ a['slug'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
