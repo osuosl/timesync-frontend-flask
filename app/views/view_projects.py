@@ -1,8 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, get_user, error_message
+from app.util import is_logged_in, error_message
 import pymesync
-import re
 
 
 @app.route('/projects/', methods=['GET', 'POST'])
@@ -14,11 +13,8 @@ def view_projects():
                            test=app.config['TESTING'],
                            token=session['token'])
 
-    user = get_user(session['user']['username'])
-    error_message(user)
-
-    projects = ts.get_projects()
-    error_message(projects)
+    session_user = session['user']
+    error_message(session_user)
 
     form = forms.FilterProjectsForm()
 
@@ -28,38 +24,34 @@ def view_projects():
         if request.form['name']:
             query['name'] = request.form['name']
         if request.form['slugs']:
-            query['slugs'] = re.split('\s?,\s?', request.form['slugs'])
+            query['slugs'] = request.form['slugs'].split(',')
         if request.form['members']:
-            query['members'] = re.split('\s?,\s?', request.form['members'])
+            query['members'] = request.form['members'].split(',')
         if request.form['managers']:
-            query['managers'] = re.split('\s?,\s?', request.form['managers'])
+            query['managers'] = request.form['managers'].split(',')
         if request.form['spectators']:
-            query['spectators'] = re.split('\s?,\s?',
-                                           request.form['spectators'])
+            query['spectators'] = request.form['spectators'].split(',')
 
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
 
     projects = ts.get_projects(query_parameters=query)
-    error_message(projects)
 
-    if 'error' in projects or 'pymesync error' in projects:
+    if error_message(projects):
         flash('Error')
         projects = []
 
     for project in projects:
-        project['members'] = []
-        project['managers'] = []
-        project['spectators'] = []
-
         if 'users' in project:
-            for username in project['users']:
-                if project['users'][username]['member']:
-                    project['members'].append(username)
-                if project['users'][username]['manager']:
-                    project['managers'].append(username)
-                if project['users'][username]['spectator']:
-                    project['spectators'].append(username)
+            users = project['users']
+            project['members'] = [user for user, permissions in
+                                  users.iteritems() if permissions['member']]
+            project['managers'] = [user for user, permissions in
+                                   users.iteritems() if permissions['manager']]
+            project['spectators'] = [user for user, permissions in
+                                     users.iteritems() if
+                                     permissions['spectator']]
 
     return render_template('view_projects.html', form=form, projects=projects,
-                           user=user['username'], admin=user['site_admin'])
+                           user=session_user['username'],
+                           admin=session_user['site_admin'])

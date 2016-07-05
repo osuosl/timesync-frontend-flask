@@ -1,8 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message
+from app.util import is_logged_in, error_message, project_user_permissions
 import pymesync
-import re
 
 
 @app.route('/projects/edit/', methods=['GET', 'POST'])
@@ -61,48 +60,24 @@ def edit_project():
 
     if form.validate_on_submit():
         project = {}
-        permissions = {}
 
         for field in form:
-            if field.data and field.name is not 'csrf_token':
+            # These are not project fields, don't take data from them here
+            exclude = ['csrf_token', 'members', 'managers', 'spectators']
+            if field.data and field.name not in exclude:
                 if field.name == 'slugs':
                     slugs = form.slugs.data
-                    project['slugs'] = re.split('\s?,\s?', slugs)
-                elif field.name == 'members':
-                    for user in field.data:
-                        if user in permissions:
-                            permissions[user]['member'] = True
-                        else:
-                            permissions[user] = {}
-                            permissions[user]['member'] = True
-                elif field.name == 'managers':
-                    for user in field.data:
-                        if user in permissions:
-                            permissions[user]['manager'] = True
-                        else:
-                            permissions[user] = {}
-                            permissions[user]['manager'] = True
-                elif field.name == 'spectators':
-                    for user in field.data:
-                        if user in permissions:
-                            permissions[user]['spectator'] = True
-                        else:
-                            permissions[user] = {}
-                            permissions[user]['spectator'] = True
+                    project['slugs'] = slugs.split(',')
                 elif field.data != project_data[field.name]:
                     project[field.name] = field.data
 
-        project['users'] = permissions
+        project['users'] = project_user_permissions(form)
 
         res = ts.update_project(project=project, slug=slug)
 
-        # TODO: Better error handling
-        if 'error' in res:
-            flash("Error: " + res['error'] + " - " + res['text'])
-        elif 'pymesync error' in res:
-            flash("Error: " + res['pymesync error'])
+        if not error_message(res):
+            flash("Project successfully submitted.")
 
-        flash("Project successfully submitted.")
         return redirect(url_for('view_projects'))
 
     for field, errors in form.errors.items():

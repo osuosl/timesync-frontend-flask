@@ -1,8 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message
+from app.util import is_logged_in, error_message, project_user_permissions
 import pymesync
-import re
 
 
 @app.route('/projects/create/', methods=['GET', 'POST'])
@@ -35,42 +34,21 @@ def create_project():
 
     if form.validate_on_submit():
         project = {}
-        permissions = {}
 
         for field in form:
-            if field.data and field.name is not 'csrf_token':
+            exclude = ['csrf_token', 'members', 'managers', 'spectators']
+            if field.data and field.name not in exclude:
                 if field.name == 'slugs':
-                    project['slugs'] = re.split('\s?,\s?', form.slugs.data)
-                elif field.name == 'members':
-                    for user in field.data:
-                        if user in permissions:
-                            permissions[user]['member'] = True
-                        else:
-                            permissions[user] = {}
-                            permissions[user]['member'] = True
-                elif field.name == 'managers':
-                    for user in field.data:
-                        if user in permissions:
-                            permissions[user]['manager'] = True
-                        else:
-                            permissions[user] = {}
-                            permissions[user]['manager'] = True
-                elif field.name == 'spectators':
-                    for user in field.data:
-                        if user in permissions:
-                            permissions[user]['spectator'] = True
-                        else:
-                            permissions[user] = {}
-                            permissions[user]['spectator'] = True
+                    project['slugs'] = form.slugs.data.split(',')
                 else:
                     project[field.name] = field.data
 
-        project['users'] = permissions
+        project['users'] = project_user_permissions(form)
 
         res = ts.create_project(project=project)
-        error_message(res)
+        if not error_message(res):
+            flash("Project successfully submitted.")
 
-        flash("Project successfully submitted.")
         return redirect(url_for('create_project'))
 
         # Flash any form errors
