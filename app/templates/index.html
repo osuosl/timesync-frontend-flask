@@ -1,76 +1,12 @@
 {% extends "layout.html" %}
 
 {% block title %} timesync-frontend {% endblock %}
-{% block imports %}
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/lib/materialize.min.css') }}">
-    {% assets "index_css" %}
-    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
-    {% endassets %}
-{% endblock %}
 
 {% block body %}
-    {# Sidebar navigation #}
-    <nav>
-        <ul id="slide-out" class="side-nav fixed">
-            {% if is_logged_in %}
-            <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a href="#!" class="collapsible-header">Times<i class="material-icons">arrow_drop_down</i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="{{ url_for('create_time') }}">Submit Time</a></li>
-                                <li><a href="{{ url_for('view_times') }}">View Times</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        {% if is_admin %}
-                            <a href="#!" class="collapsible-header">Admin<i class="material-icons">arrow_drop_down</i></a>
-                        {% else %}
-                            <a href="#!" class="collapsible-header">View<i class="material-icons">arrow_drop_down</i></a>
-                        {% endif %}
-                        <div class="collapsible-body">
-                            <ul>
-                                {% if is_admin %}
-                                    {# TODO: Use url_for() when pages are implemented #}
-                                    <li><a href="/users/create">Create User</a></li>
-                                    <li><a href="/users">Get User</a></li>
-                                    <li><a href="/users/edit">Update User</a></li>
-                                    <li><a href="/users/delete">Delete User</a></li>
-                                    <li><a href="{{ url_for('create_activity') }}">Create Activity</a></li>
-                                    <li><a href="{{ url_for('view_activities') }}">View Activities</a></li>
-                                {% else %}
-                                    <li><a href="{{ url_for('view_activities') }}">View Activities</a></li>
-                                    <li><a href="{{ url_for('view_users') }}">View Users</a></li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-            {% endif %}
-            <li><a href="{{ url_for('login', next=request.url_rule) }}">Login</a></li>
-            {% if is_logged_in %}
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            {% endif %}
-        </ul>
-        <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-    </nav>
-
-    <div class="container">Content</div>
+    Content
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript"
-        src="https://code.jquery.com/jquery-3.0.0.min.js"
-	    integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="
-	    crossorigin="anonymous"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js') }}"></script>
-
     {% assets "index_js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
