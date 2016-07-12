@@ -4,7 +4,7 @@ from app.util import is_logged_in, error_message
 import pymesync
 
 
-@app.route('/times', methods=['GET', 'POST'])
+@app.route('/times/', methods=['GET', 'POST'])
 def view_times():
     # Check if logged in first
     if not is_logged_in():

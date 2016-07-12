@@ -5,7 +5,7 @@ import pymesync
 from app.util import is_logged_in, to_readable_time, error_message
 
 
-@app.route('/times/edit', methods=['GET', 'POST'])
+@app.route('/times/edit/', methods=['GET', 'POST'])
 def edit_time():
     # Check if logged in first
     if not is_logged_in():

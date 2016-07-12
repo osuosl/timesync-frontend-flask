@@ -3,7 +3,7 @@ from app import app
 from app.util import is_logged_in
 
 
-@app.route('/admin')
+@app.route('/admin/')
 def admin():
     # Check if logged in first
     if not is_logged_in():

@@ -4,7 +4,7 @@ from app.util import get_user, error_message, get_projects
 import pymesync
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     status = 200
     form = forms.LoginForm()
