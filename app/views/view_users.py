@@ -4,7 +4,7 @@ from app.util import is_logged_in, error_message, get_user
 import pymesync
 
 
-@app.route('/users/', methods=['GET', 'POST'])
+@app.route('/users', methods=['GET', 'POST'])
 def view_users():
     # Check if logged in first
     if not is_logged_in():
@@ -45,8 +45,8 @@ def view_users():
 
     if 'metainfo' in query:
         meta_upper = query['metainfo'].upper()
-        users = [user for user in users
-                 if user['meta'] and meta_upper in user['meta'].upper()]
+        users = [ts_user for ts_user in users
+                 if ts_user['meta'] and meta_upper in ts_user['meta'].upper()]
 
     return render_template('view_users.html', form=form, users=users,
                            user=user['username'], admin=user['site_admin'])

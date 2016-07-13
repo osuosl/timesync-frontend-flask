@@ -38,6 +38,7 @@ class ReportTestCase(unittest.TestCase):
     def view_users(self):
         res = self.client.post(url_for('view_users'), data=dict(
             username="",
+            metainfo="",
         ), follow_redirects=True)
 
         return res
@@ -65,7 +66,7 @@ class ReportTestCase(unittest.TestCase):
         """Tests the view_users page for correct form fields"""
         form = forms.FilterUsersForm()
 
-        fields = ['username']
+        fields = ['username', 'metainfo']
 
         for field in fields:
             assert field in form.data
