@@ -5,7 +5,7 @@ import pymesync
 import re
 
 
-@app.route('/times/create', methods=['GET', 'POST'])
+@app.route('/times/create/', methods=['GET', 'POST'])
 def create_time():
     # Check if logged in first
     if not is_logged_in():

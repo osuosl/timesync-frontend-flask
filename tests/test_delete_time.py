@@ -89,7 +89,7 @@ class DeleteTimeTestCase(unittest.TestCase):
     def test_url_endpoint(self):
         """Make sure the url endpoint for delete_time exists"""
         url = url_for('delete_time')
-        assert url == '/times/delete'
+        assert url == '/times/delete/'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

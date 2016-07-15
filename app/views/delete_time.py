@@ -4,7 +4,7 @@ import pymesync
 from app.util import is_logged_in, error_message
 
 
-@app.route('/times/delete', methods=['GET', 'POST'])
+@app.route('/times/delete/', methods=['GET', 'POST'])
 def delete_time():
     # Check if logged in first
     if not is_logged_in():

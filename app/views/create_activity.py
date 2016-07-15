@@ -4,7 +4,7 @@ import pymesync
 from app.util import is_logged_in, error_message
 
 
-@app.route('/activities/create', methods=['GET', 'POST'])
+@app.route('/activities/create/', methods=['GET', 'POST'])
 def create_activity():
     # Check if logged in first
     if not is_logged_in():
