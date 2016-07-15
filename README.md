@@ -21,9 +21,8 @@ running the app for the first time
 | `TIMESYNC_URL` | The URL of the TimeSync server that this app will use     |
 
 Note: If you are only intending to run the app in a development environment,
-you do not change the default `TIMESYNC_URL` in config.py. 
-
-For a full list of configuration options, check out the documentation
+you do not need to change the default `TIMESYNC_URL` in config.py. For a full
+list of configuration options, check out the documentation
 
 ## Development
 
