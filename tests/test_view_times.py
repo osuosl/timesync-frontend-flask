@@ -192,10 +192,10 @@ class ReportTestCase(unittest.TestCase):
         assert projects_list_line
 
         projects_expected = [['ganeti-webmgr', 'gwm'], ['timesync', 'ts']]
-        projects_actual[[s.strip() for s in p.split('/')]
-                        for p in projects_list_line.split(',')]
+        projects_actual = [[s.strip() for s in p.split('/')]
+                           for p in projects_list_line.split(',')]
 
-        for project in projects_actual:
+        for project in projects_expected:
             # Assert that there are no duplicate projects
             assert projects_actual.count(project) == 1
 
