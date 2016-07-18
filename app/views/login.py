@@ -27,6 +27,7 @@ def login():
             status = token['status']
         # Else success, redirect to index page
         else:
+            print session
             session['token'] = token['token']
 
             user = get_user(username)
