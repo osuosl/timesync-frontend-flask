@@ -22,59 +22,57 @@ def create_time():
 
     projects = ts.get_projects()
 
-    error_message(projects)
-
-    # Load the projects into a list of tuples
-    choices = []
-    for project in projects:
-        choices.append((project['name'], project['name']))
-    form.project.choices = choices
-
-    # If form submitted (POST)
-    if form.validate_on_submit():
-        user = form.user.data
-        project_name = form.project.data
-        duration = form.duration.data
-        date_worked = form.date_worked.data
-
-        # Load optional fields, if they aren't blank
-        activities = form.activities.data
-        notes = form.notes.data
-        issue_uri = form.issue_uri.data
-
-        # With project name, get slug
+    if not error_message(projects):
+        # Load the projects into a list of tuples
+        choices = []
         for project in projects:
-            if project['name'] == project_name:
-                project_name = project['slugs'][0]
+            choices.append((project['name'], project['name']))
+        form.project.choices = choices
 
-        # Try to convert str to int, else just leave as str
-        try:
-            duration = int(duration)
-        except:
-            pass
+        # If form submitted (POST)
+        if form.validate_on_submit():
+            user = form.user.data
+            project_name = form.project.data
+            duration = form.duration.data
+            date_worked = form.date_worked.data
 
-        time = {
-            "duration": duration,
-            "user": user,
-            "project": project_name,
-            "date_worked": date_worked.strftime('%Y-%m-%d')
-        }
+            # Load optional fields, if they aren't blank
+            activities = form.activities.data
+            notes = form.notes.data
+            issue_uri = form.issue_uri.data
 
-        # If optional fields are not empty, add to time
-        if activities:
-            # Create list from comma delimited string
-            time['activities'] = re.split('\s?,\s?', activities)
-        if notes:
-            time['notes'] = notes
-        if issue_uri:
-            time['issue_uri'] = issue_uri
+            # With project name, get slug
+            for project in projects:
+                if project['name'] == project_name:
+                    project_name = project['slugs'][0]
 
-        res = ts.create_time(time=time)
+            # Try to convert str to int, else just leave as str
+            try:
+                duration = int(duration)
+            except:
+                pass
 
-        error_message(res)
+            time = {
+                "duration": duration,
+                "user": user,
+                "project": project_name,
+                "date_worked": date_worked.strftime('%Y-%m-%d')
+            }
 
-        flash("Time successfully submitted.")
-        return redirect(url_for('index'))
+            # If optional fields are not empty, add to time
+            if activities:
+                # Create list from comma delimited string
+                time['activities'] = re.split('\s?,\s?', activities)
+            if notes:
+                time['notes'] = notes
+            if issue_uri:
+                time['issue_uri'] = issue_uri
+
+            res = ts.create_time(time=time)
+
+            if not error_message(res):
+                flash("Time successfully submitted.")
+                return redirect(url_for('index'))
 
     # Flash any form errors
     for field, errors in form.errors.items():

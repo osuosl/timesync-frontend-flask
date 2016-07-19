@@ -31,39 +31,37 @@ def edit_activity():
 
     activities = ts.get_activities(query_parameters={"slug": slug})
 
-    error_message(activities)
+    if not error_message(activities):
+        activity = activities[0]
 
-    activity = activities[0]
+        if form.validate_on_submit():
+            req_form = request.form
 
-    if form.validate_on_submit():
-        req_form = request.form
+            # To preserve the old slug so we can call update_activity()
+            old_slug = slug
 
-        # To preserve the old slug so we can call update_activity()
-        old_slug = slug
+            name = req_form['name']
+            slug = req_form['slug']
 
-        name = req_form['name']
-        slug = req_form['slug']
+            activity_update = dict()
 
-        activity_update = dict()
+            if name != activity['name']:
+                activity_update['name'] = name
+            if not ts.test and slug != activity['slug']:
+                activity_update['slug'] = slug
 
-        if name != activity['name']:
-            activity_update['name'] = name
-        if not ts.test and slug != activity['slug']:
-            activity_update['slug'] = slug
+            res = ts.update_activity(activity=activity_update, slug=old_slug)
 
-        res = ts.update_activity(activity=activity_update, slug=old_slug)
+            error_message(res)
 
-        error_message(res)
+            return redirect(url_for('view_activities'))
 
-        return redirect(url_for('view_activities'))
-
-    # If GET
-
-    form.name.data = activity['name']
-    if ts.test:
-        form.slug.data = activity['slug'][0]
-    else:
-        form.slug.data = activity['slug']
+        # If GET
+        form.name.data = activity['name']
+        if ts.test:
+            form.slug.data = activity['slug'][0]
+        else:
+            form.slug.data = activity['slug']
 
     for field, errors in form.errors.items():
         for error in errors:

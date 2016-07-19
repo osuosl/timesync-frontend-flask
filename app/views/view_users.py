@@ -38,9 +38,7 @@ def view_users():
         users = ts.get_users()
 
     # Show any errors
-    error_message(users)
-    if 'error' in users or 'pymesync error' in users:
-        flash(users)
+    if error_message(users):
         users = []
 
     return render_template('view_users.html', form=form, users=users,
