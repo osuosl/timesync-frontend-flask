@@ -118,7 +118,7 @@ class ReportTestCase(unittest.TestCase):
 
         # Assert that the line exists and contains the total time
         assert total_time_line
-        assert "0h1m" in total_time_line[0]
+        assert "0 h, 0 m, 39 s" in total_time_line[0]
 
     def test_summary_num_unique_users(self):
         """Tests that the number of unique users in the summary is correct"""
