@@ -89,7 +89,7 @@ def error_message(obj):
         # There was an error
         return True
     elif 'pymesync error' in obj:
-        flash("Error: " + obj["pymesync error"])
+        flash("Error: " + str(obj["pymesync error"]))
         # There was an error
         return True
 
