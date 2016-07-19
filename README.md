@@ -20,9 +20,9 @@ running the app for the first time
 | `SECRET_KEY`   | The secret encryption key used to encrypt sessions. Make sure that it's hard to guess |
 | `TIMESYNC_URL` | The URL of the TimeSync server that this app will use     |
 
-Note: If you are only intending to run the app in a development environment,
-you do not need to change the default `TIMESYNC_URL` in config.py. For a full
-list of configuration options, check out the documentation
+Note: If you are only intending to run the app in a development environment
+with Docker, you do not need to change the default `TIMESYNC_URL` in config.py.
+For a full list of configuration options, check out the documentation
 
 ## Development
 
