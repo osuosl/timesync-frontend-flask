@@ -21,19 +21,15 @@ def view_projects():
     query = {}
 
     if form.validate_on_submit():
-        if request.form['name']:
-            query['name'] = request.form['name']
-        if request.form['slugs']:
-            query['slugs'] = request.form['slugs'].split(',')
-        if request.form['members']:
-            query['members'] = request.form['members'].split(',')
-        if request.form['managers']:
-            query['managers'] = request.form['managers'].split(',')
-        if request.form['spectators']:
-            query['spectators'] = request.form['spectators'].split(',')
-
+        for field in form:
+            if field.data and field.name is not 'csrf_token':
+                query[field.name] = field.data
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
+
+    if 'slug' in query and 'include_deleted' in query:
+        flash("Cannot have slug and include deleted filtered at the same time")
+        query = {}
 
     projects = ts.get_projects(query_parameters=query)
 

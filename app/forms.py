@@ -56,11 +56,10 @@ class CreateProjectForm(Form):
 
 
 class FilterProjectsForm(Form):
-    name = StringField('Name:')
-    slugs = StringField('Slugs:')
-    members = StringField('Members')
-    managers = StringField('Managers')
-    spectators = StringField('Spectators')
+    username = StringField('Username:')
+    slug = StringField('Slug:')
+    include_deleted = BooleanField('Include Deleted:')
+    include_revisions = BooleanField('Include Revisions:')
 
 
 class FilterActivitiesForm(Form):

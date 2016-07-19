@@ -71,11 +71,9 @@ class ReportTestCase(unittest.TestCase):
         """Tests the view_projects page for correct form fields"""
         form = forms.FilterProjectsForm()
 
-        fields = ['name', 'slugs', 'members', 'managers',
-                  'spectators']
+        fields = ['username', 'slug', 'include_deleted', 'include_revisions']
 
         for field in fields:
-            print field
             assert field in form.data
 
     def test_report(self):
