@@ -27,6 +27,9 @@ def view_times():
     # List of times
     times = list()
 
+    # Dictionary to store summary information
+    summary = dict()
+
     # If the form has been submitted and validated use the form's parameters
     if form.validate_on_submit():
         req_form = request.form
@@ -50,6 +53,33 @@ def view_times():
             query['end'] = [end]
 
         times = ts.get_times(query_parameters=query)
+#        print "PRINTING TIMES:"
+#        print times
+#        print "DONE PRINTING TIMES."
+        
+        # Find "total_time": sum duration's seconds
+        total_time = 0
+        unique_users = set()
+        unique_projects = set()
+        unique_activities = list() # empty list
+        for entry in times:
+            total_time += entry['duration']
+            unique_users.add(entry['user'])
+            unique_projects.add(tuple(entry['project']))
+            unique_activities += entry['activities'] # add activities list to big list of activities, repeats included 
+
+        # add to summary dict
+        summary['total_time'] = total_time
+        summary['unique_users'] = len(unique_users) # number of unique users
+        summary['users_list'] = list(unique_users) # list of unique users
+        summary['unique_projects'] = len(unique_projects) # num unique projs
+        summary['projects_list'] = list(unique_projects) # list of uniq projs
+        summary['unique_activities'] = len(set(unique_activities)) # num uniq act
+        summary['activities_list'] = list(set(unique_activities)) # list uniq act
+
+#        print summary
+
+        # Find unique_users
 
         # Show any errors
         if error_message(times):
@@ -60,4 +90,5 @@ def view_times():
         flash("Invalid form input")
 
     return render_template('view_times.html', form=form, times=times,
-                           user=user['username'], is_admin=user['site_admin'])
+                           summary=summary, user=user['username'],
+                           is_admin=user['site_admin'])
