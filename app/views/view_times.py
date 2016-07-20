@@ -53,33 +53,25 @@ def view_times():
             query['end'] = [end]
 
         times = ts.get_times(query_parameters=query)
-#        print "PRINTING TIMES:"
-#        print times
-#        print "DONE PRINTING TIMES."
-        
-        # Find "total_time": sum duration's seconds
+
+        # Generate summary information
         total_time = 0
         unique_users = set()
         unique_projects = set()
-        unique_activities = list() # empty list
+        unique_activities = list()
         for entry in times:
             total_time += entry['duration']
             unique_users.add(entry['user'])
-            unique_projects.add(tuple(entry['project']))
-            unique_activities += entry['activities'] # add activities list to big list of activities, repeats included 
+            unique_projects.add(entry['project'][0])
+            unique_activities += entry['activities']
 
-        # add to summary dict
-        summary['total_time'] = total_time
-        summary['unique_users'] = len(unique_users) # number of unique users
-        summary['users_list'] = list(unique_users) # list of unique users
-        summary['unique_projects'] = len(unique_projects) # num unique projs
-        summary['projects_list'] = list(unique_projects) # list of uniq projs
-        summary['unique_activities'] = len(set(unique_activities)) # num uniq act
-        summary['activities_list'] = list(set(unique_activities)) # list uniq act
-
-#        print summary
-
-        # Find unique_users
+        summary['total_time'] = (total_time)
+        summary['unique_users'] = len(unique_users) 
+        summary['users_list'] = list(unique_users)
+        summary['unique_projects'] = len(unique_projects)
+        summary['projects_list'] = list(unique_projects) 
+        summary['unique_activities'] = len(set(unique_activities)) 
+        summary['activities_list'] = list(set(unique_activities)) 
 
         # Show any errors
         if error_message(times):
