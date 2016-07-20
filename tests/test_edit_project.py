@@ -19,9 +19,24 @@ class SubmitTestCase(unittest.TestCase):
     def tearDown(self):
         self.ctx.pop()
 
-    def login(self):
+    def not_admin_login(self):
         self.username = 'test'
         self.password = 'test'
+
+        res = self.client.post(url_for('login'), data=dict(
+            username=self.username,
+            password=self.password
+        ), follow_redirects=True)
+
+        # Get session object
+        with self.client.session_transaction() as sess:
+            self.sess = sess
+
+        return res
+
+    def admin_login(self):
+        self.username = 'admin'
+        self.password = 'timesync-staging'
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
@@ -52,10 +67,17 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login()
+        self.admin_login()
 
         res = self.client.get(url_for('edit_project'))
         assert res.status_code == 200
+
+    def test_non_admin_response(self):
+        """Make sure non-admins can't access projects they're not in"""
+        self.not_admin_login()
+
+        res = self.client.get(url_for('edit_project'))
+        assert res.status_code == 403
 
     def test_login_redirect(self):
         """Make sure unauthorized users are redirected to login page."""
@@ -66,18 +88,18 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_form_fields(self):
         """Tests the submit page for correct form fields."""
-        self.login()
+        self.admin_login()
 
         res = self.client.get(url_for('edit_project'))
-        fields = ['form', 'input', 'URI', 'Name', 'Slugs', 'Members',
-                  'Managers', 'Spectators']
+        fields = ['uri', 'name', 'slugs', 'members', 'managers', 'spectators']
 
+        print res.get_data()
         for field in fields:
             assert field in res.get_data()
 
     def test_submit(self):
         """Tests successful project submission."""
-        self.login()
+        self.admin_login()
         res = self.submit()
 
         assert res.status_code == 200

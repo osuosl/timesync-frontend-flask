@@ -27,6 +27,15 @@ def edit_project():
     project = ts.get_projects({'slug': slug})[0]
     error_message(project)
 
+    user = session['user']
+    if 'users' in project:
+        if not user['username'] in project['users'] and not user['site_admin']:
+            return "Permission denied", 403
+    elif not user['site_admin']:
+        print 'b'
+        return "Permission denied", 403
+    print 'c'
+
     members = []
     managers = []
     spectators = []
@@ -39,16 +48,25 @@ def edit_project():
             if project['users'][user]['spectator'] is True:
                 spectators.append(user)
 
+    if 'name' in project:
+        name = str(project['name'])
+    else:
+        name = ''
+    if 'slugs' in project:
+        slugs = ','.join(project['slugs'])
+    else:
+        slugs = ''
+
     project_data = {
         "members": members,
         "managers": managers,
         "spectators": spectators,
-        "name": str(project['name']),
-        "slugs": ','.join(project['slugs']),
+        "name": name,
+        "slugs": slugs,
         "uri": ''
     }
 
-    if project['uri']:
+    if 'uri' in project:
         project_data['uri'] = str(project['uri'])
 
     form = forms.CreateProjectForm(data=project_data)
