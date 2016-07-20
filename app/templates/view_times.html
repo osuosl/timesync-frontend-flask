@@ -30,31 +30,40 @@ window.onload = function()
         </form>
     </div>
 
+    {% if summary %}
     <div class="times-summary">
         <table>
             <tr>
                 <th>Total Time</th>
+                <td>{{ summary['total_time'] | hms_filter }}</td>
             </tr>
             <tr>
                 <th>Unique Users</th>
+                <td>{{ summary['unique_users'] }}</td>
             </tr>
             <tr>
                 <th>Users List</th>
+                <td>{{ summary['users_list'] | join(', ') }}</td>
             </tr>
             <tr>
                 <th>Unique Projects</th>
+                <td>{{ summary['unique_users'] }}</td>
             </tr>
             <tr>
                 <th>Projects List</th>
+                <td>{{ summary['projects_list'] | join(', ') }}</td>
             </tr>
             <tr>
                 <th>Unique Activities</th>
+                <td>{{ summary['unique_activities'] }}</td>
             </tr>
             <tr>
                 <th>Activities List</th>
-            <tr>
+                <td>{{ summary['activities_list'] | join(', ') }}</td>
+            </tr>
         </table>
     </div>
+    {% endif %}
 
     <div class="view-times">
         <table>
