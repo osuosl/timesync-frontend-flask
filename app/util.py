@@ -77,9 +77,9 @@ def is_logged_in():
 
 
 def error_message(obj):
-    # obj is empty, there was an error
+    # obj is empty, no error
     if not obj:
-        return True
+        return False
 
     # Make sure obj is dict
     obj = obj if type(obj) is dict else obj[0]
