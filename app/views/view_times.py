@@ -66,12 +66,12 @@ def view_times():
             unique_activities += entry['activities']
 
         summary['total_time'] = (total_time)
-        summary['unique_users'] = len(unique_users) 
+        summary['unique_users'] = len(unique_users)
         summary['users_list'] = list(unique_users)
         summary['unique_projects'] = len(unique_projects)
-        summary['projects_list'] = list(unique_projects) 
-        summary['unique_activities'] = len(set(unique_activities)) 
-        summary['activities_list'] = list(set(unique_activities)) 
+        summary['projects_list'] = list(unique_projects)
+        summary['unique_activities'] = len(set(unique_activities))
+        summary['activities_list'] = list(set(unique_activities))
 
         # Show any errors
         if error_message(times):

@@ -150,11 +150,9 @@ class ReportTestCase(unittest.TestCase):
 
         users_expected = ["userone", "usertwo", "userthree"]
         users_actual = [u.strip() for u in users_list_line.split(',')]
-#        print users_actual
 
         for user in users_expected:
             # Assert that there are no duplicate users
-#            print user
             assert users_actual.count(user) == 1
 
     def test_summary_unique_projects(self):
@@ -221,14 +219,12 @@ class ReportTestCase(unittest.TestCase):
         lines = res.data.split('\n')
         activities_div_line = [l for l in lines if "Activities List" in l]
 
-        print "this is the activities div line: ", activities_div_line
         assert activities_div_line
 
         # Get the line of the comma-separated list of activities
         # i.e. code, docs, etc.
         activities_list_line = lines[lines.index(activities_div_line[0])]
-        
-        print "this is the activities list line: ", activities_list_line
+
         assert activities_list_line
 
         activities_expected = ['code', 'docs', 'planning']
@@ -236,5 +232,4 @@ class ReportTestCase(unittest.TestCase):
 
         for activity in activities_expected:
             # Assert that there are no duplicate activities
-            print "activity: ", activity
             assert activities_actual.count(activity) == 1
