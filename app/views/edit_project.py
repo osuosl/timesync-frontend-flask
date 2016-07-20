@@ -32,9 +32,7 @@ def edit_project():
         if not user['username'] in project['users'] and not user['site_admin']:
             return "Permission denied", 403
     elif not user['site_admin']:
-        print 'b'
         return "Permission denied", 403
-    print 'c'
 
     members = []
     managers = []
