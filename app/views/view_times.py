@@ -81,10 +81,13 @@ def view_times():
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
 
-    times = ts.get_times(query_parameters=query)
+    # Lines 87 and 89 were causing the times to show up by default regardless
+    # of whether the form had been submitted or not.
+
+    # times = ts.get_times(query_parameters=query)
 
     # Show any errors
-    error_message(times)
+    # error_message(times)
 
     return render_template('view_times.html', form=form, times=times,
                            summary=summary, user=user['username'],
