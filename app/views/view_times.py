@@ -42,7 +42,7 @@ def view_times():
 
         # Only using filter parameters that have been supplied
         if username:
-            query['user'] = [u.strip() for u in username.split(',')]
+            query['user'] = [username]
         if projects:
             query['project'] = [p.strip() for p in projects.split(',')]
         if activities:
@@ -81,6 +81,12 @@ def view_times():
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
 
+    times = ts.get_times(query_parameters=query)
+
+    # Show any errors
+    error_message(times)
+
     return render_template('view_times.html', form=form, times=times,
                            summary=summary, user=user['username'],
-                           is_admin=user['site_admin'])
+                           is_admin=user['site_admin'],
+                           admin=user['site_admin'])
