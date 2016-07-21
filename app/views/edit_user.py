@@ -20,37 +20,36 @@ def edit_user():
     username = request.args.get('username')
     user = ts.get_users(username=username)[0]
 
-    error_message(user)
+    if not error_message(user):
+        user_data = {
+                'username': user['username'],
+                'display_name': user['display_name'],
+                'email': user['email'],
+                'site_admin': user['site_admin'],
+                'site_spectator': user['site_spectator'],
+                'site_manager': user['site_manager'],
+                'active': user['active']
+        }
 
-    user_data = {
-        'username': user['username'],
-        'display_name': user['display_name'],
-        'email': user['email'],
-        'site_admin': user['site_admin'],
-        'site_spectator': user['site_spectator'],
-        'site_manager': user['site_manager'],
-        'active': user['active']
-    }
+        form = forms.CreateUserForm(data=user_data)
 
-    form = forms.CreateUserForm(data=user_data)
-
-    # If form submitted (POST)
-    if form.validate_on_submit():
-        user = {}
-        for field in form:
-            if field.data and field.name is not "csrf_token":
-                if field.name is not 'password':
-                    if field.data != user_data[field.name]:
+        # If form submitted (POST)
+        if form.validate_on_submit():
+            user = {}
+            for field in form:
+                if field.data and field.name is not "csrf_token":
+                    if field.name is not 'password':
+                        if field.data != user_data[field.name]:
+                            user[field.name] = field.data
+                    else:
                         user[field.name] = field.data
-                else:
-                    user[field.name] = field.data
 
-        res = ts.update_user(user=user, username=form.username.data)
+            res = ts.update_user(user=user, username=form.username.data)
 
-        error_message(res)
+            if not error_message(res):
+                flash("User successfully submitted.")
 
-        flash("User successfully submitted.")
-        return redirect(url_for('view_users'))
+            return redirect(url_for('view_users'))
 
     # Flash any form errors
     for field, errors in form.errors.items():

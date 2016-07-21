@@ -76,25 +76,22 @@ def is_logged_in():
     return True
 
 
-def error_message(array):
-    if type(array) is dict:
-        if 'error' in array:
-            flash("Error: " + array["error"] + " - " + array["text"])
-            # There was an error
-            return True
-        elif 'pymesync error' in array:
-            flash("Error: " + array["pymesync error"])
-            # There was an error
-            return True
-    elif type(array) is list:
-        if 'error' in array[0]:
-            flash("Error: " + array[0]["error"] + " - " + array[0]["text"])
-            # There was an error
-            return True
-        elif 'pymesync error' in array:
-            flash("Error: " + array[0]["pymesync error"])
-            # There was an error
-            return True
+def error_message(obj):
+    # obj is empty, no error
+    if not obj:
+        return False
+
+    # Make sure obj is dict
+    obj = obj if type(obj) is dict else obj[0]
+
+    if 'error' in obj:
+        flash("Error: " + obj["error"] + " - " + obj["text"])
+        # There was an error
+        return True
+    elif 'pymesync error' in obj:
+        flash("Error: " + str(obj["pymesync error"]))
+        # There was an error
+        return True
 
     # No error
     return False
