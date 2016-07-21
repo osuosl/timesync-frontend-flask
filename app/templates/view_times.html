@@ -10,7 +10,7 @@
 window.onload = function()
 {
     // Make the table sortable and sort it by most recent
-    var timesTable = document.body.getElementsByTagName("table")[0];
+    var timesTable = document.body.getElementsByTagName("table")[1];
     makeSortable(timesTable);
     sortTable(timesTable, 3, -1);
 }
@@ -47,7 +47,7 @@ window.onload = function()
             </tr>
             <tr>
                 <th>Unique Projects</th>
-                <td>{{ summary['unique_users'] }}</td>
+                <td>{{ summary['unique_projects'] }}</td>
             </tr>
             <tr>
                 <th>Projects List</th>
