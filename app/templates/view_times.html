@@ -2,18 +2,39 @@
 
 {% block title %} View Times {% endblock %}
 
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
+{% endblock %}
+
 {% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
+
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
-window.onload = function()
+$(document).ready(function()
 {
-    // Make the table sortable and sort it by most recent
-    var timesTable = document.body.getElementsByTagName("table")[1];
-    makeSortable(timesTable);
-    sortTable(timesTable, 3, -1);
-}
+    var items = $("#view-times table tbody tr");
+
+    var numItems = items.length;
+    var perPage = 20;
+
+    items.slice(perPage).hide();
+
+    $("#paginator").pagination({
+        items: numItems,
+        itemsOnPage: perPage,
+        cssStyle: "compact-theme",
+        onPageClick: function(pageNumber) {
+            var showStart = perPage * (pageNumber - 1);
+            var showEnd = showStart + perPage;
+
+            items.hide().slice(showStart, showEnd).show();
+        }
+    });
+});
 </script>
 {% endblock %}
 
@@ -65,7 +86,9 @@ window.onload = function()
     </div>
     {% endif %}
 
-    <div class="view-times">
+    <div id="paginator"></div>
+
+    <div id="view-times">
         <table>
             <thead>
                 <tr>
