@@ -15,7 +15,7 @@
         <form method="POST">
             {{ form.csrf_token }}
             {{ form.ts_object }}
-            <input type="submit" value="Yes, delete this time">
+            <input type="submit" value="Yes, delete this activity">
             <input type="button" name="no" value="No" onClick="location.href='{{ url_for('view_activities') }}'">
         </form>
     </div>
