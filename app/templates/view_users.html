@@ -4,8 +4,15 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
+window.onload = function()
+{
+    var usersTable = document.body.getElementsByTagName("table")[0];
+    makeSortable(usersTable);
+    sortTable(usersTable, 0, 1);
+}
 function clearForm(form)
 {
     for (var i = 0; i < form.elements.length; i++)

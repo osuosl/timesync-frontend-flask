@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %} Delete Time {% endblock %}
+
+{% block body %}
+    <div class="time-info">
+        <p>Time info:</p>
+        <p>
+            UUID: {{ time['uuid'] }}<br />
+            User: {{ time['user'] }}<br />
+            Duration: {{ time['duration'] | hms_filter}}<br />
+            Date Worked: {{ time['date_worked'] }}<br />
+            Project: {{ time['project'] | join(' ') }}<br />
+            Activities: {{ time['activities'] | join(' ') }}<br />
+            Issue URI: {{ time['issue_uri'] }}<br />
+            Notes: {{ time['notes'] }}<br />
+        </p>
+    </div>
+
+    <div class="confirm-delete">
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.uuid }}
+            <input type="submit" value="Yes, delete this time">
+            <input type="button" name="no" value="No" onClick="location.href='{{ url_for('view_times') }}'">
+        </form>
+    </div>
+{% endblock %}

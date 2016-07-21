@@ -27,6 +27,31 @@ def get_user(username):
     return user
 
 
+def get_projects(username):
+    if not is_logged_in():
+        print "Error: Not logged in"
+        return []
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=session['token'])
+
+    projects = ts.get_projects()
+
+    if 'error' in projects:
+        print projects['error']
+        return []
+
+    user_projects = []
+
+    # Get each project the user has access to
+    for project in projects:
+        if 'users' in project and username in project['users']:
+            user_projects.append(project)
+
+    return user_projects
+
+
 def is_logged_in():
     """Checks if the user is logged in. Also checks token expiration time,
         logging the user out if their token is expired."""
@@ -58,7 +83,7 @@ def error_message(array):
             # There was an error
             return True
         elif 'pymesync error' in array:
-            flash("Error: " + array["pymesync error"] + " - " + array["text"])
+            flash("Error: " + array["pymesync error"])
             # There was an error
             return True
     elif type(array) is list:
@@ -67,8 +92,7 @@ def error_message(array):
             # There was an error
             return True
         elif 'pymesync error' in array:
-            flash("Error: " + array[0]["pymesync error"] + " - " +
-                  array[0]["text"])
+            flash("Error: " + array[0]["pymesync error"])
             # There was an error
             return True
 
@@ -81,3 +105,20 @@ def to_readable_time(seconds):
     hours, minutes = divmod(minutes, 60)
 
     return '{}h{}m'.format(hours, minutes)
+
+
+def project_user_permissions(form):
+    users = form['members'].data + \
+        form['managers'].data + \
+        form['spectators'].data
+
+    permissions = {}
+    for user in users:
+        user_permissions = {
+            "member": user in form['members'].data,
+            "manager": user in form['managers'].data,
+            "spectator": user in form['spectators'].data
+        }
+        permissions[user] = user_permissions
+
+    return permissions

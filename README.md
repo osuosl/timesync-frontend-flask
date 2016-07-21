@@ -4,13 +4,23 @@
 
 Front-end webapp for the TimeSync API.
 
-To run the app, you should first edit the configuration:
+## Configuration
 
-1. Rename the config file from `config.py.dist` to `config.py`.
-2. Change the `SECRET_KEY` to one of your own. Make it unique.
-4. Change `TIMESYNC_URL` to the URL of the TimeSync instance to
-communicate with.
-5. If you want to run it in debug mode, make sure you set `DEBUG` to `True`.
+Copy `config.py.dist` and rename the copy `config.py`
+
+```sh
+$ cp config.py.dist config.py
+```
+
+Inside `config.py` there are several options that **must** be set before
+running the app for the first time
+
+| Option         | Description                                               |
+|:--------------:|:---------------------------------------------------------:|
+| `SECRET_KEY`   | The secret encryption key used to encrypt sessions. Make sure that it's hard to guess |
+| `TIMESYNC_URL` | The URL of the TimeSync server that this app will use     |
+
+For a full list of configuration options, check out the documentation
 
 ## Development
 

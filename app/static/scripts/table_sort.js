@@ -10,15 +10,18 @@ function hmsToSeconds(str)
 
 function sortAlpha(a, b, direction)
 {
-    if (a < b)
+    var a_lower = a.toLowerCase();
+    var b_lower = b.toLowerCase();
+
+    if (a_lower < b_lower)
     {
         return -1 * direction;
     }
-    else if (a > b)
+    else if (a_lower > b_lower)
     {
         return 1 * direction;
     }
-    else if (a == b)
+    else if (a_lower == b_lower)
     {
         return 0;
     }
@@ -128,17 +131,3 @@ function makeSortable(table)
         tableClosure(i);
     }
 }
-
-function makeAllSortable()
-{
-    var tables = document.body.getElementsByTagName('table');
-
-    for (var i = 0; i < tables.length; i++)
-    {
-        makeSortable(tables[i]);
-
-        sortTable(tables[i], 3, -1); // Initial sort by most recent
-    }
-}
-
-window.onload = makeAllSortable;

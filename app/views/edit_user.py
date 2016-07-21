@@ -4,7 +4,7 @@ from app.util import is_logged_in, error_message
 import pymesync
 
 
-@app.route('/users/edit', methods=['GET', 'POST'])
+@app.route('/users/edit/', methods=['GET', 'POST'])
 def edit_user():
     # Check if logged in first
     if not is_logged_in():
@@ -23,13 +23,13 @@ def edit_user():
     error_message(user)
 
     user_data = {
-            'username': user['username'],
-            'display_name': user['display_name'],
-            'email': user['email'],
-            'site_admin': user['site_admin'],
-            'site_spectator': user['site_spectator'],
-            'site_manager': user['site_manager'],
-            'active': user['active']
+        'username': user['username'],
+        'display_name': user['display_name'],
+        'email': user['email'],
+        'site_admin': user['site_admin'],
+        'site_spectator': user['site_spectator'],
+        'site_manager': user['site_manager'],
+        'active': user['active']
     }
 
     form = forms.CreateUserForm(data=user_data)

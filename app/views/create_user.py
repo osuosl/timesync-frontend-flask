@@ -4,7 +4,7 @@ from app.util import is_logged_in, error_message
 import pymesync
 
 
-@app.route('/users/create', methods=['GET', 'POST'])
+@app.route('/users/create/', methods=['GET', 'POST'])
 def create_user():
     # Check if logged in first
     if not is_logged_in():

@@ -49,7 +49,7 @@ class CreateUserTestCase(unittest.TestCase):
     def test_url_endpoint(self):
         """Make sure the url endpoint for create_user exists."""
         url = url_for('create_user')
-        assert url == '/users/create'
+        assert url == '/users/create/'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""

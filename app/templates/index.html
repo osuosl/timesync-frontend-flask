@@ -22,7 +22,9 @@
                 <a href="/admin">Admin</a>
             {% else %}
                 <a href="{{ url_for('view_activities') }}">View Activities</a>
+                <a href="{{ url_for('view_users') }}">View Users</a>
+                <a href="{{ url_for('view_projects') }}">View Projects</a>
             {% endif %}
-        </div>
+       </div>
     {% endif %}
 {% endblock %}
