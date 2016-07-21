@@ -34,31 +34,31 @@ window.onload = function()
     <div class="times-summary">
         <table>
             <tr>
-                <th>Total Time</th>
+                <th align='left'>Total Time</th>
                 <td>{{ summary['total_time'] | hms_filter }}</td>
             </tr>
             <tr>
-                <th>Unique Users</th>
+                <th align='left'>Unique Users</th>
                 <td>{{ summary['unique_users'] }}</td>
             </tr>
             <tr>
-                <th>Users List</th>
+                <th align='left'>Users List</th>
                 <td>{{ summary['users_list'] | join(', ') }}</td>
             </tr>
             <tr>
-                <th>Unique Projects</th>
+                <th align='left'>Unique Projects</th>
                 <td>{{ summary['unique_projects'] }}</td>
             </tr>
             <tr>
-                <th>Projects List</th>
+                <th align='left'>Projects List</th>
                 <td>{{ summary['projects_list'] | join(', ') }}</td>
             </tr>
             <tr>
-                <th>Unique Activities</th>
+                <th align='left'>Unique Activities</th>
                 <td>{{ summary['unique_activities'] }}</td>
             </tr>
             <tr>
-                <th>Activities List</th>
+                <th align='left'>Activities List</th>
                 <td>{{ summary['activities_list'] | join(', ') }}</td>
             </tr>
         </table>
