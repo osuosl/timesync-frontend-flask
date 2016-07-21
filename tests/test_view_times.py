@@ -139,21 +139,9 @@ class ReportTestCase(unittest.TestCase):
 
         # Get the line of the div that the users list is in
         lines = res.data.split('\n')
-        users_div_line = [l for l in lines if "Users List" in l]
-
-        assert users_div_line
-
-        # Get the line of the comma-separated list of users
-        # i.e. userone, usertwo, etc.
-        users_list_line = lines[lines.index(users_div_line[0])]
-        assert users_list_line
-
-        users_expected = ["userone", "usertwo", "userthree"]
-        users_actual = [u.strip() for u in users_list_line.split(',')]
-
-        for user in users_expected:
-            # Assert that there are no duplicate users
-            assert users_actual.count(user) == 1
+        users = ["userone", "usertwo", "userthree"]
+        users_line = [l for l in lines if all(u in l for u in users)]
+        assert users_line
 
     def test_summary_unique_projects(self):
         """Tests that the number of unique projects in the summary is
@@ -176,25 +164,10 @@ class ReportTestCase(unittest.TestCase):
 
         # Get the line of the project list div
         lines = res.data.split('\n')
-        projects_div_line = [l for l in lines if "Projects List" in l]
-
-        assert projects_div_line
-
-        # Get the line of the comma-separated list of projects
-        # Since projects can have multiple slugs, all of the project's
-        # slugs are separated by forward slashes
-        # i.e. timesync/ts. timesync-node/tn, etc.
-        projects_list_line = lines[lines.index(projects_div_line[0])]
-
-        assert projects_list_line
-
-        projects_expected = [['ganeti-webmgr', 'gwm'], ['timesync', 'ts']]
-        projects_actual = [[s.strip() for s in p.split('/')]
-                           for p in projects_list_line.split(',')]
-
-        for project in projects_expected:
-            # Assert that there are no duplicate projects
-            assert projects_actual.count(project) == 1
+        projects = [['ganeti-webmgr', 'gwm'], ['timesync', 'ts']]
+        projects_line = [l for l in lines if all(
+            any(s in l for s in p) for p in projects)]
+        assert projects_line
 
     def test_summary_unique_activities(self):
         """Tests that the number of unique activities in the summary is
@@ -217,19 +190,6 @@ class ReportTestCase(unittest.TestCase):
 
         # Get the line of the activity list div
         lines = res.data.split('\n')
-        activities_div_line = [l for l in lines if "Activities List" in l]
-
-        assert activities_div_line
-
-        # Get the line of the comma-separated list of activities
-        # i.e. code, docs, etc.
-        activities_list_line = lines[lines.index(activities_div_line[0])]
-
-        assert activities_list_line
-
-        activities_expected = ['code', 'docs', 'planning']
-        activities_actual = [a.strip for a in activities_list_line.split(',')]
-
-        for activity in activities_expected:
-            # Assert that there are no duplicate activities
-            assert activities_actual.count(activity) == 1
+        activities = ['code', 'docs', 'planning']
+        activities_line = [l for l in lines if all(a in l for a in activities)]
+        assert activities_line
