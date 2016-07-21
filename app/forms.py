@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    BooleanField, HiddenField
-from wtforms.validators import DataRequired, Optional
+    BooleanField, HiddenField, SelectMultipleField
+from wtforms.validators import DataRequired, Optional, URL
 
 
 class LoginForm(Form):
@@ -32,7 +32,7 @@ class CreateTimeForm(Form):
 
 class FilterTimesForm(Form):
     # All optional
-    user = StringField('Users:', description='Comma separated')
+    user = StringField('User:')
     project = StringField('Project Slugs:', description='Comma separated')
     activity = StringField('Activity Slugs:', description='Comma separated')
     start = DateField('Start Date:', format="%Y-%m-%d",
@@ -44,6 +44,22 @@ class FilterTimesForm(Form):
 class CreateActivityForm(Form):
     name = StringField('Activity Name:')
     slug = StringField('Activity Slug:')
+
+
+class CreateProjectForm(Form):
+    uri = StringField('URI:', validators=[URL()])
+    name = StringField('Name:')
+    slugs = StringField('Slugs:')
+    members = SelectMultipleField('Members')
+    managers = SelectMultipleField('Managers')
+    spectators = SelectMultipleField('Spectators')
+
+
+class FilterProjectsForm(Form):
+    username = StringField('Username:')
+    slug = StringField('Slug:')
+    include_deleted = BooleanField('Include Deleted:')
+    include_revisions = BooleanField('Include Revisions:')
 
 
 class FilterActivitiesForm(Form):

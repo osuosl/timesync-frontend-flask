@@ -83,7 +83,7 @@ def error_message(array):
             # There was an error
             return True
         elif 'pymesync error' in array:
-            flash("Error: " + array["pymesync error"] + " - " + array["text"])
+            flash("Error: " + array["pymesync error"])
             # There was an error
             return True
     elif type(array) is list:
@@ -92,8 +92,7 @@ def error_message(array):
             # There was an error
             return True
         elif 'pymesync error' in array:
-            flash("Error: " + array[0]["pymesync error"] + " - " +
-                  array[0]["text"])
+            flash("Error: " + array[0]["pymesync error"])
             # There was an error
             return True
 
@@ -106,3 +105,20 @@ def to_readable_time(seconds):
     hours, minutes = divmod(minutes, 60)
 
     return '{}h{}m'.format(hours, minutes)
+
+
+def project_user_permissions(form):
+    users = form['members'].data + \
+        form['managers'].data + \
+        form['spectators'].data
+
+    permissions = {}
+    for user in users:
+        user_permissions = {
+            "member": user in form['members'].data,
+            "manager": user in form['managers'].data,
+            "spectator": user in form['spectators'].data
+        }
+        permissions[user] = user_permissions
+
+    return permissions
