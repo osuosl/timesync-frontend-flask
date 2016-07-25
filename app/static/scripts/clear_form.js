@@ -14,11 +14,10 @@ function clearForm(form, reload = true)
     }
     else
     {
-        var oldBody = document.getElementsByTagName('tbody');
-        for (var i = 0; i < oldBody.length; i++)
-        {
-            var newBody = document.createElement('tbody');
-            oldBody[i].parentNode.replaceChild(newBody, oldBody[i]);
-        }
+        $("table").empty();
+        $("#paginator").pagination({
+            items: 0,
+            cssStyle: "compact-theme"
+        });
     }
 }

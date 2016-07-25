@@ -54,80 +54,69 @@ function sortLists(a, b, direction)
     return sortAlpha(aList[0], bList[0], direction);
 }
 
-function sortTable(table, col, direction)
-{
-    var tableHead = Array.prototype.slice.call(table.tHead.rows, 0),
-        tableBody = table.tBodies[0],
-        tableRows = Array.prototype.slice.call(tableBody.rows, 0);
+function paginateTable(tableSelector, pageNum) {
+    var showStart = 20 * (pageNum - 1);
+    var showEnd = showStart + 20;
 
-    tableRows = tableRows.sort(
-        function (a, b) {
-            var columnClass = tableHead[0].cells[col].className,
-                aText = a.cells[col].textContent,
-                bText = b.cells[col].textContent;
-
-            if (columnClass === "alpha")
-            {
-                return sortAlpha(aText, bText, direction);
-            }
-            else if (columnClass === "hms")
-            {
-                return sortHMS(aText, bText, direction);
-            }
-            else if (columnClass === "date")
-            {
-                return sortDate(aText, bText, direction);
-            }
-            else if (columnClass == "list")
-            {
-                return sortLists(aText, bText, direction);
-            }
-            else
-            {
-                return 0; // Can't sort otherwise
-            }
-        });
-
-    for (var i = 0; i < tableRows.length; i++)
-    {
-        tableBody.appendChild(tableRows[i]);
-    }
+    $(tableSelector + " tbody tr").hide().slice(showStart, showEnd).show();
 }
 
-function makeSortable(table)
-{
-    var tableHead = Array.prototype.slice.call(table.tHead.rows, 0);
+function sortTable(tableSelector, column, order) {
+    var table = $(tableSelector);
+    var tableBody = table.find("tbody");
+    var tableItems = tableBody.find("tr");
+    var headerClass = table.find("th").eq(column).attr("class").split(' ')[0];
+    var direction = (order === "asc") ? 1 : -1;
+    var pageAnchor = window.location.hash;
+    var pageNum;
 
-    if (!tableHead) return;
-
-    for (var i = 0; i < tableHead[0].cells.length; i++)
-    {
-        var columnClass = tableHead[0].cells[i].className;
-
-        // Only make it sortable if the class is valid
-        if (columnClass !== "alpha"
-         && columnClass !== "hms"
-         && columnClass !== "date"
-         && columnClass !== "list")
-        {
-            continue;
-        }
-
-        // Make cursor indicate that it is clickable
-        tableHead[0].cells[i].style.cursor = "pointer";
-
-        // Closure to keep track of current sort direction
-        function tableClosure (i) {
-            var direction = 1;
-
-            tableHead[0].cells[i].addEventListener('click',
-                function () {
-                    sortTable(table, i, direction);
-
-                    direction *= -1; // Switch directions
-                });
-        }
-
-        tableClosure(i);
+    if (pageAnchor.length > 0) {
+        pageNum = parseInt(pageAnchor.split('-')[1]);
+    } else {
+        pageNum = 1;
     }
+
+    tableItems.sort(function(a, b) {
+        var aText = $(a).find("td").eq(column).text();
+        var bText = $(b).find("td").eq(column).text();
+
+        if (headerClass === "alpha") {
+            return sortAlpha(aText, bText, direction);
+        } else if (headerClass === "hms")  {
+            return sortHMS(aText, bText, direction);
+        } else if (headerClass === "date") {
+            return sortDate(aText, bText, direction);
+        } else if (headerClass == "list") {
+            return sortLists(aText, bText, direction);
+        } else {
+            return 0; // Can't sort otherwise
+        }
+    }).appendTo(tableBody);
+
+    paginateTable(tableSelector, pageNum);
+}
+
+function makeSortable(tableSelector, initColumn, initDirection) {
+    var columnSelector = tableSelector + " th";
+
+    // Add click handler to table headers
+    $(columnSelector).click(function() {
+        $(columnSelector).not($(this)).removeClass("sorted-asc sorted-desc");
+
+        if ($(this).hasClass("sorted-asc") || $(this).hasClass("sorted-desc")) {
+            $(this).toggleClass("sorted-asc sorted-desc");
+        } else {
+            $(this).addClass("sorted-asc");
+        }
+
+        sortTable(tableSelector,
+                  $(this).index(),
+                  this.className.split('-')[1]);
+    });
+
+    $(columnSelector).eq(initColumn).addClass("sorted-" + initDirection);
+
+    sortTable(tableSelector,
+              initColumn,
+              initDirection);
 }

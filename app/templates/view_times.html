@@ -4,34 +4,31 @@
 
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
-
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
 $(document).ready(function()
 {
-    var items = $("#view-times table tbody tr");
-
-    var numItems = items.length;
+    var tableSelector = "#view-times table";
+    var items = $(tableSelector + " tbody tr");
     var perPage = 20;
 
-    items.slice(perPage).hide();
+    makeSortable(tableSelector, 4, "desc");
 
     $("#paginator").pagination({
-        items: numItems,
+        items: items.length,
         itemsOnPage: perPage,
         cssStyle: "compact-theme",
         onPageClick: function(pageNumber) {
-            var showStart = perPage * (pageNumber - 1);
-            var showEnd = showStart + perPage;
-
-            items.hide().slice(showStart, showEnd).show();
+            console.log(tableSelector);
+            paginateTable(tableSelector, pageNumber);
         }
     });
 });
