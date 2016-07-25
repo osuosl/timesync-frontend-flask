@@ -100,6 +100,11 @@ function sortTable(tableSelector, perPage, column, order) {
 function makeSortable(tableSelector, perPage, initColumn, initDirection) {
     var columnSelector = tableSelector + " th";
 
+    // Change pointer type on sortable headers
+    $(columnSelector).filter(function() {
+        return this.className.length > 0;
+    }).css({"cursor": "pointer"});
+
     // Add click handler to table headers
     $(columnSelector).click(function() {
         $(columnSelector).not($(this)).removeClass("sorted-asc sorted-desc");

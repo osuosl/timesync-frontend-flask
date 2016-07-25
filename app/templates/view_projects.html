@@ -59,11 +59,11 @@ $(document).ready(function() {
                 <td>{{ p['managers'] | join(' ') }}</td>
                 <td>{{ p['spectators'] | join(' ') }}</td>
                 <td>{{ p['uri'] }}</td>
-                {% if admin %}
+                {% if is_admin %}
                     <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
                 {% else %}
                     {% for manager in p['managers'] %}
-                        {% if manager == user or admin %}
+                        {% if manager == user or is_admin %}
                             <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
                         {% endif %}
                     {% endfor %}

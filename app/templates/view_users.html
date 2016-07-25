@@ -59,7 +59,7 @@ $(document).ready(function()
                 <td>{{ u['site_manager'] }}</td>
                 <td>{{ u['site_spectator'] }}</td>
                 <td>{{ u['active'] }}</td>
-                {% if admin %}
+                {% if u['username'] == user or is_admin %}
                     <td><a href="{{ url_for('edit_user', username=u['username']) }}">EDIT</a></td>
                     <td><a href="{{ url_for('delete_user', username=u['username']) }}">DELETE</a></td>
                 {% else %}

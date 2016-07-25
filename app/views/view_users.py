@@ -42,4 +42,4 @@ def view_users():
         users = []
 
     return render_template('view_users.html', form=form, users=users,
-                           user=user['username'], admin=user['site_admin'])
+                           user=user['username'], is_admin=user['site_admin'])
