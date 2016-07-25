@@ -14,29 +14,17 @@
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
-$(document).ready(function()
-{
+$(document).ready(function() {
     var tableSelector = "#view-times table";
-    var items = $(tableSelector + " tbody tr");
-    var perPage = 20;
 
+    addPagination(tableSelector, 20);
     makeSortable(tableSelector, 4, "desc");
-
-    $("#paginator").pagination({
-        items: items.length,
-        itemsOnPage: perPage,
-        cssStyle: "compact-theme",
-        onPageClick: function(pageNumber) {
-            console.log(tableSelector);
-            paginateTable(tableSelector, pageNumber);
-        }
-    });
 });
 </script>
 {% endblock %}
 
 {% block body %}
-    <div class="filter-params">
+    <div id="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.user.label }} {{ form.user }}</p>

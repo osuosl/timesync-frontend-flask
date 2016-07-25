@@ -1,19 +1,13 @@
-function clearForm(form, reload = true)
-{
-    for (var i = 0; i < form.elements.length; i++)
-    {
-        if (form.elements[i].type == "text")
-        {
+function clearForm(form, reload = true) {
+    for (var i = 0; i < form.elements.length; i++) {
+        if (form.elements[i].type == "text") {
             form.elements[i].value = "";
         }
     }
 
-    if (reload)
-    {
+    if (reload) {
         form.submit();
-    }
-    else
-    {
+    } else {
         $("table").empty();
         $("#paginator").pagination({
             items: 0,

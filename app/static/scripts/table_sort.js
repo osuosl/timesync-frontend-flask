@@ -1,5 +1,4 @@
-function hmsToSeconds(str)
-{
+function hmsToSeconds(str) {
     var splitStr = str.split(" "),
         hours = parseInt(splitStr[0]),
         minutes = parseInt(splitStr[2]),
@@ -8,43 +7,34 @@ function hmsToSeconds(str)
     return (hours * 3600) + (minutes * 60) + seconds;
 }
 
-function sortAlpha(a, b, direction)
-{
+function sortAlpha(a, b, direction) {
     var a_lower = a.toLowerCase();
     var b_lower = b.toLowerCase();
 
-    if (a_lower < b_lower)
-    {
+    if (a_lower < b_lower) {
         return -1 * direction;
-    }
-    else if (a_lower > b_lower)
-    {
+    } else if (a_lower > b_lower) {
         return 1 * direction;
-    }
-    else if (a_lower == b_lower)
-    {
+    } else if (a_lower == b_lower) {
         return 0;
     }
 }
 
-function sortHMS(a, b, direction)
-{
+function sortHMS(a, b, direction) {
     var aSeconds = hmsToSeconds(a),
         bSeconds = hmsToSeconds(b);
 
     return (aSeconds - bSeconds) * direction;
 }
 
-function sortDate(a, b, direction)
-{
+function sortDate(a, b, direction) {
     var aTimestamp = new Date(a).getTime() / 1000,
         bTimestamp = new Date(b).getTime() / 1000;
 
     return (aTimestamp - bTimestamp) * direction;
 }
 
-function sortLists(a, b, direction)
-{
+function sortLists(a, b, direction) {
     var aList = a.split(" "),
         bList = b.split(" ");
 
@@ -59,6 +49,17 @@ function paginateTable(tableSelector, pageNum) {
     var showEnd = showStart + 20;
 
     $(tableSelector + " tbody tr").hide().slice(showStart, showEnd).show();
+}
+
+function addPagination(tableSelector, perPage) {
+    $("#paginator").pagination({
+        items: $(tableSelector + " tbody tr").length,
+        itemsOnPage: perPage,
+        cssStyle: "compact-theme",
+        onPageClick: function(pageNumber) {
+            paginateTable(tableSelector, pageNumber);
+        }
+    });
 }
 
 function sortTable(tableSelector, column, order) {
