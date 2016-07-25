@@ -16,9 +16,10 @@
 <script>
 $(document).ready(function() {
     var tableSelector = "#view-activities table";
+    var perPage = 10
 
-    addPagination(tableSelector, 20);
-    makeSortable(tableSelector, 1, "asc");
+    addPagination(tableSelector, perPage);
+    makeSortable(tableSelector, perPage, 1, "asc");
 });
 </script>
 {% endblock %}

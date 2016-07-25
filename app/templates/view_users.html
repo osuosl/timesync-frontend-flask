@@ -17,9 +17,10 @@
 $(document).ready(function()
 {
     var tableSelector = "#view-users table";
+    var perPage = 10;
 
-    addPagination(tableSelector, 20);
-    makeSortable(tableSelector, 0, "asc");
+    addPagination(tableSelector, perPage);
+    makeSortable(tableSelector, perPage, 0, "asc");
 });
 </script>
 {% endblock %}
