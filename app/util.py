@@ -2,6 +2,7 @@ from flask import session, flash
 from app import app
 from app.views.logout import logout
 from datetime import datetime
+from Crypto.Cipher import AES
 import pymesync
 
 
@@ -10,9 +11,11 @@ def get_user(username):
         print "Error: Not logged in"
         return {}
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     user = ts.get_users(username=username)[0]
 
@@ -32,9 +35,11 @@ def get_projects(username):
         print "Error: Not logged in"
         return []
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     projects = ts.get_projects()
 
@@ -59,9 +64,11 @@ def is_logged_in():
     if 'token' not in session:
         return False
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     expire = ts.token_expiration_time()
 
@@ -119,3 +126,28 @@ def project_user_permissions(form):
         permissions[user] = user_permissions
 
     return permissions
+
+
+# Padding for encryption
+def pad(s):
+    # Block size
+    BS = 16
+    p = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
+    return p(s)
+
+
+def unpad(s):
+    u = lambda s : s[:-ord(s[len(s)-1:])]
+    return u(s)
+
+
+def encrypter(e):
+    encrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_ECB)
+    padded = pad(e)
+    return encrypt.encrypt(padded)
+
+
+def decrypter(e):
+    decrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_ECB)
+    padded = decrypt.decrypt(e)
+    return unpad(padded)

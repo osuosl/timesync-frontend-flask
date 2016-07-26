@@ -1,6 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message, project_user_permissions
+from app.util import is_logged_in, error_message, project_user_permissions, \
+                     decrypter
 import pymesync
 
 
@@ -12,9 +13,11 @@ def edit_project():
         elif request.method == 'POST':
             return "Not logged in.", 401
 
+    token = decrypter(session['token']) 
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     users = ts.get_users()
     error_message(users)

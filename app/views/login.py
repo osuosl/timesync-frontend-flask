@@ -1,6 +1,7 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
-from app.util import get_user, error_message, get_projects
+from app.util import get_user, error_message, get_projects, encrypter
+#from Crypto.Cipher import AES
 import pymesync
 
 
@@ -23,11 +24,12 @@ def login():
 
         # If no error, proceed
         if not error_message(token):
-            session['token'] = token['token']
+            session['token'] = encrypter(token['token'])
 
             user = get_user(username)
 
             if not user:
+                error_message(user)
                 return 'There was an error.', 500
 
             projects = get_projects(username)
