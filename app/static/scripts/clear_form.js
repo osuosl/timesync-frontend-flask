@@ -1,12 +1,9 @@
 function clearForm(form, reload = true) {
-    for (var i = 0; i < form.elements.length; i++) {
-        if (form.elements[i].type == "text") {
-            form.elements[i].value = "";
-        }
-    }
+
+    $(form).find("input[type=text]").val("");
 
     if (reload) {
-        form.submit();
+        $(form).submit();
     } else {
         $("table").empty();
         $("#paginator").pagination({
