@@ -1,6 +1,7 @@
 import sys
 
-from flask import Flask
+from flask import Flask, session
+from flask.ext.session import Session
 
 app = Flask(__name__, static_folder="static")
 
@@ -11,6 +12,9 @@ except ImportError as e:
     print 'Error loading configuration!'
     print 'Does the file exist?'
     sys.exit(1)
+
+# Server-side sessions
+Session(app)
 
 # Do some config checks
 if app.config.get('TIMESYNC_URL') == 'http://timesync.example.com/':
