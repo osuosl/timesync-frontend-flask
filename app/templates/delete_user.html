@@ -6,20 +6,20 @@
     <div class="user-info">
         <p>User info:</p>
         <p>
-            Display Name: {{ user['display_name'] }}<br />
-            Username: {{ user['username'] }}<br />
-            Email: {{ user['email'] }}<br />
-            Site Admin: {{ user['site_admin'] }}<br />
-            Site Manager: {{ user['site_manager'] }}<br />
-            Site Spectator: {{ user['site_spectator'] }}<br />
-            Active: {{ user['active'] }}<br />
+            Display Name: {{ delete_user['display_name'] }}<br />
+            Username: {{ delete_user['username'] }}<br />
+            Email: {{ delete_user['email'] }}<br />
+            Site Admin: {{ delete_user['site_admin'] }}<br />
+            Site Manager: {{ delete_user['site_manager'] }}<br />
+            Site Spectator: {{ delete_user['site_spectator'] }}<br />
+            Active: {{ delete_user['active'] }}<br />
         </p>
     </div>
 
     <div class="confirm-delete">
         <form method="POST">
             {{ form.csrf_token }}
-            {{ form.ts_object }}
+            <!--{{ form.ts_object }} -->
             <input type="submit" value="Yes, delete this user">
             <input type="button" name="no" value="No" onClick="location.href='{{ url_for('view_users') }}'">
         </form>

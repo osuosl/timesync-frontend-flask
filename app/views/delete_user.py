@@ -20,30 +20,24 @@ def delete_user():
 
     username = request.args.get('username')
 
-    if not username and request.method == 'GET':
-        return 'Username not found', 404
-
     if not user['site_admin']:
         return 'You cannot access this page.', 403
 
-    form = forms.ConfirmDeleteForm(ts_object=username)
+    if not username:
+        return 'Username not found', 404
 
-    user = ts.get_users(username=username)[0]
+    form = forms.ConfirmDeleteForm()
+
+    # Need to be able to show the user's data
+    delete_user = ts.get_users(username=username)[0]
+    error_message(delete_user)
 
     if form.validate_on_submit():
-        if 'ts_object' not in request.form:
-            return 'UUID not found', 404
-
-        username = request.form['ts_object']
         response = ts.delete_user(username=username)
-
         if not error_message(response):
             flash('Deletion successful')
 
         return redirect(url_for('view_users'))
 
-    if error_message(user):
-        user = dict()
-
     return render_template('delete_user.html', form=form,
-                           user=user)
+                           delete_user=delete_user, user=user)

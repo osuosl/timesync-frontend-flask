@@ -60,9 +60,8 @@ class DeleteUserTestCase(unittest.TestCase):
         return res
 
     def delete_user(self):
-        res = self.client.post(url_for('delete_user'), data=dict(
-            ts_object="test"
-        ), follow_redirects=True)
+        res = self.client.post(url_for('delete_user', username='test'),
+                               follow_redirects=True)
 
         return res
 
