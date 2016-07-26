@@ -29,10 +29,9 @@ def create_user():
 
         res = ts.create_user(user=user)
 
-        error_message(res)
-
-        flash("User successfully submitted.")
-        return redirect(url_for('create_user'))
+        if not error_message(res):
+            flash("Time successfully submitted.")
+            return redirect(url_for('create_user'))
 
     # Flash any form errors
     for field, errors in form.errors.items():

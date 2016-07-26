@@ -21,12 +21,8 @@ def login():
                                 password=password,
                                 auth_type='password')
 
-        # If regular error, tell user error
-        error_message(token)
-        if 'error' in token:
-            status = token['status']
-        # Else success, redirect to index page
-        else:
+        # If no error, proceed
+        if not error_message(token):
             session['token'] = token['token']
 
             user = get_user(username)
@@ -40,6 +36,8 @@ def login():
             session['user'] = user
 
             return redirect(request.args.get('next') or url_for('index'))
+        else:
+            return "There was an error.", 500
 
     # Else if POST request (meaning form invalid), notify user
     elif request.method == 'POST':

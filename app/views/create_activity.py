@@ -40,10 +40,9 @@ def create_activity():
 
         res = ts.create_activity(activity=activity)
 
-        error_message(res)
-
-        flash('Activity successfully created')
-        return redirect(url_for('admin'))
+        if not error_message(res):
+            flash('Activity successfully created')
+            return redirect(url_for('admin'))
 
     # If GET
     for field, errors in form.errors.items():
