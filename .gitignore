@@ -6,4 +6,4 @@ config.py
 
 docs/build/
 
-app/flask_session/
+flask_session/
