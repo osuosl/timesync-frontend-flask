@@ -1,6 +1,6 @@
 import sys
 
-from flask import Flask, session
+from flask import Flask
 from flask.ext.session import Session
 
 app = Flask(__name__, static_folder="static")

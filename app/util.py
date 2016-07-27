@@ -129,16 +129,15 @@ def project_user_permissions(form):
 
 
 # Padding for encryption
-def pad(s):
+# The lambdas are from StackOverflow, I have no idea how they work
+def pad(e):
     # Block size
     BS = 16
-    p = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
-    return p(s)
+    return (lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS))(e)
 
 
-def unpad(s):
-    u = lambda s : s[:-ord(s[len(s)-1:])]
-    return u(s)
+def unpad(e):
+    return (lambda s: s[:-ord(s[len(s)-1:])])(e)
 
 
 def encrypter(e):

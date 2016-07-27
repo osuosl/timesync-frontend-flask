@@ -13,7 +13,7 @@ def edit_project():
         elif request.method == 'POST':
             return "Not logged in.", 401
 
-    token = decrypter(session['token']) 
+    token = decrypter(session['token'])
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],

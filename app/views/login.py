@@ -1,7 +1,6 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
 from app.util import get_user, error_message, get_projects, encrypter
-#from Crypto.Cipher import AES
 import pymesync
 
 
