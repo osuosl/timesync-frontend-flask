@@ -133,14 +133,22 @@ def project_user_permissions(form):
 # length of the string mod the block size (how many chars you need to pad the
 # string out to the block size) and multiply by the ascii charcter
 # representation of the number of chars you need to pad. Then add those char
-# strings to the end of the original string, thereby padding it out to the block
-# size with ascii char strings.
+# strings to the end of the original string, thereby padding it out to the
+# block size with ascii char strings.
 def pad(e):
     # Block size
     BS = 16
     return (lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS))(e)
 
 
+# Unpadding for decryption
+# Working from the inside out: Get the last character the string (e becomes s 
+# in the lambda). Get the ord() of that character - which from the last lambda
+# should be the number of characters we padded the original string with. Then
+# measure from the end of our string backwards the number of characters we 
+# added (which ord of the last character gave us). Get all the characters in 
+# the string up to that point. So if we added 10 chars, get all the chars in 
+# the string up to 10 from the end. Which leaves us with the original string.
 def unpad(e):
     return (lambda s: s[:-ord(s[len(s)-1:])])(e)
 
