@@ -4,7 +4,7 @@ from app.util import is_logged_in, error_message, get_user
 import pymesync
 
 
-@app.route('/users', methods=['GET', 'POST'])
+@app.route('/users/', methods=['GET', 'POST'])
 def view_users():
     # Check if logged in first
     if not is_logged_in():
