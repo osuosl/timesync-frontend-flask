@@ -142,12 +142,12 @@ def pad(e):
 
 
 # Unpadding for decryption
-# Working from the inside out: Get the last character the string (e becomes s 
+# Working from the inside out: Get the last character the string (e becomes s
 # in the lambda). Get the ord() of that character - which from the last lambda
 # should be the number of characters we padded the original string with. Then
-# measure from the end of our string backwards the number of characters we 
-# added (which ord of the last character gave us). Get all the characters in 
-# the string up to that point. So if we added 10 chars, get all the chars in 
+# measure from the end of our string backwards the number of characters we
+# added (which ord of the last character gave us). Get all the characters in
+# the string up to that point. So if we added 10 chars, get all the chars in
 # the string up to 10 from the end. Which leaves us with the original string.
 def unpad(e):
     return (lambda s: s[:-ord(s[len(s)-1:])])(e)
