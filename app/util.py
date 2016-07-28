@@ -129,7 +129,12 @@ def project_user_permissions(form):
 
 
 # Padding for encryption
-# The lambdas are from StackOverflow, I have no idea how they work
+# Take a string (e becomes s inside the lambda). Take the block size minus the
+# length of the string mod the block size (how many chars you need to pad the
+# string out to the block size) and multiply by the ascii charcter
+# representation of the number of chars you need to pad. Then add those char
+# strings to the end of the original string, thereby padding it out to the block
+# size with ascii char strings.
 def pad(e):
     # Block size
     BS = 16
