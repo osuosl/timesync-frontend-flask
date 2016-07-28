@@ -24,6 +24,12 @@ def view_times():
     # Dictionary to store filter parameters
     query = dict()
 
+    # List of times
+    times = list()
+
+    # Dictionary to store summary information
+    summary = dict()
+
     # If the form has been submitted and validated use the form's parameters
     if form.validate_on_submit():
         req_form = request.form
@@ -46,14 +52,44 @@ def view_times():
         if end:
             query['end'] = [end]
 
+        times = ts.get_times(query_parameters=query)
+
+        # Generate summary information
+        total_time = 0
+        unique_users = set()
+        unique_projects = set()
+        unique_activities = list()
+        for entry in times:
+            total_time += entry['duration']
+            unique_users.add(entry['user'])
+            unique_projects.add(entry['project'][0])
+            unique_activities += entry['activities']
+
+        summary['total_time'] = (total_time)
+        summary['unique_users'] = len(unique_users)
+        summary['users_list'] = list(unique_users)
+        summary['unique_projects'] = len(unique_projects)
+        summary['projects_list'] = list(unique_projects)
+        summary['unique_activities'] = len(set(unique_activities))
+        summary['activities_list'] = list(set(unique_activities))
+
+        # Show any errors
+        if error_message(times):
+            times = list()
+
     # If the form's parameters are not valid, tell the user
     elif request.method == 'POST' and not form.validate():
         flash("Invalid form input")
 
-    times = ts.get_times(query_parameters=query)
+    # Lines 87 and 89 were causing the times to show up by default regardless
+    # of whether the form had been submitted or not.
+
+    # times = ts.get_times(query_parameters=query)
 
     # Show any errors
-    error_message(times)
+    # error_message(times)
 
     return render_template('view_times.html', form=form, times=times,
-                           user=user['username'], admin=user['site_admin'])
+                           summary=summary, user=user['username'],
+                           is_admin=user['site_admin'],
+                           admin=user['site_admin'])

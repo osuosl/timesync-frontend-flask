@@ -10,7 +10,7 @@
 window.onload = function()
 {
     // Make the table sortable and sort it by most recent
-    var timesTable = document.body.getElementsByTagName("table")[0];
+    var timesTable = document.body.getElementsByTagName("table")[1];
     makeSortable(timesTable);
     sortTable(timesTable, 3, -1);
 }
@@ -29,6 +29,42 @@ window.onload = function()
             <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);"></p>
         </form>
     </div>
+
+    {% if summary %}
+    <div class="times-summary">
+        <table>
+            <tr>
+                <th align='left'>Total Time</th>
+                <td>{{ summary['total_time'] | hms_filter }}</td>
+            </tr>
+            <tr>
+                <th align='left'>Unique Users</th>
+                <td>{{ summary['unique_users'] }}</td>
+            </tr>
+            <tr>
+                <th align='left'>Users List</th>
+                <td>{{ summary['users_list'] | join(', ') }}</td>
+            </tr>
+            <tr>
+                <th align='left'>Unique Projects</th>
+                <td>{{ summary['unique_projects'] }}</td>
+            </tr>
+            <tr>
+                <th align='left'>Projects List</th>
+                <td>{{ summary['projects_list'] | join(', ') }}</td>
+            </tr>
+            <tr>
+                <th align='left'>Unique Activities</th>
+                <td>{{ summary['unique_activities'] }}</td>
+            </tr>
+            <tr>
+                <th align='left'>Activities List</th>
+                <td>{{ summary['activities_list'] | join(', ') }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+
     <div class="view-times">
         <table>
             <thead>

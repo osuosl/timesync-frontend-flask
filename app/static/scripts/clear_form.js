@@ -14,9 +14,11 @@ function clearForm(form, reload = true)
     }
     else
     {
-        var oldBody = document.getElementsByTagName('tbody')[0];
-        var newBody = document.createElement('tbody');
-
-        oldBody.parentNode.replaceChild(newBody, oldBody);
+        var oldBody = document.getElementsByTagName('tbody');
+        for (var i = 0; i < oldBody.length; i++)
+        {
+            var newBody = document.createElement('tbody');
+            oldBody[i].parentNode.replaceChild(newBody, oldBody[i]);
+        }
     }
 }
