@@ -21,8 +21,8 @@
             <p>{{ form.user.label }} {{ form.user }}</p>
             <p>{{ form.project.label }} {{ form.project }} {{ form.project.description }}</p>
             <p>{{ form.activity.label }} {{ form.activity }} {{ form.activity.description}} </p>
-            <p>{{ form.start.label }} {{ form.start(class="datepicker", type="date") }} {{ form.start.description }}</p>
-            <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
+            <p>{{ form.start.label }} {{ form.start(class="datepicker", type="date") }}</p>
+            <p>{{ form.end.label }} {{ form.end(class="datepicker", type="date") }}</p>
             <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);"></p>
         </form>
     </div>
@@ -118,8 +118,7 @@ $(document).ready(function() {
     makeSortable(tableSelector, perPage, 4, "desc");
 
     $('.datepicker').pickadate({
-        formatSubmit: 'yyyy-mm-dd',
-        format: 'dddd, mmm dd, yyyy'
+        format: 'yyyy-mm-dd'
     });
 });
 </script>
