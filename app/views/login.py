@@ -13,13 +13,15 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
+        auth_type = form.auth_type.data
+        print auth_type
 
         # Login to TimeSync
         ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                                test=app.config['TESTING'])
         token = ts.authenticate(username=username,
                                 password=password,
-                                auth_type='password')
+                                auth_type=auth_type)
 
         # If no error, proceed
         if not error_message(token):
