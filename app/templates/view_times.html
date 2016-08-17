@@ -4,6 +4,7 @@
 
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
 
 <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
@@ -25,7 +26,11 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block body %}
-    <div id="filter-params">
+    <div class="create-link">
+        <a href="{{ url_for('create_time') }}">Create Time</a>
+    </div>
+
+    <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.user.label }} {{ form.user }}</p>
