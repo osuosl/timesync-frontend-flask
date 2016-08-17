@@ -1,5 +1,5 @@
-from flask import session, redirect, url_for, request, render_template, flash
-from app import app, forms
+from flask import session, redirect, url_for, request, render_template
+from app import app
 from app.util import is_logged_in, error_message
 import pymesync
 
