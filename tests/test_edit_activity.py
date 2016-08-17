@@ -25,7 +25,8 @@ class EditActivityTestCase(unittest.TestCase):
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
-            password=self.password
+            password=self.password,
+            auth_type="password"
         ), follow_redirects=True)
 
         with self.client.session_transaction() as sess:
@@ -39,7 +40,8 @@ class EditActivityTestCase(unittest.TestCase):
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
-            password=self.password
+            password=self.password,
+            auth_type="password"
         ), follow_redirects=True)
 
         with self.client.session_transaction() as sess:
