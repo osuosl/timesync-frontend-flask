@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title %} View User Times {% endblock %}
+
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
+
+<script>
+$(document).ready(function() {
+    var tableSelector = "#view-user-times table";
+    var perPage = 20;
+
+    addPagination(tableSelector, perPage);
+    makeSortable(tableSelector, perPage, 4, "desc");
+});
+</script>
+
+{% endblock %}
+
+{% block body %}
+    <div id="paginator"></div>
+
+    <div id="view-user-times">
+        <table class="tablesorter">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th class="alpha">User</th>
+                    <th class="hms">Duration</th>
+                    <th class="date">Date Worked</th>
+                    <th class="list">Projects</th>
+                    <th class="list">Activities</th>
+                    <th>Issue URI</th>
+                    <th>Additional Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in times %}
+                <tr>
+                    {% if t['user'] == user or is_admin %}
+                        <td><a href="{{ url_for('delete_time', time=t['uuid']) }}">DELETE</a></td>
+                        <td><a href="{{ url_for('edit_time', time=t['uuid']) }}">EDIT</a></td>
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+
+                    <td>{{ t['user'] }}</td>
+                    <td>{{ t['duration'] | hms_filter }}</td>
+                    <td>{{ t['date_worked'] }}</td>
+                    <td>{{ t['project'] | join(' ') }}</td>
+                    <td>{{ t['activities'] | join(' ') }}</td>
+                    <td>{{ t['issue_uri'] }}</td>
+                    <td>{{ t['notes'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

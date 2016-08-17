@@ -37,6 +37,7 @@ if app.config.get('ENCRYPTION_KEY') == key:
 
 from app.views import index, admin, create_time, delete_time  # NOQA flake8 ignore
 from app.views import login, logout, view_times, edit_time  # NOQA flake8 ignore
+from app.views import login, logout, view_times, view_user_times, edit_time  # NOQA flake8 ignore
 from app.views import create_project, edit_project, view_projects  # NOQA flake8 ignore
 from app.views import create_activity, edit_activity, view_activities, delete_activity  # NOQA flake8 ignore
 from app.views import create_user, edit_user, view_users, delete_user  # NOQA flake8 ignore
