@@ -76,6 +76,7 @@ class CreateUserForm(Form):
 
 class FilterUsersForm(Form):
     username = StringField('Username:')
+    metainfo = StringField('Meta-information:')
 
 
 class ConfirmDeleteForm(Form):

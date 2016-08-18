@@ -29,6 +29,8 @@ def view_users():
         # Only using filter parameters that have been supplied
         if request.form['username']:
             query['username'] = request.form['username']
+        if request.form['metainfo']:
+            query['metainfo'] = request.form['metainfo']
 
     # If the form's parameters are not valid, tell the user
     elif request.method == 'POST' and not form.validate():
@@ -42,6 +44,11 @@ def view_users():
     # Show any errors
     if error_message(users):
         users = []
+
+    if 'metainfo' in query:
+        meta_upper = query['metainfo'].upper()
+        users = [ts_user for ts_user in users
+                 if ts_user['meta'] and meta_upper in ts_user['meta'].upper()]
 
     return render_template('view_users.html', form=form, users=users,
                            user=user['username'], admin=user['site_admin'])
