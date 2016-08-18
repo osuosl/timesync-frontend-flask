@@ -37,5 +37,5 @@ def view_activities():
     error_message(activities)
 
     return render_template('view_activities.html', form=form,
-                           activities=activities, user = user,
+                           activities=activities, user=user,
                            is_admin=is_admin)
