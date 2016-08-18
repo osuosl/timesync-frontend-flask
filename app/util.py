@@ -2,6 +2,7 @@ from flask import session, flash
 from app import app
 from app.views.logout import logout
 from datetime import datetime
+from Crypto.Cipher import AES
 import pymesync
 
 
@@ -10,9 +11,11 @@ def get_user(username):
         print "Error: Not logged in"
         return {}
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     user = ts.get_users(username=username)[0]
 
@@ -32,9 +35,11 @@ def get_projects(username):
         print "Error: Not logged in"
         return []
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     projects = ts.get_projects()
 
@@ -59,9 +64,11 @@ def is_logged_in():
     if 'token' not in session:
         return False
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     expire = ts.token_expiration_time()
 
@@ -119,3 +126,40 @@ def project_user_permissions(form):
         permissions[user] = user_permissions
 
     return permissions
+
+
+# Padding for encryption
+# Take a string (e becomes s inside the lambda). Take the block size minus the
+# length of the string mod the block size (how many chars you need to pad the
+# string out to the block size) and multiply by the ascii charcter
+# representation of the number of chars you need to pad. Then add those char
+# strings to the end of the original string, thereby padding it out to the
+# block size with ascii char strings.
+def pad(e):
+    # Block size
+    BS = 16
+    return (lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS))(e)
+
+
+# Unpadding for decryption
+# Working from the inside out: Get the last character the string (e becomes s
+# in the lambda). Get the ord() of that character - which from the last lambda
+# should be the number of characters we padded the original string with. Then
+# measure from the end of our string backwards the number of characters we
+# added (which ord of the last character gave us). Get all the characters in
+# the string up to that point. So if we added 10 chars, get all the chars in
+# the string up to 10 from the end. Which leaves us with the original string.
+def unpad(e):
+    return (lambda s: s[:-ord(s[len(s)-1:])])(e)
+
+
+def encrypter(e):
+    encrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_ECB)
+    padded = pad(e)
+    return encrypt.encrypt(padded)
+
+
+def decrypter(e):
+    decrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_ECB)
+    padded = decrypt.decrypt(e)
+    return unpad(padded)
