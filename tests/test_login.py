@@ -94,8 +94,9 @@ class LoginTestCase(unittest.TestCase):
         assert 'user' in self.sess
         assert 'token' in self.sess
 
-        # Make sure projects are stored in user object
+        # Make sure projects and activities are stored in user object
         assert 'projects' in self.sess['user']
+        assert 'activities' in self.sess['user']
 
         # Make sure username is correct
         assert self.sess['user']['username'] == self.username
