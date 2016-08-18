@@ -2,7 +2,7 @@ from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 from datetime import datetime
 import pymesync
-from app.util import is_logged_in, to_readable_time, error_message
+from app.util import is_logged_in, to_readable_time, error_message, decrypter
 
 
 @app.route('/times/edit/', methods=['GET', 'POST'])
@@ -11,8 +11,10 @@ def edit_time():
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
-                           test=app.config['TESTING'], token=session['token'])
+                           test=app.config['TESTING'], token=token)
 
     user = session['user']
 
