@@ -10,8 +10,8 @@ class LoginForm(Form):
     password = PasswordField('password', validators=[DataRequired()],
                              render_kw={'placeholder': 'password'})
     auth_type = SelectField('Authentication Type', validators=[DataRequired()],
-                            choices=[('password', 'Password'),
-                                     ('ldap', 'LDAP')])
+                            choices=[('ldap', 'LDAP'),
+                                     ('password', 'Password')])
 
 
 class CreateTimeForm(Form):

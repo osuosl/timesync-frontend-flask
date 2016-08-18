@@ -14,7 +14,6 @@ def login():
         username = form.username.data
         password = form.password.data
         auth_type = form.auth_type.data
-        print auth_type
 
         # Login to TimeSync
         ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
