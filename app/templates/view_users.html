@@ -27,9 +27,11 @@ $(document).ready(function()
 {% endblock %}
 
 {% block body%}
-    <div class="create-link">
-        <a href="{{ url_for('create_user') }}">Create User</a>
-    </div>
+    {% if is_admin %}
+        <div class="create-link">
+            <a href="{{ url_for('create_user') }}">Create User</a>
+        </div>
+    {% endif %}
 
     <div class="filter-params">
         <form method="POST">
