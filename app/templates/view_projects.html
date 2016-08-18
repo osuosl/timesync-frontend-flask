@@ -2,33 +2,43 @@
 
 {% block title %} View Projects {% endblock %}
 
+{% block imports %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
+{% endblock %}
+
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
-window.onload = function()
-{
-    // Make the table sortable and sort it by most recent
-    var timesTable = document.body.getElementsByTagName("table")[0];
-    makeSortable(timesTable);
-    sortTable(timesTable, 3, -1);
-}
+$(document).ready(function() {
+    var tableSelector = "#view-projects table";
+    var perPage = 10;
+
+    addPagination(tableSelector, perPage);
+    makeSortable(tableSelector, perPage, 0, "asc");
+});
 </script>
 {% endblock %}
 
 {% block body %}
-    <div class="filter-params">
+    <div id="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.username.label }} {{ form.username }}</p>
             <p>{{ form.slug.label }} {{ form.slug }}</p>
             <p>{{ form.include_deleted.label }} {{ form.include_deleted }}</p>
             <p>{{ form.include_revisions.label }} {{ form.include_revisions }}</p>
-            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);"></p>
+            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form, true);"></p>
         </form>
     </div>
-        <div class="view-projects">
+
+    <div id="paginator"></div>
+
+    <div id="view-projects">
         <table>
             <thead>
                 <tr>
@@ -49,11 +59,11 @@ window.onload = function()
                 <td>{{ p['managers'] | join(' ') }}</td>
                 <td>{{ p['spectators'] | join(' ') }}</td>
                 <td>{{ p['uri'] }}</td>
-                {% if admin %}
+                {% if is_admin %}
                     <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
                 {% else %}
                     {% for manager in p['managers'] %}
-                        {% if manager == user or admin %}
+                        {% if manager == user or is_admin %}
                             <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
                         {% endif %}
                     {% endfor %}
@@ -61,5 +71,5 @@ window.onload = function()
             </tr>
             {% endfor %}
         </table>
-</div>
+    </div>
 {% endblock %}

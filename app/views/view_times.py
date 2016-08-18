@@ -93,5 +93,4 @@ def view_times():
 
     return render_template('view_times.html', form=form, times=times,
                            summary=summary, user=user['username'],
-                           is_admin=user['site_admin'],
-                           admin=user['site_admin'])
+                           is_admin=user['site_admin'])

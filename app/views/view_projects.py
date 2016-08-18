@@ -52,4 +52,4 @@ def view_projects():
 
     return render_template('view_projects.html', form=form, projects=projects,
                            user=session_user['username'],
-                           admin=session_user['site_admin'])
+                           is_admin=session_user['site_admin'])
