@@ -21,15 +21,10 @@ def edit_time():
     if not user:
         return 'There was an error.', 500
 
-    projects = ts.get_projects()
     uuid = request.args.get('time')
     times = ts.get_times({'uuid': uuid})
 
-    if not error_message(projects) and not error_message(times):
-        choices = []
-        for project in projects:
-            choices.append((project['slugs'][0], project['name']))
-
+    if not error_message(times):
         time = times[0]
 
         if time['user'] != user['username'] and not user['site_admin']:
@@ -40,13 +35,13 @@ def edit_time():
             "user": str(time['user']),
             "project": str(time['project'][0]),
             "date_worked": datetime.strptime(time['date_worked'], "%Y-%m-%d"),
-            "activities": '',
+            "activities": [],
             "notes": '',
             "issue_uri": ''
         }
 
         if time['activities']:
-            time_data['activities'] = ','.join(time['activities'])
+            time_data['activities'] = time['activities']
         if time['notes']:
             time_data['notes'] = str(time['notes'])
         if time['issue_uri']:
@@ -54,18 +49,19 @@ def edit_time():
 
         form = forms.CreateTimeForm(data=time_data)
 
-        form.project.choices = choices
+        form.project.choices = [(p['slugs'][0], p['name'])
+                                for p in session['user']['projects']]
+        form.activities.choices = [(a['slug'], a['name'])
+                                   for a in session['user']['activities']]
 
         # If the form has been submitted and validated we will update the time
         if form.validate_on_submit():
-            req_form = request.form
-
-            duration = req_form['duration']
-            project = req_form['project']
-            date_worked = req_form['date_worked']
-            activities = req_form['activities'].split(',')
-            notes = req_form['notes']
-            issue_uri = req_form['issue_uri']
+            duration = form.duration.data
+            project = form.project.data
+            date_worked = form.date_worked.data
+            activities = form.activities.data
+            notes = form.notes.data
+            issue_uri = form.issue_uri.data
 
             time_update = dict()
 
@@ -76,7 +72,7 @@ def edit_time():
             if date_worked != datetime.strftime(time_data['date_worked'],
                                                 '%Y-%m-%d'):
                 time_update['date_worked'] = date_worked
-            if activities != time_data['activities'].split(','):
+            if activities != time_data['activities']:
                 time_update['activities'] = activities
             if notes != time_data['notes']:
                 time_update['notes'] = notes

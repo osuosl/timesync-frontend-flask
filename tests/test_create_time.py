@@ -66,7 +66,7 @@ class SubmitTestCase(unittest.TestCase):
         self.login()
 
         res = self.client.get(url_for('create_time'))
-        fields = ['form', 'input', 'User', 'Duration', 'Project',
+        fields = ['Duration', 'Project',
                   'Activities', 'Date Worked', 'Notes', 'Issue URI']
 
         for field in fields:

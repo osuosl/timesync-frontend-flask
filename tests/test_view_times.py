@@ -76,7 +76,7 @@ class ReportTestCase(unittest.TestCase):
         """Tests the view_times page for correct form fields"""
         form = forms.FilterTimesForm()
 
-        fields = ['user', 'project', 'activity', 'start', 'end']
+        fields = ['user', 'projects', 'activities', 'start', 'end']
 
         for field in fields:
             assert field in form.data

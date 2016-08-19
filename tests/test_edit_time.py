@@ -61,7 +61,7 @@ class EditTestCase(unittest.TestCase):
         """Tests the edit page for correct form fields"""
         form = forms.CreateTimeForm()
 
-        fields = ['user', 'duration', 'project', 'date_worked', 'activities',
+        fields = ['duration', 'project', 'date_worked', 'activities',
                   'notes', 'issue_uri']
 
         for field in fields:
