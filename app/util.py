@@ -30,7 +30,7 @@ def get_user(username):
     return user
 
 
-def get_projects(username):
+def get_projects(username=None):
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -46,6 +46,9 @@ def get_projects(username):
     if 'error' in projects:
         print projects['error']
         return []
+
+    if not username:
+        return projects
 
     user_projects = []
 

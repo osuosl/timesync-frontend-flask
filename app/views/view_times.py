@@ -34,7 +34,7 @@ def view_times():
 
     # Set up form choices
     form.projects.choices = [(p['slugs'][0], p['name'])
-                             for p in session['user']['projects']]
+                             for p in session['projects']]
     form.activities.choices = [(a['slug'], a['name'])
                                for a in session['user']['activities']]
 

@@ -32,12 +32,14 @@ def login():
                 error_message(user)
                 return 'There was an error.', 500
 
+            all_projects = get_projects()
             projects = get_projects(username)
             activities = get_activities(username)
 
             user['projects'] = projects
             user['activities'] = activities
 
+            session['projects'] = all_projects
             session['user'] = user
 
             return redirect(request.args.get('next') or url_for('index'))
