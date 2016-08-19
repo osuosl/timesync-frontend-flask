@@ -42,6 +42,11 @@ Once that's done, you can run the app using:
 $ docker-compose up
 ```
 
+To generate dummy data for testing the app, run:
+```sh
+$ docker-compose run app python scripts/generate_dummy_data.py
+```
+
 ## Production
 
 To install requirements, do:
