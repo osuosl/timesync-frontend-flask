@@ -41,8 +41,6 @@ def login():
             session['user'] = user
 
             return redirect(request.args.get('next') or url_for('index'))
-        else:
-            return "There was an error.", 500
 
     # Else if POST request (meaning form invalid), notify user
     elif request.method == 'POST':
