@@ -1,8 +1,9 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
+from app.util import is_logged_in, to_readable_time, error_message, decrypter
 from datetime import datetime
 import pymesync
-from app.util import is_logged_in, to_readable_time, error_message, decrypter
+import json
 
 
 @app.route('/times/edit/', methods=['GET', 'POST'])
@@ -24,6 +25,8 @@ def edit_time():
 
     uuid = request.args.get('time')
     times = ts.get_times({'uuid': uuid})
+
+    default_activities = []
 
     form = forms.CreateTimeForm()
 
@@ -61,6 +64,10 @@ def edit_time():
         form.activities.choices = [(a['slug'], a['name'])
                                    for a in session['user']['activities']]
 
+        default_activities = {p['slugs'][0]: p['default_activity']
+                              for p in session['user']['projects']
+                              if p['default_activity']}
+
         # If the form has been submitted and validated we will update the time
         if form.validate_on_submit():
             duration = form.duration.data
@@ -76,9 +83,8 @@ def edit_time():
                 time_update['duration'] = duration
             if project != time_data['project']:
                 time_update['project'] = project
-            if date_worked != datetime.strftime(time_data['date_worked'],
-                                                '%Y-%m-%d'):
-                time_update['date_worked'] = date_worked
+            if date_worked != time_data['date_worked']:
+                time_update['date_worked'] = date_worked.isoformat()
             if activities != time_data['activities']:
                 time_update['activities'] = activities
             if notes != time_data['notes']:
@@ -101,4 +107,5 @@ def edit_time():
                     error
                 ), 'error')
 
-    return render_template('create_time.html', form=form)
+    return render_template('create_time.html', form=form,
+                           default_activities=json.dumps(default_activities))

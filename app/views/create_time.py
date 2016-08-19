@@ -2,6 +2,7 @@ from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 from app.util import is_logged_in, error_message, decrypter
 import pymesync
+import json
 
 
 @app.route('/times/create/', methods=['GET', 'POST'])
@@ -21,10 +22,15 @@ def create_time():
                            test=app.config['TESTING'],
                            token=token)
 
-    form.project.choices = [(p['slugs'][0], p['name'])
-                            for p in session['user']['projects']]
+    form.project.choices = [('', '')]
+    form.project.choices += [(p['slugs'][0], p['name'])
+                             for p in session['user']['projects']]
     form.activities.choices = [(a['slug'], a['name'])
                                for a in session['user']['activities']]
+
+    default_activities = {p['slugs'][0]: p['default_activity']
+                          for p in session['user']['projects']
+                          if p['default_activity']}
 
     # If form submitted (POST)
     if form.validate_on_submit():
@@ -71,4 +77,5 @@ def create_time():
             ), 'error')
 
     # If not submitted (GET)
-    return render_template('create_time.html', form=form)
+    return render_template('create_time.html', form=form,
+                           default_activities=json.dumps(default_activities))
