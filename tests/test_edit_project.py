@@ -56,6 +56,7 @@ class SubmitTestCase(unittest.TestCase):
             uri="http://github.com",
             name="Github",
             slugs="git, hub, gh",
+            default_activity="development",
             users="{'tschuy': {'member': True, 'spectator': False, 'manager': \
                 True}}"
         ), follow_redirects=True)
@@ -93,7 +94,8 @@ class SubmitTestCase(unittest.TestCase):
         self.admin_login()
 
         res = self.client.get(url_for('edit_project'))
-        fields = ['uri', 'name', 'slugs', 'members', 'managers', 'spectators']
+        fields = ['uri', 'name', 'slugs', 'default_activity', 'members',
+                  'managers', 'spectators']
 
         print res.get_data()
         for field in fields:
