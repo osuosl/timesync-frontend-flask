@@ -22,6 +22,7 @@ for display, user in dummy_users:
 
 dummy_projects = [('Project X', 'px'), ('Project Y', 'py'), ('Project Z', 'pz')]
 dummy_project_permissions = {u: {"member": True, "spectator": True, "manager": False} for _, u in dummy_users}
+dummy_project_permissions['admin'] = {"member": True, "spectator": True, "manager": True}
 existing_projects = [p['slugs'][0] for p in ts.get_projects()]
 
 for name, slug in dummy_projects:
