@@ -62,9 +62,11 @@ def get_activities(username):
         print "Error: Not logged in"
         return []
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'],
-                           token=session['token'])
+                           token=token)
 
     activities = ts.get_activities()
 

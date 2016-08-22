@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, error_message
+from app.util import is_logged_in, error_message, decrypter
 
 
 @app.route('/users/delete', methods=['GET', 'POST'])
@@ -15,8 +15,10 @@ def delete_user():
     if not user:
         return "There was an error.", 500
 
+    token = decrypter(session['token'])
+
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
-                           test=app.config['TESTING'], token=session['token'])
+                           test=app.config['TESTING'], token=token)
 
     username = request.args.get('username')
 
