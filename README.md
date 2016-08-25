@@ -15,10 +15,12 @@ $ cp config.py.dist config.py
 Inside `config.py` there are several options that **must** be set before
 running the app for the first time
 
-| Option         | Description                                               |
-|:--------------:|:---------------------------------------------------------:|
-| `SECRET_KEY`   | The secret encryption key used to encrypt sessions. Make sure that it's hard to guess |
-| `TIMESYNC_URL` | The URL of the TimeSync server that this app will use     |
+| Option                  | Description                                                                           |
+|:-----------------------:|:-------------------------------------------------------------------------------------:|
+| `SECRET_KEY`            | The secret encryption key used to encrypt sessions. Make sure that it's hard to guess |
+| `TIMESYNC_URL`          | The URL of the TimeSync server that this app will use                                 |
+| `ENCRYPTION_KEY`        | The encryption key used for session encryption                                        |
+| `INITIALIZATION_VECTOR` | The initialization vector used for session encryption                                 |
 
 Note: If you are only intending to run the app in a development environment
 with Docker, you do not need to change the default `TIMESYNC_URL` in config.py.
