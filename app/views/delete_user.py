@@ -10,6 +10,8 @@ def delete_user():
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
+    token = decrypter(session['token'])
+
     user = session['user']
 
     if not user:
