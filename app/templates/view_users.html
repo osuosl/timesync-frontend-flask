@@ -21,12 +21,6 @@ $(document).ready(function() {
 
     addPagination(tableSelector, perPage);
     makeSortable(tableSelector, perPage, 0, "asc");
-
-    // When a username is clicked, redirect to a table of that user's times
-    $(".username").click(function() {
-        var username = $(this).html();
-        window.location.pathname = view_user_times_root + username;
-    }).css({"cursor": "pointer"});
 });
 </script>
 {% endblock %}
@@ -60,7 +54,7 @@ $(document).ready(function() {
 
             {% for u in users %}
             <tr>
-                <td class="username">{{ u['username'] }}</td>
+                <td class="username"><a href="{{ url_for('view_user_times', username=u['username']) }}">{{ u['username'] }}</a></td>
                 <td>{{ u['display_name'] }}</td>
                 <td>{{ u['email'] }}</td>
                 <td>{{ u['site_admin'] }}</td>
