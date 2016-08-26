@@ -25,7 +25,8 @@ class AdminTestCase(unittest.TestCase):
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
-            password=self.password
+            password=self.password,
+            auth_type="password"
         ), follow_redirects=True)
 
         # Get session object
@@ -40,7 +41,8 @@ class AdminTestCase(unittest.TestCase):
 
         res = self.client.post(url_for('login'), data=dict(
             username=self.username,
-            password=self.password
+            password=self.password,
+            auth_type="password"
         ), follow_redirects=True)
 
         # Get session object
