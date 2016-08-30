@@ -56,32 +56,33 @@ def view_times():
 
         times = ts.get_times(query_parameters=query)
 
-        # Generate summary information
-        total_time = 0
-        unique_users = set()
-        unique_projects = set()
-        unique_activities = list()
-        for entry in times:
-            total_time += entry['duration']
-            unique_users.add(entry['user'])
-            unique_projects.add(entry['project'][0])
-            unique_activities += entry['activities']
-
-        summary['total_time'] = (total_time)
-        summary['unique_users'] = len(unique_users)
-        summary['users_list'] = list(unique_users)
-        summary['unique_projects'] = len(unique_projects)
-        summary['projects_list'] = list(unique_projects)
-        summary['unique_activities'] = len(set(unique_activities))
-        summary['activities_list'] = list(set(unique_activities))
-
         # Show any errors
         if error_message(times):
             times = list()
 
+        # Generate summary information
+        if times:
+            total_time = 0
+            unique_users = set()
+            unique_projects = set()
+            unique_activities = list()
+            for entry in times:
+                total_time += entry['duration']
+                unique_users.add(entry['user'])
+                unique_projects.add(entry['project'][0])
+                unique_activities += entry['activities']
+
+            summary['total_time'] = (total_time)
+            summary['unique_users'] = len(unique_users)
+            summary['users_list'] = list(unique_users)
+            summary['unique_projects'] = len(unique_projects)
+            summary['projects_list'] = list(unique_projects)
+            summary['unique_activities'] = len(set(unique_activities))
+            summary['activities_list'] = list(set(unique_activities))
+
     # If the form's parameters are not valid, tell the user
     elif request.method == 'POST' and not form.validate():
-        flash("Invalid form input")
+        flash('Invalid form input')
 
     # Lines 87 and 89 were causing the times to show up by default regardless
     # of whether the form had been submitted or not.
