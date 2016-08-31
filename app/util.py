@@ -1,6 +1,7 @@
 from flask import session, flash
 from app import app
 from app.views.logout import logout
+from cgi import escape
 from datetime import datetime
 from Crypto.Cipher import AES
 import pymesync
@@ -126,6 +127,28 @@ def is_logged_in():
     return True
 
 
+def format_error_message(err):
+    if 'error' in err:
+        error_type = err['error']
+        error_text = err['text']
+
+        if error_type == 'Bad Query Value':
+            split_text = error_text.split(' ', 5)
+            invalid_param = split_text[1]
+            invalid_value = escape(split_text[5])
+
+            msg = ('Error: Bad Query Value - Parameter <em>{}</em> contained '
+                 + 'invalid value "<em>{}</em>"').format(invalid_param,
+                                                         invalid_value)
+
+    elif 'pymesync error' in err:
+        msg = '{pymesync error}'.format(**err)
+    else:
+        msg = 'Unrecognized error'
+
+    return msg
+
+
 def error_message(obj):
     # obj is empty, no error
     if not obj:
@@ -134,13 +157,8 @@ def error_message(obj):
     # Make sure obj is dict
     obj = obj if type(obj) is dict else obj[0]
 
-    if 'error' in obj:
-        flash("Error: " + obj["error"] + " - " + obj["text"])
-        # There was an error
-        return True
-    elif 'pymesync error' in obj:
-        flash("Error: " + str(obj["pymesync error"]))
-        # There was an error
+    if 'error' in obj or 'pymesync error' in obj:
+        flash(format_error_message(obj))
         return True
 
     # No error
