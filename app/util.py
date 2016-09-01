@@ -49,6 +49,7 @@ def get_users():
 
     return users
 
+
 def get_projects(username=None):
     if not is_logged_in():
         print "Error: Not logged in"
