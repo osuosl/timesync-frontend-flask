@@ -28,7 +28,7 @@ $(document).ready(function() {
     <div id="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
-            <p>{{ form.user.label }} {{ form.user }}</p>
+            <p>{{ form.users.label }} {{ form.users }}</p>
             <p>{{ form.projects.label }} {{ form.projects }}</p>
             <p>{{ form.activities.label }} {{ form.activities }}</p>
             <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>

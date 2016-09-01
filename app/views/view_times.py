@@ -33,6 +33,8 @@ def view_times():
     summary = dict()
 
     # Set up form choices
+    form.users.choices = [(u['username'], u['username'])
+                          for u in session['users']]
     form.projects.choices = [(p['slugs'][0], p['name'])
                              for p in session['projects']]
     form.activities.choices = [(a['slug'], a['name'])
@@ -40,7 +42,7 @@ def view_times():
 
     # If the form has been submitted and validated use the form's parameters
     if form.validate_on_submit():
-        username = form.user.data
+        username = form.users.data
         projects = form.projects.data
         activities = form.activities.data
         start = form.start.data
@@ -48,7 +50,7 @@ def view_times():
 
         # Only using filter parameters that have been supplied
         if username:
-            query['user'] = [username]
+            query['user'] = username
         if projects:
             query['project'] = projects
         if activities:
