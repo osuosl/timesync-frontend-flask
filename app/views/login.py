@@ -1,7 +1,7 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
-from app.util import get_user, error_message, get_projects, get_activities, \
-                     encrypter
+from app.util import get_user, error_message, get_users, get_projects, \
+                     get_activities, encrypter
 import pymesync
 
 
@@ -33,12 +33,16 @@ def login():
                 error_message(user)
                 return 'There was an error.', 500
 
+            all_projects = get_projects()
             projects = get_projects(username)
             activities = get_activities(username)
+            users = get_users()
 
             user['projects'] = projects
             user['activities'] = activities
 
+            session['projects'] = all_projects
+            session['users'] = users
             session['user'] = user
 
             return redirect(request.args.get('next') or url_for('index'))

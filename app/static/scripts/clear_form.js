@@ -1,6 +1,7 @@
 function clearForm(form, reload = true) {
 
     $(form).find("input[type=text]").val("");
+    $(form).find("option:selected").prop("selected", false);
 
     if (reload) {
         $(form).submit();

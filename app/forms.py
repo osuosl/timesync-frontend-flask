@@ -15,7 +15,6 @@ class LoginForm(Form):
 
 
 class CreateTimeForm(Form):
-    user = StringField('User:', validators=[DataRequired()])
     duration = StringField('Duration:', validators=[DataRequired()])
     project = SelectField('Project:', validators=[DataRequired()])
     date_worked = DateField('Date Worked:', format='%Y-%m-%d',
@@ -23,7 +22,7 @@ class CreateTimeForm(Form):
                             validators=[DataRequired()])
 
     # Optional
-    activities = StringField('Activities:', description='Comma separated')
+    activities = SelectMultipleField('Activities:')
     notes = StringField('Notes:')
     issue_uri = StringField('Issue URI:',
                             description='E.g. http://www.github.com')
@@ -31,9 +30,9 @@ class CreateTimeForm(Form):
 
 class FilterTimesForm(Form):
     # All optional
-    user = StringField('User:')
-    project = StringField('Project Slugs:', description='Comma separated')
-    activity = StringField('Activity Slugs:', description='Comma separated')
+    users = SelectMultipleField('User:')
+    projects = SelectMultipleField('Project Slugs:')
+    activities = SelectMultipleField('Activity Slugs:')
     start = DateField('Start Date:', format="%Y-%m-%d",
                       description='yyyy-mm-dd', validators=[Optional()])
     end = DateField('End Date:', format="%Y-%m-%d",

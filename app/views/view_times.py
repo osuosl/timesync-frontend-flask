@@ -32,23 +32,29 @@ def view_times():
     # Dictionary to store summary information
     summary = dict()
 
+    # Set up form choices
+    form.users.choices = [(u['username'], u['username'])
+                          for u in session['users']]
+    form.projects.choices = [(p['slugs'][0], p['name'])
+                             for p in session['projects']]
+    form.activities.choices = [(a['slug'], a['name'])
+                               for a in session['user']['activities']]
+
     # If the form has been submitted and validated use the form's parameters
     if form.validate_on_submit():
-        req_form = request.form
-
-        username = req_form['user']
-        projects = req_form['project']
-        activities = req_form['activity']
-        start = req_form['start']
-        end = req_form['end']
+        username = form.users.data
+        projects = form.projects.data
+        activities = form.activities.data
+        start = form.start.data
+        end = form.end.data
 
         # Only using filter parameters that have been supplied
         if username:
-            query['user'] = [username]
+            query['user'] = username
         if projects:
-            query['project'] = [p.strip() for p in projects.split(',')]
+            query['project'] = projects
         if activities:
-            query['activity'] = [a.strip() for a in activities.split(',')]
+            query['activity'] = activities
         if start:
             query['start'] = [start]
         if end:

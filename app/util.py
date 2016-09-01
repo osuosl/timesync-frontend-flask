@@ -30,7 +30,27 @@ def get_user(username):
     return user
 
 
-def get_projects(username):
+def get_users():
+    if not is_logged_in():
+        print "Error: Not logged in"
+        return []
+
+    token = decrypter(session['token'])
+
+    ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
+                           test=app.config['TESTING'],
+                           token=token)
+
+    users = ts.get_users()
+
+    if error_message(users):
+        print users
+        return []
+
+    return users
+
+
+def get_projects(username=None):
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -46,6 +66,9 @@ def get_projects(username):
     if 'error' in projects:
         print projects['error']
         return []
+
+    if not username:
+        return projects
 
     user_projects = []
 
