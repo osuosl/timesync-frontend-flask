@@ -22,6 +22,8 @@ def edit_user():
     username = request.args.get('username')
     user = ts.get_users(username=username)[0]
 
+    form = forms.CreateUserForm()
+
     if not error_message(user):
         user_data = {
                 'username': user['username'],
@@ -53,11 +55,11 @@ def edit_user():
 
             return redirect(url_for('view_users'))
 
-    # Flash any form errors
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash("{0} {1}".format(getattr(form, field).label.text, error),
-                  'error')
+        # Flash any form errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash("{0} {1}".format(getattr(form, field).label.text, error),
+                      'error')
 
     # If not submitted (GET)
     return render_template('edit_user.html', form=form)

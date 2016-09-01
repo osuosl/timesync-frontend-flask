@@ -132,6 +132,12 @@ def format_error_message(err):
         error_type = err.get('error')
         error_text = err.get('text')
 
+        if error_type:
+            error_type = escape(error_type)
+
+        if error_text:
+            error_text = escape(error_text)
+
         if error_type == 'Object not found':
             split_text = error_text.split(' ', 1)
             nonexistent_obj = split_text[1]
@@ -179,7 +185,7 @@ def format_error_message(err):
         elif error_type == 'Bad Query Value':
             split_text = error_text.split(' ', 5)
             invalid_param = split_text[1]
-            invalid_value = escape(split_text[5])
+            invalid_value = split_text[5]
 
             msg = ('Error: Bad Query Value - Parameter <em>{}</em> ' +
                    'contains invalid value <em>{}</em>').format(invalid_param,
