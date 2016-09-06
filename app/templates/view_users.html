@@ -14,10 +14,10 @@
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
-$(document).ready(function()
-{
+$(document).ready(function() {
     var tableSelector = "#view-users table";
     var perPage = 10;
+    var view_user_times_root = "{{ url_for('view_user_times') }}";
 
     addPagination(tableSelector, perPage);
     makeSortable(tableSelector, perPage, 0, "asc");
@@ -54,7 +54,7 @@ $(document).ready(function()
 
             {% for u in users %}
             <tr>
-                <td>{{ u['username'] }}</td>
+                <td class="username"><a href="{{ url_for('view_user_times', username=u['username']) }}">{{ u['username'] }}</a></td>
                 <td>{{ u['display_name'] }}</td>
                 <td>{{ u['email'] }}</td>
                 <td>{{ u['site_admin'] }}</td>

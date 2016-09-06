@@ -20,6 +20,7 @@ def view_users():
 
     # Form for filter parameters
     form = forms.FilterUsersForm()
+    times_form = forms.FilterTimesForm()
 
     # Dictionary to store filter parameters
     query = {}
@@ -50,5 +51,6 @@ def view_users():
         users = [ts_user for ts_user in users
                  if ts_user['meta'] and meta_upper in ts_user['meta'].upper()]
 
-    return render_template('view_users.html', form=form, users=users,
-                           user=user['username'], is_admin=user['site_admin'])
+    return render_template('view_users.html', form=form, times_form=times_form,
+                           users=users, user=user['username'],
+                           is_admin=user['site_admin'])
