@@ -81,7 +81,7 @@ class AdminTestCase(unittest.TestCase):
         """Test the admin page for correct links."""
         self.adminLogin()
 
-        links = ['Create User', 'Get User', 'Update User', 'Delete User']
+        links = ['Create User', 'Get User', 'Update User']
 
         res = self.client.get(url_for('admin'))
 
