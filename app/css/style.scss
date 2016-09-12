@@ -1,6 +1,7 @@
 .icon-block {
     padding: 0 15px;
 }
+
 .icon-block .material-icons {
     font-size: inherit;
 }
@@ -17,4 +18,8 @@ header,
     .container {
         padding-left: 0;
     }
+}
+
+.input-field label {
+    left: 0;
 }

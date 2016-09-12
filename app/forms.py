@@ -5,10 +5,8 @@ from wtforms.validators import DataRequired, Optional, URL
 
 
 class LoginForm(Form):
-    username = StringField('username', validators=[DataRequired()],
-                           render_kw={'placeholder': 'username'})
-    password = PasswordField('password', validators=[DataRequired()],
-                             render_kw={'placeholder': 'password'})
+    username = StringField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
     auth_type = SelectField('Authentication Type', validators=[DataRequired()],
                             choices=[('ldap', 'LDAP'),
                                      ('password', 'Password')])
