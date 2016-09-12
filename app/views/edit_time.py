@@ -17,6 +17,7 @@ def edit_time():
                            test=app.config['TESTING'], token=token)
 
     user = session['user']
+    projects = session['user']['projects']
 
     if not user:
         return 'There was an error.', 500
@@ -24,7 +25,13 @@ def edit_time():
     uuid = request.args.get('time')
     times = ts.get_times({'uuid': uuid})
 
-    if not error_message(times):
+    form = forms.CreateTimeForm()
+
+    if not error_message(projects) and not error_message(times):
+        choices = []
+        for project in projects:
+            choices.append((project['slugs'][0], project['name']))
+
         time = times[0]
 
         if time['user'] != user['username'] and not user['site_admin']:
@@ -86,12 +93,12 @@ def edit_time():
 
             return redirect(url_for('view_times'))
 
-    # Flash any form errors
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash("%s %s" % (
-                getattr(form, field).label.text,
-                error
-            ), 'error')
+        # Flash any form errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash("%s %s" % (
+                    getattr(form, field).label.text,
+                    error
+                ), 'error')
 
     return render_template('create_time.html', form=form)

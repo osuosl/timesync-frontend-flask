@@ -16,7 +16,7 @@ class LoginForm(Form):
 
 class CreateTimeForm(Form):
     duration = StringField('Duration:', validators=[DataRequired()])
-    project = SelectField('Project:', validators=[DataRequired()])
+    project = SelectField('Project:', choices=[], validators=[DataRequired()])
     date_worked = DateField('Date Worked:', format='%Y-%m-%d',
                             description='yyyy-mm-dd',
                             validators=[DataRequired()])
