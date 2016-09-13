@@ -32,10 +32,18 @@ $(document).ready(function() {
         {{ form.csrf_token }}
         <p>{{ form.duration.label }} {{ form.duration }}</p>
         <p>{{ form.project.label }} {{ form.project }}</p>
-        <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description }}</p>
-        <p>{{ form.notes.label }} {{ form.notes }}</p>
-        <p>{{ form.issue_uri.label }} {{ form.issue_uri }} {{ form.issue_uri.description }}</p>
+
+        {% if form.activities.choices %}
+            <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description }}</p>
+        {% endif %}
+        {% if form.notes %}
+            <p>{{ form.notes.label }} {{ form.notes }}</p>
+        {% endif %}
+        {% if form.issue_uri %}
+            <p>{{ form.issue_uri.label }} {{ form.issue_uri }} {{ form.issue_uri.description }}</p>
+        {% endif %}
+
         <p>{{ form.date_worked.label }} {{ form.date_worked }} {{ form.date_worked.description }}</p>
-        <p><input type="submit" value="Submit"></p>
+        <p><input type="submit" value="Submit"></p
     </form>
 {% endblock %}

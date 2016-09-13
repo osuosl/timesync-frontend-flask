@@ -107,5 +107,5 @@ def edit_time():
                     error
                 ), 'error')
 
-    return render_template('create_time.html', form=form,
+    return render_template('create_time.html', form=form, is_logged_in=True,
                            default_activities=json.dumps(default_activities))
