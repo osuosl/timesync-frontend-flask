@@ -1,4 +1,4 @@
-setuptools>=17.1
+six
 Flask==0.10.1
 pymesync==0.1.7
 flake8==2.5.4
