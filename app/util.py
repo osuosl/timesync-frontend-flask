@@ -274,12 +274,14 @@ def unpad(e):
 
 
 def encrypter(e):
-    encrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_ECB)
+    encrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_CBC,
+                      app.config['INITIALIZATION_VECTOR'])
     padded = pad(e)
     return encrypt.encrypt(padded)
 
 
 def decrypter(e):
-    decrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_ECB)
+    decrypt = AES.new(app.config['ENCRYPTION_KEY'], AES.MODE_CBC,
+                      app.config['INITIALIZATION_VECTOR'])
     padded = decrypt.decrypt(e)
     return unpad(padded)

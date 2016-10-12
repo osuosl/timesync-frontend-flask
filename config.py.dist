@@ -15,6 +15,10 @@ SECRET_KEY = "secret"
 ENCRYPTION_KEY = "\x1ft\xeb\xd2\xb72\x16CT\xacE\xde\xedP\xf1\xe2\xcb\x10\xfe" \
                  "\xb1\x12\xac\x9d\x91$\xa4\x17\x0f\x88\\\xb2f"
 
+# Initialization Vector (needed for CBC mode)
+# ALSO CHANGE
+INITIALIZATION_VECTOR = "abcdefghijklmnop"
+
 # Sets the server-side session type
 # Changing this requires a bunch of stuff to be changed, I don't reccomend it
 SESSION_TYPE = 'filesystem'
