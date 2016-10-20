@@ -6,8 +6,8 @@ import pymesync
 import json
 
 
-@app.route('/times/edit/', methods=['GET', 'POST'])
-def edit_time():
+@app.route('/times/edit/<uuid>', methods=['GET', 'POST'])
+def edit_time(uuid):
     # Check if logged in first
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
@@ -23,7 +23,6 @@ def edit_time():
     if not user:
         return 'There was an error.', 500
 
-    uuid = request.args.get('time')
     times = ts.get_times({'uuid': uuid})
 
     default_activities = []
