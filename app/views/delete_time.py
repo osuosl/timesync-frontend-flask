@@ -6,10 +6,12 @@ from app.util import is_logged_in, error_message, decrypter
 
 @app.route('/times/delete/<uuid>', methods=['GET', 'POST'])
 def delete_time(uuid):
-    print(uuid)
     # Check if logged in first
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
+
+    if not uuid:
+        return 'UUID not found', 404
 
     token = decrypter(session['token'])
 

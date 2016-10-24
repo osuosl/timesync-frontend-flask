@@ -12,6 +12,9 @@ def edit_time(uuid):
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
 
+    if not uuid:
+        return 'UUID not found', 404
+
     token = decrypter(session['token'])
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],

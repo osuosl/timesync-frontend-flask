@@ -67,32 +67,31 @@ class DeleteTimeTestCase(unittest.TestCase):
         return res
 
     def get_page(self):
-        res = self.client.get(url_for('delete_time', time='test'))
+        res = self.client.get(url_for('delete_time', uuid='test'))
 
         return res
 
     def get_page_no_uuid(self):
-        res = self.client.get(url_for('delete_time'))
+        res = self.client.get(url_for('delete_time', uuid=''))
 
         return res
 
     def delete_time(self):
-        res = self.client.post(url_for('delete_time'), data=dict(
-            uuid="test"
-        ), follow_redirects=True)
+        res = self.client.post(url_for('delete_time', uuid='test'),
+                               follow_redirects=True)
 
         return res
 
     def delete_time_no_uuid(self):
-        res = self.client.post(url_for('delete_time'), data=dict(),
+        res = self.client.post(url_for('delete_time', uuid=''),
                                follow_redirects=True)
 
         return res
 
     def test_url_endpoint(self):
         """Make sure the url endpoint for delete_time exists"""
-        url = url_for('delete_time')
-        assert url == '/times/delete/'
+        url = url_for('delete_time', uuid='test')
+        assert url == '/times/delete/test'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
