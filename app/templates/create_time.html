@@ -43,7 +43,19 @@ $(document).ready(function() {
             <p>{{ form.issue_uri.label }} {{ form.issue_uri }} {{ form.issue_uri.description }}</p>
         {% endif %}
 
-        <p>{{ form.date_worked.label }} {{ form.date_worked }} {{ form.date_worked.description }}</p>
-        <p><input type="submit" value="Submit"></p
+        <p>{{ form.date_worked.label }} {{ form.date_worked(class="datepicker", type="date") }}</p>
+        <p><input type="submit" value="Submit"></p>
     </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function () {
+    $('select').material_select();
+
+    $('.datepicker').pickadate({
+        format: 'yyyy-mm-dd'
+    });
+});
+</script>
 {% endblock %}

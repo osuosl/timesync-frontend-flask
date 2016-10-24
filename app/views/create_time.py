@@ -66,7 +66,7 @@ def create_time():
 
         if not error_message(res):
             flash("Time successfully submitted.")
-            return redirect(url_for('index'))
+            return redirect(url_for('create_time'))
 
     # Flash any form errors
     for field, errors in form.errors.items():
