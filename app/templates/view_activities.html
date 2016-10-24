@@ -21,7 +21,10 @@
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.slug.label }} {{ form.slug }}</p>
-            <p><input type="submit" value="Submit"> <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
+            <p>
+                <input class="btn waves-effect waves-light" type="submit" value="Submit">
+                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form);">
+            </p>
         </form>
     </div>
 
