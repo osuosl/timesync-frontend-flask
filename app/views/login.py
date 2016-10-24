@@ -1,7 +1,7 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
 from app.util import get_user, error_message, get_users, get_projects, \
-                     get_activities, encrypter
+                     get_activities, encrypter, is_logged_in
 import pymesync
 
 
@@ -52,4 +52,5 @@ def login():
         flash("Invalid submission.")
         status = 401
 
-    return render_template('login.html', form=form), status
+    return render_template('login.html', form=form,
+                           is_logged_in=is_logged_in()), status
