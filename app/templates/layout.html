@@ -12,7 +12,6 @@
 
     <body>
         {# Sidebar navigation #}
-        {# TODO: Use url_for() when pages are implemented #}
         <nav>
             <ul id="slide-out" class="side-nav fixed">
                 {% if is_logged_in %}
@@ -36,8 +35,6 @@
                                     <li><a class="waves-effect" href="{{ url_for('view_activities') }}">View Activities</a></li>
                                     {% if is_admin %}
                                         <li><a class="waves-effect" href="{{ url_for('create_activity') }}">Create Activity</a></li>
-                                        <li><a class="waves-effect" href="{{ url_for('edit_activity') }}">Edit Activity</a></li>
-                                        <li><a class="waves-effect" href="/activities/delete">Delete Activity</a></li>
                                     {% endif %}
                                 </ul>
                             </div>
@@ -50,8 +47,6 @@
                                 <ul>
                                     <li><a class="waves-effect" href="{{ url_for('view_users') }}">View Users</a></li>
                                     <li><a class="waves-effect" href="{{ url_for('create_user') }}">Create User</a></li>
-                                    <li><a class="waves-effect" href="{{ url_for('edit_user') }}">Edit User</a></li>
-                                    <li><a class="waves-effect" href="/users/delete">Delete User</a></li>
                                 </ul>
                             </div>
                         </li>
