@@ -11,12 +11,6 @@
 {% endblock %}
 
 {% block body%}
-    {% if user['site_admin'] or user['site_manager'] %}
-        <div class="create-link">
-            <a href="{{ url_for('create_activity') }}">Create Activity</a>
-        </div>
-    {% endif %}
-
     <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token }}

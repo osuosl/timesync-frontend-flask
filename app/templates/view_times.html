@@ -11,10 +11,6 @@
 {% endblock %}
 
 {% block body %}
-    <div class="create-link">
-        <a href="{{ url_for('create_time') }}">Create Time</a>
-    </div>
-
     <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
