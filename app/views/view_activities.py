@@ -38,4 +38,4 @@ def view_activities():
 
     return render_template('view_activities.html', form=form,
                            activities=activities, user=user,
-                           is_admin=is_admin)
+                           is_logged_in=True, is_admin=is_admin)

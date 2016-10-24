@@ -78,4 +78,5 @@ def create_time():
 
     # If not submitted (GET)
     return render_template('create_time.html', form=form, is_logged_in=True,
-                           default_activities=json.dumps(default_activities))
+                           default_activities=json.dumps(default_activities),
+                           is_admin=session['user']['site_admin'])
