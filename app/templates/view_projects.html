@@ -5,23 +5,21 @@
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
-
-<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
 
 <script>
-$(document).ready(function() {
-    var tableSelector = "#view-projects table";
-    var perPage = 10;
+    $(document).ready(function() {
+        var tableSelector = "#view-projects table";
+        var perPage = 10;
 
-    addPagination(tableSelector, perPage);
-    makeSortable(tableSelector, perPage, 0, "asc");
-});
+        addPagination(tableSelector, perPage);
+        makeSortable(tableSelector, perPage, 0, "asc");
+    });
 </script>
 {% endblock %}
 

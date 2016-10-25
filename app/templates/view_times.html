@@ -5,9 +5,6 @@
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
-
-<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -104,23 +101,25 @@
 {% endblock %}
 
 {% block scripts %}
-    {% assets "js_forms" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
+
+{% assets "js_forms" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 
 <script>
-$(document).ready(function() {
-    $('select').material_select();
+    $(document).ready(function() {
+        $('select').material_select();
 
-    $('.datepicker').pickadate({
-        format: 'yyyy-mm-dd'
+        $('.datepicker').pickadate({
+            format: 'yyyy-mm-dd'
+        });
+
+        var tableSelector = "#view-times table";
+        var perPage = 20;
+
+        addPagination(tableSelector, perPage);
+        makeSortable(tableSelector, perPage, 4, "desc");
     });
-
-    var tableSelector = "#view-times table";
-    var perPage = 20;
-
-    addPagination(tableSelector, perPage);
-    makeSortable(tableSelector, perPage, 4, "desc");
-});
 </script>
 {% endblock %}
