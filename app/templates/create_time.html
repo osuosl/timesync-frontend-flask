@@ -32,10 +32,8 @@ $(document).ready(function() {
         {{ form.csrf_token }}
         <p>{{ form.duration.label }} {{ form.duration }}</p>
         <p>{{ form.project.label }} {{ form.project }}</p>
+        <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description }}</p>
 
-        {% if form.activities.choices %}
-            <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description }}</p>
-        {% endif %}
         {% if form.notes %}
             <p>{{ form.notes.label }} {{ form.notes }}</p>
         {% endif %}
