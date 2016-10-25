@@ -29,6 +29,19 @@
                     </ul>
                     <ul class="collapsible collapsible-accordion">
                         <li>
+                            <a href="#!" class="collapsible-header waves-effect">Projects<i class="material-icons">arrow_drop_down</i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a class="waves-effect" href="{{ url_for('view_projects') }}">View Projects</a></li>
+                                    {% if is_admin %}
+                                        <li><a class="waves-effect" href="{{ url_for('create_project') }}">Create Project</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
                             <a href="#!" class="collapsible-header waves-effect">Activities<i class="material-icons">arrow_drop_down</i></a>
                             <div class="collapsible-body">
                                 <ul>
