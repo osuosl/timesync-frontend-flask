@@ -9,7 +9,7 @@ services:
         volumes:
             - .:/opt/code
         working_dir: /opt/code
-        command: python /opt/code/run.py
+        command: bash -c ". /opt/code/dockerfiles/startup.sh && python /opt/code/run.py"
         ports:
             - "5000:5000"
         links:

@@ -41,14 +41,15 @@ if app.config.get('INITIALIZATION_VECTOR') == iv:
     print '         default. This is insecure, please generate a new one'
 
 assets = Environment(app)
-indexjs = Bundle('../js/index.js', filters='rjsmin', output='js/index.js')
+indexjs = Bundle('../js/index.js', filters='rjsmin', output='js/index.min.js')
 formjs = Bundle('../js/clear_form.js', '../js/table_sort.js', filters='rjsmin',
-                output='js/tableform.js')
+                output='js/tableform.min.js')
 
 assets.config['LIBSASS_STYLE'] = 'compressed'
 index_css = Bundle('../css/index.scss', filters='libsass',
-                   output='css/index.css')
-css = Bundle('../css/style.scss', filters='libsass', output='css/style.css')
+                   output='css/index.min.css')
+css = Bundle('../css/style.scss', filters='libsass',
+             output='css/style.min.css')
 
 assets.register('index_js', indexjs)
 assets.register('js_forms', formjs)
