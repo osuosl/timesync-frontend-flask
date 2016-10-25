@@ -52,5 +52,9 @@ def login():
         flash("Invalid submission.")
         status = 401
 
+    logged_in = is_logged_in()
+
     return render_template('login.html', form=form,
-                           is_logged_in=is_logged_in()), status
+                           is_logged_in=logged_in,
+                           is_admin=session['user']['site_admin'] if logged_in
+                           else False), status
