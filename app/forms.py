@@ -1,7 +1,59 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, DateField, \
-    BooleanField, HiddenField, SelectMultipleField
+    BooleanField, HiddenField, SelectMultipleField, widgets
 from wtforms.validators import DataRequired, Optional, URL
+
+
+class SelectWithDisable(object):
+    """
+    Renders a select field.
+
+    If `multiple` is True, then the `size` property should be specified on
+    rendering to make the field useful.
+
+    The field must provide an `iter_choices()` method which the widget will
+    call on rendering; this method must yield tuples of
+    `(value, label, selected, disabled)`.
+    """
+    def __init__(self, multiple=False):
+        self.multiple = multiple
+
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault('id', field.id)
+
+        if self.multiple:
+            kwargs['multiple'] = 'multiple'
+            kwargs['size'] = len(field.choices) \
+                if len(field.choices) < 15 else 15
+
+        html = [u'<select %s>' % widgets.html_params(
+            name=field.name, **kwargs
+        )]
+
+        for val, label, selected, disabled in field.iter_choices():
+            html.append(self.render_option(val, label, selected, disabled))
+
+        html.append(u'</select>')
+        return widgets.HTMLString(u''.join(html))
+
+    @classmethod
+    def render_option(cls, value, label, selected, disabled):
+        options = {'value': value}
+        if selected:
+            options['selected'] = u'selected'
+        if disabled:
+            options['disabled'] = u'disabled'
+        return widgets.HTMLString(u'<option %s>%s</option>' % (
+            widgets.html_params(**options), widgets.core.escape(unicode(label))
+        ))
+
+
+class SelectMultipleFieldWithDisable(SelectMultipleField):
+    widget = SelectWithDisable(multiple=True)
+
+    def iter_choices(self):
+        for value, label, selected, disabled in self.choices:
+            yield (value, label, selected, disabled)
 
 
 class LoginForm(Form):
@@ -20,7 +72,7 @@ class CreateTimeForm(Form):
                             validators=[DataRequired()])
 
     # Optional
-    activities = SelectMultipleField('Activities:')
+    activities = SelectMultipleFieldWithDisable('Activities:')
     notes = StringField('Notes:')
     issue_uri = StringField('Issue URI:',
                             description='E.g. http://www.github.com')
@@ -28,9 +80,9 @@ class CreateTimeForm(Form):
 
 class FilterTimesForm(Form):
     # All optional
-    users = SelectMultipleField('User:')
-    projects = SelectMultipleField('Project Slugs:')
-    activities = SelectMultipleField('Activity Slugs:')
+    users = SelectMultipleFieldWithDisable('User:')
+    projects = SelectMultipleFieldWithDisable('Project Slugs:')
+    activities = SelectMultipleFieldWithDisable('Activity Slugs:')
     start = DateField('Start Date:', format="%Y-%m-%d",
                       description='yyyy-mm-dd', validators=[Optional()])
     end = DateField('End Date:', format="%Y-%m-%d",
@@ -43,13 +95,13 @@ class CreateActivityForm(Form):
 
 
 class CreateProjectForm(Form):
-    uri = StringField('URI:', validators=[URL(), DataRequired()])
-    name = StringField('Name:', validators=[DataRequired()])
-    slugs = StringField('Slugs:', validators=[DataRequired()])
+    uri = StringField('URI:', validators=[URL()])
+    name = StringField('Name:')
+    slugs = StringField('Slugs:')
     default_activity = SelectField("Default Activity:")
-    members = SelectMultipleField('Members')
-    managers = SelectMultipleField('Managers')
-    spectators = SelectMultipleField('Spectators')
+    members = SelectMultipleFieldWithDisable('Members')
+    managers = SelectMultipleFieldWithDisable('Managers')
+    spectators = SelectMultipleFieldWithDisable('Spectators')
 
 
 class FilterProjectsForm(Form):
