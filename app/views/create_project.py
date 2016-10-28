@@ -28,6 +28,10 @@ def create_project():
     for user in users:
         usernames.append((user['username'], user['display_name']))
 
+    form.default_activity.choices = [('', '')]
+    form.default_activity.choices += [(a['slug'], a['name'])
+                                      for a in session['user']['activities']]
+
     # Fill the multi-select boxes with usernames
     # In order to be able to select users for each permission, you must have a
     # list of users

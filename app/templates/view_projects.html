@@ -50,6 +50,7 @@ $(document).ready(function() {
             <thead>
                 <tr>
                     <th class="alpha">Name</th>
+                    <th class="alpha">Default Activity</th>
                     <th class="list">Slugs</th>
                     <th class="list">Members</th>
                     <th class="list">Managers</th>
@@ -61,6 +62,7 @@ $(document).ready(function() {
             {% for p in projects %}
             <tr>
                 <td>{{ p['name'] }}</td>
+                <td>{{ p['default_activity'] }}</td>
                 <td>{{ p['slugs'] | join(' ') }}</td>
                 <td>{{ p['members'] | join(' ') }}</td>
                 <td>{{ p['managers'] | join(' ') }}</td>

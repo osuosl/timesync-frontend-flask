@@ -40,14 +40,15 @@ class FilterTimesForm(Form):
 
 
 class CreateActivityForm(Form):
-    name = StringField('Activity Name:')
-    slug = StringField('Activity Slug:')
+    name = StringField('Activity Name:', validators=[DataRequired()])
+    slug = StringField('Activity Slug:', validators=[DataRequired()])
 
 
 class CreateProjectForm(Form):
-    uri = StringField('URI:', validators=[URL()])
-    name = StringField('Name:')
-    slugs = StringField('Slugs:')
+    uri = StringField('URI:', validators=[URL(), DataRequired()])
+    name = StringField('Name:', validators=[DataRequired()])
+    slugs = StringField('Slugs:', validators=[DataRequired()])
+    default_activity = SelectField("Default Activity:")
     members = SelectMultipleField('Members')
     managers = SelectMultipleField('Managers')
     spectators = SelectMultipleField('Spectators')
@@ -66,8 +67,8 @@ class FilterActivitiesForm(Form):
 
 
 class CreateUserForm(Form):
-    username = StringField('Username:')
-    password = PasswordField('Password:')
+    username = StringField('Username:', validators=[DataRequired()])
+    password = PasswordField('Password:', validators=[DataRequired()])
     display_name = StringField('Display Name:')
     email = StringField('Email:')
     site_admin = BooleanField('Site Admin:')

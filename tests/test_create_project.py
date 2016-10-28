@@ -40,6 +40,7 @@ class SubmitTestCase(unittest.TestCase):
             uri="http://github.com",
             name="Github",
             slugs="git, hub, gh",
+            default_activity="development",
             users="{'tschuy': {'member': True, 'spectator': False, 'manager': \
                 True}}"
         ), follow_redirects=True)
@@ -68,8 +69,8 @@ class SubmitTestCase(unittest.TestCase):
         self.login()
 
         res = self.client.get(url_for('create_project'))
-        fields = ['form', 'input', 'URI', 'Name', 'Slugs', 'Members',
-                  'Managers', 'Spectators']
+        fields = ['form', 'input', 'URI', 'Name', 'Slugs', 'Default Activity',
+                  'Members', 'Managers', 'Spectators']
 
         for field in fields:
             assert field in res.get_data()

@@ -37,6 +37,11 @@ def edit_project():
     elif not user['site_admin']:
         return "Permission denied", 403
 
+    if 'default_activity' in project:
+        default_activity = str(project['default_activity'])
+    else:
+        default_activity = ''
+
     members = []
     managers = []
     spectators = []
@@ -62,6 +67,7 @@ def edit_project():
         "members": members,
         "managers": managers,
         "spectators": spectators,
+        "default_activity": default_activity,
         "name": name,
         "slugs": slugs,
         "uri": ''
@@ -71,6 +77,10 @@ def edit_project():
         project_data['uri'] = str(project['uri'])
 
     form = forms.CreateProjectForm(data=project_data)
+
+    form.default_activity.choices = [('', '')]
+    form.default_activity.choices += [(a['slug'], a['name'])
+                                      for a in session['user']['activities']]
 
     # Enter choices
     form.members.choices = usernames
