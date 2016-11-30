@@ -2,6 +2,7 @@ import sys
 
 from flask import Flask
 from flask.ext.session import Session
+from flask_assets import Environment, Bundle
 
 app = Flask(__name__, static_folder="static")
 
