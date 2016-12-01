@@ -21,6 +21,13 @@ class SelectWithDisable(object):
     def __call__(self, field, **kwargs):
         kwargs.setdefault('id', field.id)
 
+        # Set 'selected' and 'disabled' to False for all fields except default
+        for i, choice in enumerate(field.choices):
+            field.choices[i] = choice + (False, False,)
+
+        default = ('', 'Choose option(s)', True, True)
+        field.choices.insert(0, default)
+
         if self.multiple:
             kwargs['multiple'] = 'multiple'
             kwargs['size'] = len(field.choices) \

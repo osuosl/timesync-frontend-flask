@@ -11,9 +11,9 @@
     <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
-            <p>{{ form.users.label }} {{ form.users | select_with_disabled }}</p>
-            <p>{{ form.projects.label }} {{ form.projects | select_with_disabled }} {{ form.projects.description }}</p>
-            <p>{{ form.activities.label }} {{ form.activities | select_with_disabled }} {{ form.activities.description}} </p>
+            <p>{{ form.users.label }} {{ form.users }}</p>
+            <p>{{ form.projects.label }} {{ form.projects }} {{ form.projects.description }}</p>
+            <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description}} </p>
             <p>{{ form.start.label }} {{ form.start(class="datepicker", type="date") }}</p>
             <p>{{ form.end.label }} {{ form.end(class="datepicker", type="date") }}</p>
             <p>
