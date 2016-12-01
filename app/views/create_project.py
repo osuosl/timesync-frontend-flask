@@ -28,16 +28,18 @@ def create_project():
     for user in users:
         usernames.append((user['username'], user['display_name']))
 
-    form.default_activity.choices = [('', '')]
-    form.default_activity.choices += [(a['slug'], a['name'])
+    form.default_activity.choices = [(a['slug'], a['name'])
                                       for a in session['user']['activities']]
 
     # Fill the multi-select boxes with usernames
     # In order to be able to select users for each permission, you must have a
-    # list of users
+    # list of users.
+    #
+    # Subsequent uses of `usernames` must be initialized as a new list, as
+    # leaving it as a reference causes errors when rendering the form.
     form.members.choices = usernames
-    form.managers.choices = usernames
-    form.spectators.choices = usernames
+    form.managers.choices = list(usernames)
+    form.spectators.choices = list(usernames)
 
     if form.validate_on_submit():
         project = {}
@@ -58,7 +60,7 @@ def create_project():
 
         return redirect(url_for('create_project'))
 
-        # Flash any form errors
+    # Flash any form errors
     for field, errors in form.errors.items():
         for error in errors:
             flash("{0} {1}".format(getattr(form, field).label.text, error),

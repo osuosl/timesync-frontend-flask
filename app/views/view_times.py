@@ -24,13 +24,13 @@ def view_times():
     form = forms.FilterTimesForm()
 
     # Dictionary to store filter parameters
-    query = dict()
+    query = {}
 
     # List of times
-    times = list()
+    times = []
 
     # Dictionary to store summary information
-    summary = dict()
+    summary = {}
 
     # Set up form choices
     form.users.choices = [(u['username'], u['username'])
@@ -64,14 +64,14 @@ def view_times():
 
         # Show any errors
         if error_message(times):
-            times = list()
+            times = []
 
         # Generate summary information
         if times:
             total_time = 0
             unique_users = set()
             unique_projects = set()
-            unique_activities = list()
+            unique_activities = []
             for entry in times:
                 total_time += entry['duration']
                 unique_users.add(entry['user'])

@@ -25,7 +25,8 @@ class SelectWithDisable(object):
         for i, choice in enumerate(field.choices):
             field.choices[i] = choice + (False, False,)
 
-        default = ('', 'Choose option(s)', True, True)
+        default_text = 'Choose option(s)' if self.multiple else 'Choose option'
+        default = ('', default_text, True, True)
         field.choices.insert(0, default)
 
         if self.multiple:
@@ -63,6 +64,14 @@ class SelectMultipleFieldWithDisable(SelectMultipleField):
             yield (value, label, selected, disabled)
 
 
+class SelectFieldWithDisable(SelectField):
+    widget = SelectWithDisable()
+
+    def iter_choices(self):
+        for value, label, selected, disabled in self.choices:
+            yield (value, label, selected, disabled)
+
+
 class LoginForm(Form):
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
@@ -73,7 +82,8 @@ class LoginForm(Form):
 
 class CreateTimeForm(Form):
     duration = StringField('Duration:', validators=[DataRequired()])
-    project = SelectField('Project:', choices=[], validators=[DataRequired()])
+    project = SelectFieldWithDisable('Project:', choices=[],
+                                     validators=[DataRequired()])
     date_worked = DateField('Date Worked:', format='%Y-%m-%d',
                             description='yyyy-mm-dd',
                             validators=[DataRequired()])
@@ -105,7 +115,7 @@ class CreateProjectForm(Form):
     uri = StringField('URI:', validators=[URL()])
     name = StringField('Name:')
     slugs = StringField('Slugs:')
-    default_activity = SelectField("Default Activity:")
+    default_activity = SelectFieldWithDisable("Default Activity:")
     members = SelectMultipleFieldWithDisable('Members')
     managers = SelectMultipleFieldWithDisable('Managers')
     spectators = SelectMultipleFieldWithDisable('Spectators')

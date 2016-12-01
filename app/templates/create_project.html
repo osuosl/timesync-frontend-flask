@@ -1,16 +1,29 @@
 {% extends "layout.html" %}
 
 {% block title %} Create Project {% endblock %}
+
 {% block body %}
-    <form method="POST">
-        {{ form.csrf_token }}
-        <p>{{ form.uri.label }} {{ form.uri }}</p>
-        <p>{{ form.name.label }} {{ form.name }}</p>
-        <p>{{ form.slugs.label }} {{ form.slugs }}</p>
-        <p>{{ form.default_activity.label }} {{ form.default_activity }}</p>
-        <p>{{ form.members.label }} {{ form.members }}</p>
-        <p>{{ form.managers.label }} {{ form.managers }}</p>
-        <p>{{ form.spectators.label }} {{ form.spectators }}</p>
-        <p><input type="submit" value="Submit"></p>
-    </form>
+    <div class="filter-params">
+        <form method="POST">
+            {{ form.csrf_token }}
+            <p>{{ form.uri.label }} {{ form.uri }}</p>
+            <p>{{ form.name.label }} {{ form.name }}</p>
+            <p>{{ form.slugs.label }} {{ form.slugs }}</p>
+            <p>{{ form.default_activity.label }} {{ form.default_activity }}</p>
+            <p>{{ form.members.label }} {{ form.members }}</p>
+            <p>{{ form.managers.label }} {{ form.managers }}</p>
+            <p>{{ form.spectators.label }} {{ form.spectators }}</p>
+            <p><input type="submit" value="Submit"></p>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('select').material_select();
+
+    $('.datepicker').pickadate({
+        format: 'yyyy-mm-dd'
+    });
+</script>
 {% endblock %}

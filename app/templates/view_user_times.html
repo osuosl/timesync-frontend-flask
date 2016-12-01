@@ -8,8 +8,10 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
+
+{% assets "js_forms" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 
 <script>
     $(document).ready(function() {
@@ -44,8 +46,8 @@
                 {% for t in times %}
                 <tr>
                     {% if t['user'] == user or is_admin %}
-                        <td><a href="{{ url_for('delete_time', time=t['uuid']) }}">DELETE</a></td>
-                        <td><a href="{{ url_for('edit_time', time=t['uuid']) }}">EDIT</a></td>
+                        <td><a href="{{ url_for('delete_time', uuid=t['uuid']) }}">DELETE</a></td>
+                        <td><a href="{{ url_for('edit_time', uuid=t['uuid']) }}">EDIT</a></td>
                     {% else %}
                         <td></td>
                         <td></td>
