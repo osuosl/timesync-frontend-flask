@@ -28,4 +28,4 @@ def view_user_times(username):
         times = []
 
     return render_template('view_user_times.html', times=times, user=user,
-                           is_admin=user['site_admin'])
+                           is_logged_in=True, is_admin=user['site_admin'])
