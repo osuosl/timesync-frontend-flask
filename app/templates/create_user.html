@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    {% if form.data.username is not none %}
-        Edit User
-    {% else %}
+    {% if form.data.username is none %}
         Create User
+    {% else %}
+        Edit User
     {% endif %}
 {% endblock %}
 

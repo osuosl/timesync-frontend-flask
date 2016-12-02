@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
 
-{% block title %} Submit Times {% endblock %}
+{% block title %}
+    {% if form.data.duration is none %}
+        Submit Time
+    {% else %}
+        Edit Time
+    {% endif %}
+{% endblock %}
 
 {% block body %}
     <form method="POST">

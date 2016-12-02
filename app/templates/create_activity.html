@@ -1,6 +1,13 @@
 {% extends "layout.html" %}
 
-{% block title %} Create Activity {% endblock %}
+{% block title %}
+    {% if form.data.name is none %}
+        Create Activity
+    {% else %}
+        Edit Activity
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     <form method="POST">
         {{ form.csrf_token }}

@@ -44,4 +44,6 @@ def delete_user():
         return redirect(url_for('view_users'))
 
     return render_template('delete_user.html', form=form,
-                           delete_user=delete_user, user=user)
+                           delete_user=delete_user, user=user,
+                           is_logged_in=True,
+                           is_admin=session['user']['site_admin'])

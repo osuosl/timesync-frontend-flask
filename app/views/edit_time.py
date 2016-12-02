@@ -110,4 +110,5 @@ def edit_time(uuid):
                 ), 'error')
 
     return render_template('create_time.html', form=form, is_logged_in=True,
+                           is_admin=session['user']['site_admin'],
                            default_activities=json.dumps(default_activities))

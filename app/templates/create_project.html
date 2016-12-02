@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    {% if form.data.uri is not none %}
-        Edit Project
-    {% else %}
+    {% if form.data.uri is none %}
         Create Project
+    {% else %}
+        Edit Project
     {% endif %}
 {% endblock %}
 

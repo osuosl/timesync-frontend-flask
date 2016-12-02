@@ -39,4 +39,6 @@ def delete_time(uuid):
     if error_message(time):
         time = dict()
 
-    return render_template('delete_time.html', form=form, time=time)
+    return render_template('delete_time.html', form=form, time=time,
+                           is_logged_in=True,
+                           is_admin=session['user']['site_admin'])
