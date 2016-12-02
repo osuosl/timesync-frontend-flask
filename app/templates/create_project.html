@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
 
-{% block title %} Create Project {% endblock %}
+{% block title %}
+    {% if form.data.uri is not none %}
+        Edit Project
+    {% else %}
+        Create Project
+    {% endif %}
+{% endblock %}
 
 {% block body %}
     <div class="filter-params">
@@ -13,7 +19,7 @@
             <p>{{ form.members.label }} {{ form.members }}</p>
             <p>{{ form.managers.label }} {{ form.managers }}</p>
             <p>{{ form.spectators.label }} {{ form.spectators }}</p>
-            <p><input type="submit" value="Submit"></p>
+            <p><input class="btn waves-effect waves-light" type="submit" value="Submit"></p>
         </form>
     </div>
 {% endblock %}
@@ -21,9 +27,5 @@
 {% block scripts %}
 <script>
     $('select').material_select();
-
-    $('.datepicker').pickadate({
-        format: 'yyyy-mm-dd'
-    });
 </script>
 {% endblock %}

@@ -66,5 +66,6 @@ def create_project():
             flash("{0} {1}".format(getattr(form, field).label.text, error),
                   'error')
 
-    return render_template('create_project.html', form=form,
+    return render_template('create_project.html', form=form, is_logged_in=True,
+                           is_admin=session['user']['site_admin'],
                            usernames=usernames)

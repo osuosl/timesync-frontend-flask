@@ -51,5 +51,5 @@ def view_projects():
                                      permissions['spectator']]
 
     return render_template('view_projects.html', form=form, projects=projects,
-                           user=session_user,
-                           admin=session_user['site_admin'])
+                           user=session_user, is_logged_in=True,
+                           is_admin=session_user['site_admin'])

@@ -1,6 +1,13 @@
 {% extends "layout.html" %}
 
-{% block title %} Create User {% endblock %}
+{% block title %}
+    {% if form.data.username is not none %}
+        Edit User
+    {% else %}
+        Create User
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     <form method="POST">
         {{ form.csrf_token }}

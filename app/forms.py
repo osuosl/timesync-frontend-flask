@@ -124,8 +124,8 @@ class CreateProjectForm(Form):
 class FilterProjectsForm(Form):
     username = StringField('Username:')
     slug = StringField('Slug:')
-    include_deleted = BooleanField('Include Deleted:')
-    include_revisions = BooleanField('Include Revisions:')
+    include_deleted = BooleanField('Include Deleted')
+    include_revisions = BooleanField('Include Revisions')
 
 
 class FilterActivitiesForm(Form):
