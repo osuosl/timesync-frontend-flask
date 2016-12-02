@@ -79,7 +79,7 @@ def edit_project():
     form = forms.CreateProjectForm(data=project_data)
 
     form.default_activity.choices = [(a['slug'], a['name'])
-                                      for a in session['user']['activities']]
+                                     for a in session['user']['activities']]
 
     # Enter choices
     # Subsequent uses of `usernames` must be initialized as a new list, as
