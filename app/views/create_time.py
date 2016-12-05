@@ -22,9 +22,8 @@ def create_time():
                            test=app.config['TESTING'],
                            token=token)
 
-    form.project.choices = [('', '')]
-    form.project.choices += [(p['slugs'][0], p['name'])
-                             for p in session['user']['projects']]
+    form.project.choices = [(p['slugs'][0], p['name'])
+                            for p in session['user']['projects']]
     form.activities.choices = [(a['slug'], a['name'])
                                for a in session['user']['activities']]
 
@@ -66,7 +65,7 @@ def create_time():
 
         if not error_message(res):
             flash("Time successfully submitted.")
-            return redirect(url_for('index'))
+            return redirect(url_for('create_time'))
 
     # Flash any form errors
     for field, errors in form.errors.items():
@@ -77,5 +76,6 @@ def create_time():
             ), 'error')
 
     # If not submitted (GET)
-    return render_template('create_time.html', form=form,
-                           default_activities=json.dumps(default_activities))
+    return render_template('create_time.html', form=form, is_logged_in=True,
+                           default_activities=json.dumps(default_activities),
+                           is_admin=session['user']['site_admin'])

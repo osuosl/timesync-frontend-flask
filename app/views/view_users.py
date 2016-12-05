@@ -53,4 +53,4 @@ def view_users():
 
     return render_template('view_users.html', form=form, times_form=times_form,
                            users=users, user=user['username'],
-                           is_admin=user['site_admin'])
+                           is_logged_in=True, is_admin=user['site_admin'])

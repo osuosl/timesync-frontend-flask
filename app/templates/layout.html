@@ -2,23 +2,97 @@
 <html>
     <head>
         <title>{% block title %}{% endblock %}</title>
+        <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/lib/materialize.min.css') }}">
+        {% assets "css" %}
+        <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+        {% endassets %}
         {% block imports %}{% endblock %}
     </head>
 
     <body>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="flashes">
-                {% for message in messages %}
-                    <li>{{ message | safe }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+        {# Sidebar navigation #}
+        <nav>
+            <ul id="slide-out" class="side-nav fixed">
+                {% if is_logged_in %}
+                <li class="no-padding">
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a href="#!" class="collapsible-header waves-effect">Times<i class="material-icons">arrow_drop_down</i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a class="waves-effect" href="{{ url_for('view_times') }}">View Times</a></li>
+                                    <li><a class="waves-effect" href="{{ url_for('create_time') }}">Submit Time</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a href="#!" class="collapsible-header waves-effect">Projects<i class="material-icons">arrow_drop_down</i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a class="waves-effect" href="{{ url_for('view_projects') }}">View Projects</a></li>
+                                    {% if is_admin %}
+                                        <li><a class="waves-effect" href="{{ url_for('create_project') }}">Create Project</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a href="#!" class="collapsible-header waves-effect">Activities<i class="material-icons">arrow_drop_down</i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a class="waves-effect" href="{{ url_for('view_activities') }}">View Activities</a></li>
+                                    {% if is_admin %}
+                                        <li><a class="waves-effect" href="{{ url_for('create_activity') }}">Create Activity</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a href="#!" class="collapsible-header waves-effect">Users<i class="material-icons">arrow_drop_down</i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a class="waves-effect" href="{{ url_for('view_users') }}">View Users</a></li>
+                                    <li><a class="waves-effect" href="{{ url_for('create_user') }}">Create User</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                <li><a href="{{ url_for('login', next=request.url_rule) }}">Login</a></li>
+                {% if is_logged_in %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% endif %}
+            </ul>
+            <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+        </nav>
 
-        {% block body %}
-        {% endblock %}
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message | safe }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
 
+            {% block body %}{% endblock %}
+        </div>
+
+        <script type="text/javascript"
+                src="//code.jquery.com/jquery-3.0.0.min.js"
+                integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="
+                crossorigin="anonymous"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js') }}"></script>
         {% block scripts %}{% endblock %}
     </body>
 </html>

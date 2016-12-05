@@ -5,40 +5,21 @@
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
-
-<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
-{% endblock %}
-
-{% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
-
-<script>
-$(document).ready(function() {
-    var tableSelector = "#view-times table";
-    var perPage = 20;
-
-    addPagination(tableSelector, perPage);
-    makeSortable(tableSelector, perPage, 4, "desc");
-});
-</script>
 {% endblock %}
 
 {% block body %}
-    <div class="create-link">
-        <a href="{{ url_for('create_time') }}">Create Time</a>
-    </div>
-
     <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.users.label }} {{ form.users }}</p>
-            <p>{{ form.projects.label }} {{ form.projects }}</p>
-            <p>{{ form.activities.label }} {{ form.activities }}</p>
-            <p>{{ form.start.label }} {{ form.start }} {{ form.start.description }}</p>
-            <p>{{ form.end.label }} {{ form.end }} {{ form.end.description }}</p>
-            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);"></p>
+            <p>{{ form.projects.label }} {{ form.projects }} {{ form.projects.description }}</p>
+            <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description}} </p>
+            <p>{{ form.start.label }} {{ form.start(class="datepicker", type="date") }}</p>
+            <p>{{ form.end.label }} {{ form.end(class="datepicker", type="date") }}</p>
+            <p>
+                <input class="btn waves-effect waves-light" type="submit" value="Submit">
+                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);">
+            </p>
         </form>
     </div>
 
@@ -98,8 +79,8 @@ $(document).ready(function() {
                 {% for t in times %}
                 <tr>
                     {% if t['user'] == user or is_admin %}
-                        <td><a href="{{ url_for('delete_time', time=t['uuid']) }}">DELETE</a></td>
-                        <td><a href="{{ url_for('edit_time', time=t['uuid']) }}">EDIT</a></td>
+                        <td><a href="{{ url_for('delete_time', uuid=t['uuid']) }}">DELETE</a></td>
+                        <td><a href="{{ url_for('edit_time', uuid=t['uuid']) }}">EDIT</a></td>
                     {% else %}
                         <td></td>
                         <td></td>
@@ -117,4 +98,28 @@ $(document).ready(function() {
             </tbody>
         </table>
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
+
+{% assets "js_forms" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+<script>
+    $(document).ready(function() {
+        $('select').material_select();
+
+        $('.datepicker').pickadate({
+            format: 'yyyy-mm-dd'
+        });
+
+        var tableSelector = "#view-times table";
+        var perPage = 20;
+
+        addPagination(tableSelector, perPage);
+        makeSortable(tableSelector, perPage, 4, "desc");
+    });
+</script>
 {% endblock %}

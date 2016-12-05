@@ -35,25 +35,25 @@ class EditTestCase(unittest.TestCase):
         return res
 
     def edit(self):
-        return self.client.post(url_for('edit_time'), data={
+        return self.client.post(url_for('edit_time', uuid='test'), data={
             "date_worked": '2016-05-20'
         }, follow_redirects=True)
 
     def test_url_endpoint(self):
         """Make sure the url endpoint for edit exists."""
-        url = url_for('edit_time')
-        assert url == '/times/edit/'
+        url = url_for('edit_time', uuid='test')
+        assert url == '/times/edit/test'
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
         self.login()
 
-        res = self.client.get(url_for('edit_time'))
+        res = self.client.get(url_for('edit_time', uuid='test'))
         assert res.status_code == 200
 
     def test_login_redirect(self):
         """Make sure unauthorized users are redirected to login page"""
-        edit_res = self.client.get(url_for('edit_time'))
+        edit_res = self.client.get(url_for('edit_time', uuid='test'))
         endpoint = urlparse(edit_res.location).path
 
         assert endpoint == url_for('login')

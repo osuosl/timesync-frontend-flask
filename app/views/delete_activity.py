@@ -48,4 +48,5 @@ def delete_activity():
         activity = dict()
 
     return render_template('delete_activity.html', form=form,
-                           activity=activity)
+                           activity=activity, is_logged_in=True,
+                           is_admin=session['user']['site_admin'])

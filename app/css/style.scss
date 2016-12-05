@@ -1,0 +1,25 @@
+.icon-block {
+    padding: 0 15px;
+}
+
+.icon-block .material-icons {
+    font-size: inherit;
+}
+
+footer,
+header,
+.container {
+    padding-left: 240px;
+}
+
+@media only screen and (max-width : 992px) {
+    footer,
+    header,
+    .container {
+        padding-left: 0;
+    }
+}
+
+.input-field label {
+    left: 0;
+}

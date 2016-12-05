@@ -5,40 +5,18 @@
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
-
-<script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-3.1.0.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
-{% endblock %}
-
-{% block scripts %}
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/table_sort.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts/clear_form.js') }}"></script>
-
-<script>
-$(document).ready(function() {
-    var tableSelector = "#view-users table";
-    var perPage = 10;
-    var view_user_times_root = "{{ url_for('view_user_times') }}";
-
-    addPagination(tableSelector, perPage);
-    makeSortable(tableSelector, perPage, 0, "asc");
-});
-</script>
 {% endblock %}
 
 {% block body%}
-    {% if is_admin %}
-        <div class="create-link">
-            <a href="{{ url_for('create_user') }}">Create User</a>
-        </div>
-    {% endif %}
-
     <div class="filter-params">
         <form method="POST">
             {{ form.csrf_token}}
             <p>{{ form.username.label }} {{ form.username }}</p>
             <p>{{ form.metainfo.label }} {{ form.metainfo }}</p>
-            <p><input type="submit" value="Submit">  <input type="button" name="clear" value="Clear" onclick="clearForm(this.form);"></p>
+            <p>
+                <input class="btn waves-effect waves-light" type="submit" value="Submit">
+                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form);">
+            </p>
         </form>
     </div>
 
@@ -80,4 +58,23 @@ $(document).ready(function() {
             {% endfor %}
         </table>
     </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='lib/simplePagination/jquery.simplePagination.js') }}"></script>
+
+{% assets "js_forms" %}
+<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+<script>
+    $(document).ready(function() {
+        var tableSelector = "#view-users table";
+        var perPage = 10;
+        var view_user_times_root = "{{ url_for('view_user_times') }}";
+
+        addPagination(tableSelector, perPage);
+        makeSortable(tableSelector, perPage, 0, "asc");
+    });
+</script>
 {% endblock %}

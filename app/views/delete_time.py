@@ -4,21 +4,19 @@ import pymesync
 from app.util import is_logged_in, error_message, decrypter
 
 
-@app.route('/times/delete/', methods=['GET', 'POST'])
-def delete_time():
+@app.route('/times/delete/<uuid>', methods=['GET', 'POST'])
+def delete_time(uuid):
     # Check if logged in first
     if not is_logged_in():
         return redirect(url_for('login', next=request.url_rule))
+
+    if not uuid:
+        return 'UUID not found', 404
 
     token = decrypter(session['token'])
 
     ts = pymesync.TimeSync(baseurl=app.config['TIMESYNC_URL'],
                            test=app.config['TESTING'], token=token)
-
-    uuid = request.args.get('time')
-
-    if not uuid and request.method == 'GET':
-        return 'UUID not found', 404
 
     time = ts.get_times({"uuid": uuid})[0]
 
@@ -31,12 +29,6 @@ def delete_time():
     form = forms.ConfirmDeleteForm(uuid=uuid)
 
     if form.validate_on_submit():
-        req_form = request.form
-
-        if 'uuid' not in req_form:
-            return 'UUID not found', 404
-
-        uuid = req_form['uuid']
         response = ts.delete_time(uuid=uuid)
 
         if not error_message(response):
@@ -47,4 +39,6 @@ def delete_time():
     if error_message(time):
         time = dict()
 
-    return render_template('delete_time.html', form=form, time=time)
+    return render_template('delete_time.html', form=form, time=time,
+                           is_logged_in=True,
+                           is_admin=session['user']['site_admin'])

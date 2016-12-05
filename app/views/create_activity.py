@@ -44,7 +44,7 @@ def create_activity():
 
         if not error_message(res):
             flash('Activity successfully created')
-            return redirect(url_for('admin'))
+            return redirect(url_for('create_activity'))
 
     # If GET
     for field, errors in form.errors.items():
@@ -54,4 +54,5 @@ def create_activity():
                 error
             ), 'error')
 
-    return render_template('create_activity.html', form=form)
+    return render_template('create_activity.html', form=form,
+                           is_logged_in=True, is_admin=True)

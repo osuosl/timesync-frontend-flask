@@ -47,11 +47,11 @@ def edit_project():
     spectators = []
     if 'users' in project:
         for user in project['users']:
-            if project['users'][user]['member'] is True:
+            if project['users'][user]['member']:
                 members.append(user)
-            if project['users'][user]['manager'] is True:
+            if project['users'][user]['manager']:
                 managers.append(user)
-            if project['users'][user]['spectator'] is True:
+            if project['users'][user]['spectator']:
                 spectators.append(user)
 
     if 'name' in project:
@@ -78,14 +78,15 @@ def edit_project():
 
     form = forms.CreateProjectForm(data=project_data)
 
-    form.default_activity.choices = [('', '')]
-    form.default_activity.choices += [(a['slug'], a['name'])
-                                      for a in session['user']['activities']]
+    form.default_activity.choices = [(a['slug'], a['name'])
+                                     for a in session['user']['activities']]
 
     # Enter choices
+    # Subsequent uses of `usernames` must be initialized as a new list, as
+    # leaving it as a reference causes errors when rendering the form.
     form.members.choices = usernames
-    form.managers.choices = usernames
-    form.spectators.choices = usernames
+    form.managers.choices = list(usernames)
+    form.spectators.choices = list(usernames)
 
     if form.validate_on_submit():
         project = {}
@@ -116,4 +117,5 @@ def edit_project():
                 error
             ), 'error')
 
-    return render_template('edit_project.html', form=form)
+    return render_template('create_project.html', form=form, is_logged_in=True,
+                           is_admin=session['user']['site_admin'])

@@ -72,4 +72,6 @@ def edit_activity():
                 error
             ), 'error')
 
-    return render_template('create_activity.html', form=form)
+    return render_template('create_activity.html', form=form,
+                           is_logged_in=True,
+                           is_admin=session['user']['site_admin'])
