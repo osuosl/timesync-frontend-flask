@@ -1,3 +1,3 @@
 from app import app
 
-app.run(host=app.config['HOST'], port=app.config['PORT'])
+# we actually don't need anything else here
