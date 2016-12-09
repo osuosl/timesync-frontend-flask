@@ -51,11 +51,14 @@ index_css = Bundle('../css/index.scss', filters='libsass',
                    output='css/index.min.css')
 css = Bundle('../css/style.scss', filters='libsass',
              output='css/style.min.css')
+css_libs = Bundle('../css/lib/materialize.scss', filters='libsass',
+                  output='css/lib/materialize.min.css')
 
 assets.register('index_js', indexjs)
 assets.register('js_forms', formjs)
 assets.register('index_css', index_css)
 assets.register('css', css)
+assets.register('css_libs', css_libs)
 
 from app.views import index, admin, create_time, delete_time  # NOQA flake8 ignore
 from app.views import login, logout, view_times, edit_time  # NOQA flake8 ignore
