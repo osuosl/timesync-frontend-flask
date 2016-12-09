@@ -39,6 +39,10 @@ class SelectWithDisable(object):
         )]
 
         for val, label, selected, disabled in field.iter_choices():
+            if field.data:
+                if val == field.data or val in field.data:
+                    selected = True
+
             html.append(self.render_option(val, label, selected, disabled))
 
         html.append(u'</select>')
