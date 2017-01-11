@@ -45,7 +45,12 @@ def login():
             session['users'] = users
             session['user'] = user
 
-            return redirect(request.args.get('next') or url_for('index'))
+            # Preserve query values from redirecting page
+            redirect_args = dict(request.args)
+            del redirect_args['next']
+
+            return redirect(url_for(request.args.get('next'), **redirect_args)
+                            or url_for('index'))
 
     # Else if POST request (meaning form invalid), notify user
     elif request.method == 'POST':

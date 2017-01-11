@@ -9,7 +9,8 @@ import pymesync
 def edit_project():
     if not is_logged_in():
         if request.method == 'GET':
-            return redirect(url_for('login', next=request.url_rule))
+            return redirect(url_for('login', next=request.endpoint,
+                                    **request.args))
         elif request.method == 'POST':
             return "Not logged in.", 401
 

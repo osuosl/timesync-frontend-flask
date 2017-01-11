@@ -9,7 +9,7 @@ import pymesync
 def view_user_times(username):
     # Check if logged in first
     if not is_logged_in():
-        return redirect(url_for('login', next=request.url_rule))
+        return redirect(url_for('login', next=request.endpoint))
 
     token = decrypter(session['token'])
 

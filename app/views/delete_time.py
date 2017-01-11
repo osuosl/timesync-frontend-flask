@@ -8,7 +8,7 @@ from app.util import is_logged_in, error_message, decrypter
 def delete_time(uuid):
     # Check if logged in first
     if not is_logged_in():
-        return redirect(url_for('login', next=request.url_rule))
+        return redirect(url_for('login', next=request.endpoint))
 
     if not uuid:
         return 'UUID not found', 404

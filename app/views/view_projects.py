@@ -7,7 +7,7 @@ import pymesync
 @app.route('/projects/', methods=['GET', 'POST'])
 def view_projects():
     if not is_logged_in():
-        return redirect(url_for('login', next=request.url_rule))
+        return redirect(url_for('login', next=request.endpoint))
 
     token = decrypter(session['token'])
 

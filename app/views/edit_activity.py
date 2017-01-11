@@ -8,7 +8,7 @@ from app.util import is_logged_in, error_message, decrypter
 def edit_activity():
     # Check if logged in first
     if not is_logged_in():
-        return redirect(url_for('login', next=request.url_rule))
+        return redirect(url_for('login', next=request.endpoint))
 
     # Check if the user is an admin and deny access if not
     is_admin = False
