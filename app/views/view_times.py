@@ -62,8 +62,6 @@ def view_times():
 
         times = ts.get_times(query_parameters=query)
 
-        print(times)
-
         # Show any errors
         if error_message(times):
             times = []
