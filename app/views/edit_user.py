@@ -9,7 +9,8 @@ def edit_user():
     # Check if logged in first
     if not is_logged_in():
         if request.method == 'GET':
-            return redirect(url_for('login', next=request.endpoint))
+            return redirect(url_for('login', next=request.endpoint,
+                                    **request.args))
         elif request.method == 'POST':
             return "Not logged in.", 401
 

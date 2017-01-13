@@ -10,7 +10,11 @@ import json
 def edit_time(uuid):
     # Check if logged in first
     if not is_logged_in():
-        return redirect(url_for('login', next=request.endpoint))
+        if request.method == 'GET':
+            return redirect(url_for('login', next=request.endpoint,
+                                    **request.args))
+        elif request.method == 'POST':
+            return "Not logged in.", 401
 
     if not uuid:
         return 'UUID not found', 404
