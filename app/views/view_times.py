@@ -8,7 +8,7 @@ import pymesync
 def view_times():
     # Check if logged in first
     if not is_logged_in():
-        return redirect(url_for('login', next=request.url_rule))
+        return redirect(url_for('login', next=request.endpoint))
 
     token = decrypter(session['token'])
 
@@ -61,8 +61,6 @@ def view_times():
             query['end'] = [end]
 
         times = ts.get_times(query_parameters=query)
-
-        print(times)
 
         # Show any errors
         if error_message(times):
