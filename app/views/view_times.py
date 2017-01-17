@@ -62,8 +62,6 @@ def view_times():
 
         times = ts.get_times(query_parameters=query)
 
-        print(times)
-
         # Show any errors
         if error_message(times):
             times = []
@@ -101,5 +99,5 @@ def view_times():
     # error_message(times)
 
     return render_template('view_times.html', form=form, times=times,
-                           summary=summary, user=user['username'],
+                           summary=summary, user=user,
                            is_admin=user['site_admin'], is_logged_in=True)
