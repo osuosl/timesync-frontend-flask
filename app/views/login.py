@@ -1,7 +1,6 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
-from app.util import get_user, error_message, get_users, get_projects, \
-                     get_activities, encrypter, is_logged_in, update_cache
+from app.util import error_message, encrypter, is_logged_in, update_cache
 import pymesync
 
 
