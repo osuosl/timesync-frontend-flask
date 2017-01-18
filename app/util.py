@@ -101,6 +101,33 @@ def get_activities(username):
     return activities
 
 
+def update_cache(username=None):
+    """Updates the session's cache of activities, projects, and users"""
+
+    if not is_logged_in():
+        return
+
+    # If no username was provided, attempt to use the current user's username
+    if not username:
+        if 'user' in session:
+            username = session['user']['username']
+        else:
+            return
+
+    user = get_user(username)
+    all_projects = get_projects()
+    projects = get_projects(username)
+    activities = get_activities(username)
+    users = get_users()
+
+    user['projects'] = projects
+    user['activities'] = activities
+
+    session['projects'] = all_projects
+    session['users'] = users
+    session['user'] = user
+
+
 def is_logged_in():
     """Checks if the user is logged in. Also checks token expiration time,
         logging the user out if their token is expired."""
