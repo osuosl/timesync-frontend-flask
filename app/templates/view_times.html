@@ -59,7 +59,6 @@
     {% endif %}
 
     <div id="paginator"></div>
-
     <div id="view-times">
         <table>
             <thead>
@@ -88,7 +87,7 @@
                     {% endif %}
 
                     <td>{{ t['user'] }}</td>
-                    <td>{{ user['meta'] }}</td>
+                    <td>{{ users[t['user']]['meta'] }}</td>
                     <td>{{ t['duration'] | hms_filter }}</td>
                     <td>{{ t['date_worked'] }}</td>
                     <td>{{ t['project'] | join(' ') }}</td>
