@@ -9,9 +9,5 @@ docs/build/
 flask_session/
 .webassets-cache/
 
-app/static/css/*
-!app/static/css/fonts
-!app/static/css/lib
-
-app/static/js/*
-!app/static/js/lib
+*.min.css
+*.min.js
