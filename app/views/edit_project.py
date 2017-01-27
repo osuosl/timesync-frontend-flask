@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 from app.util import is_logged_in, error_message, project_user_permissions, \
-                     decrypter
+                     decrypter, update_cached_projects
 import pymesync
 
 
@@ -107,6 +107,8 @@ def edit_project():
         res = ts.update_project(project=project, slug=slug)
 
         if not error_message(res):
+            update_cached_projects()
+
             flash("Project successfully submitted.")
 
         return redirect(url_for('view_projects'))

@@ -1,6 +1,6 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
-from app.util import error_message, encrypter, is_logged_in, update_cache
+from app.util import error_message, encrypter, is_logged_in, build_cache
 import pymesync
 
 
@@ -26,7 +26,7 @@ def login():
         if not error_message(token):
             session['token'] = encrypter(token['token'])
 
-            update_cache(username)
+            build_cache(username)
 
             # Preserve query values from redirecting page
             redirect_args = dict(request.args)

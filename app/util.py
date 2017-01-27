@@ -81,7 +81,7 @@ def get_projects(username=None):
     return user_projects
 
 
-def get_activities(username):
+def get_activities():
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -101,31 +101,59 @@ def get_activities(username):
     return activities
 
 
-def update_cache(username=None):
-    """Updates the session's cache of activities, projects, and users"""
+def update_cached_projects():
+    """Updates the projects in the session cache"""
 
     if not is_logged_in():
         return
 
-    # If no username was provided, attempt to use the current user's username
+    session["user"]["projects"] = get_projects(session["user"]["username"])
+    session["projects"] = get_projects()
+
+
+def update_cached_activities():
+    """Updates the activities in the session cache"""
+
+    if not is_logged_in():
+        return
+
+    session["user"]["activities"] = get_activities()
+
+
+def update_cached_users(username=None):
+    """Updates the users in the session cache"""
+
+    if not is_logged_in():
+        return
+
+    # Update the current user
     if not username:
-        if 'user' in session:
-            username = session['user']['username']
-        else:
-            return
+        username = session["user"]["username"]
 
     user = get_user(username)
-    all_projects = get_projects()
-    projects = get_projects(username)
-    activities = get_activities(username)
-    users = get_users()
 
-    user['projects'] = projects
-    user['activities'] = activities
+    if "user" in session:
+        user_projects = session["user"]["projects"]
+        activities = session["user"]["activities"]
 
-    session['projects'] = all_projects
-    session['users'] = users
-    session['user'] = user
+        user["projects"] = user_projects
+        user["activities"] = activities
+
+    session["user"] = user
+
+    # Update the cache of all users
+    session["users"] = get_users()
+
+
+def build_cache(username=None):
+    """Rebuilds the session cache of projects, activities, and users"""
+
+    if not is_logged_in():
+        return
+
+    update_cached_users(username)
+    update_cached_activities()
+    update_cached_projects()
 
 
 def is_logged_in():

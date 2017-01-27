@@ -1,7 +1,8 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, \
+                     update_cached_users
 
 
 @app.route('/users/delete', methods=['GET', 'POST'])
@@ -43,6 +44,8 @@ def delete_user():
     if form.validate_on_submit():
         response = ts.delete_user(username=username)
         if not error_message(response):
+            update_cached_users()
+
             flash('Deletion successful')
 
         return redirect(url_for('view_users'))
