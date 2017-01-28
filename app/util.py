@@ -156,8 +156,8 @@ def build_cache(username=None):
     update_cached_projects()
 
     # Add expiration time before next cache update
-    session["next_update"] = datetime.now() + \
-                             timedelta(minutes=app.config["CACHE_EXP"])
+    session["next_update"] = \
+        datetime.now() + timedelta(minutes=app.config["CACHE_EXP"])
 
 
 def is_logged_in():
