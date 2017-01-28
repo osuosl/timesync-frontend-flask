@@ -2,7 +2,7 @@ from flask import session, flash
 from app import app
 from app.views.logout import logout
 from cgi import escape
-from datetime import datetime
+from datetime import datetime, timedelta
 from Crypto.Cipher import AES
 import pymesync
 
@@ -154,6 +154,10 @@ def build_cache(username=None):
     update_cached_users(username)
     update_cached_activities()
     update_cached_projects()
+
+    # Add expiration time before next cache update
+    session["next_update"] = datetime.now() + \
+                             timedelta(minutes=app.config["CACHE_EXP"])
 
 
 def is_logged_in():

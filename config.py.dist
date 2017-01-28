@@ -23,6 +23,9 @@ INITIALIZATION_VECTOR = "abcdefghijklmnop"
 # Changing this requires a bunch of stuff to be changed, I don't recommend it
 SESSION_TYPE = 'filesystem'
 
+# The number of minutes before the session cache expires and has to be rebuilt
+CACHE_EXP = 5
+
 HOST = "0.0.0.0"
 PORT = 5000
 
