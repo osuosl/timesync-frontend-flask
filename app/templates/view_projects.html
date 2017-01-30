@@ -48,6 +48,8 @@
         <table>
             <thead>
                 <tr>
+                    <th></th>
+                    <th></th>
                     <th class="alpha">Name</th>
                     <th class="alpha">Default Activity</th>
                     <th class="list">Slugs</th>
@@ -60,6 +62,13 @@
 
             {% for p in projects %}
             <tr>
+                {% if is_admin or user['username'] in p['managers'] %}
+                    <td><a href="{{ url_for('delete_project', slug=p['slugs'][0]) }}">DELETE</a></td>
+                    <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
                 <td>{{ p['name'] }}</td>
                 <td>{{ p['default_activity'] }}</td>
                 <td>{{ p['slugs'] | join(' ') }}</td>
@@ -67,15 +76,6 @@
                 <td>{{ p['managers'] | join(' ') }}</td>
                 <td>{{ p['spectators'] | join(' ') }}</td>
                 <td>{{ p['uri'] }}</td>
-                {% if is_admin %}
-                    <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
-                {% else %}
-                    {% for manager in p['managers'] %}
-                        {% if manager == user['username'] or admin %}
-                            <td><a href="{{ url_for('edit_project', project=p['slugs'][0]) }}">EDIT</a></td>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
             </tr>
             {% endfor %}
         </table>

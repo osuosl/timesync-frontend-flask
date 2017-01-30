@@ -14,8 +14,6 @@ def delete_user():
         elif request.method == 'POST':
             return "Not logged in.", 401
 
-    token = decrypter(session['token'])
-
     user = session['user']
 
     if not user:

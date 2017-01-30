@@ -231,6 +231,33 @@ def to_readable_time(seconds):
     return '{}h{}m'.format(hours, minutes)
 
 
+def project_members(project):
+    """Returns the list of members in a project"""
+    if 'users' not in project:
+        return []
+
+    return [user for user, permissions in project['users'].iteritems()
+            if permissions['member']]
+
+
+def project_managers(project):
+    """Returns the list of managers in a project"""
+    if 'users' not in project:
+        return []
+
+    return [user for user, permissions in project['users'].iteritems()
+            if permissions['manager']]
+
+
+def project_spectators(project):
+    """Returns the list of spectators in a project"""
+    if 'users' not in project:
+        return []
+
+    return [user for user, permissions in project['users'].iteritems()
+            if permissions['spectator']]
+
+
 def project_user_permissions(form):
     users = form['members'].data + \
         form['managers'].data + \
