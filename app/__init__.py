@@ -47,18 +47,14 @@ formjs = Bundle('../js/clear_form.js', '../js/table_sort.js', filters='rjsmin',
                 output='js/tableform.min.js')
 
 assets.config['LIBSASS_STYLE'] = 'compressed'
-index_css = Bundle('../css/index.scss', filters='libsass',
-                   output='css/index.min.css')
 css = Bundle('../css/style.scss', filters='libsass',
              output='css/style.min.css')
 
 assets.register('index_js', indexjs)
 assets.register('js_forms', formjs)
-assets.register('index_css', index_css)
 assets.register('css', css)
 
-from app.views import index, admin, create_time, delete_time  # NOQA flake8 ignore
-from app.views import login, logout, view_times, edit_time  # NOQA flake8 ignore
+from app.views import index, create_time, delete_time  # NOQA flake8 ignore
 from app.views import login, logout, view_times, view_user_times, edit_time  # NOQA flake8 ignore
 from app.views import create_project, edit_project, view_projects  # NOQA flake8 ignore
 from app.views import create_activity, edit_activity, view_activities, delete_activity  # NOQA flake8 ignore
