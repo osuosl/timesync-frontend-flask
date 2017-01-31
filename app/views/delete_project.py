@@ -27,6 +27,10 @@ def delete_project():
                            test=app.config['TESTING'], token=token)
 
     slug = request.args.get('slug')
+    form = forms.ConfirmDeleteForm(ts_object=slug)
+
+    if request.method == 'POST':
+        slug = form['ts_object']
 
     if not slug:
         return 'Project not found', 404
@@ -50,11 +54,6 @@ def delete_project():
 
     if not user['site_admin'] and username not in project['managers']:
         return 'You cannot access this page.', 403
-
-    form = forms.ConfirmDeleteForm(ts_object=slug)
-
-    # Need to be able to show the user's data
-    error_message(project)
 
     if form.validate_on_submit():
         if 'ts_object' not in request.form:
