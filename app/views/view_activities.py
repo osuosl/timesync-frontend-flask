@@ -27,10 +27,16 @@ def view_activities():
     query = {}
 
     if form.validate_on_submit():
-        req_form = request.form
-        slug = req_form["slug"]
+        slug = form.slug.data
+        include_deleted = form.include_deleted.data
+        include_revisions = form.include_revisions.data
 
-        query["slug"] = slug
+        if slug:
+            query["slug"] = slug
+        if include_deleted:
+            query["include_deleted"] = include_deleted
+        if include_revisions:
+            query["include_revisions"] = include_revisions
 
     activities = ts.get_activities(query_parameters=query)
 

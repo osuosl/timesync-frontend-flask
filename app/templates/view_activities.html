@@ -12,6 +12,8 @@
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.slug.label }} {{ form.slug }}</p>
+            <p>{{ form.include_deleted }} {{ form.include_deleted.label }}</p>
+            <p>{{ form.include_revisions }} {{ form.include_revisions.label }}</p>
             <p>
                 <input class="btn waves-effect waves-light" type="submit" value="Submit">
                 <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form);">

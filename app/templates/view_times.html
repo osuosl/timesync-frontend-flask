@@ -16,6 +16,8 @@
             <p>{{ form.activities.label }} {{ form.activities }} {{ form.activities.description}} </p>
             <p>{{ form.start.label }} {{ form.start(class="datepicker", type="date") }}</p>
             <p>{{ form.end.label }} {{ form.end(class="datepicker", type="date") }}</p>
+            <p>{{ form.include_deleted }} {{ form.include_deleted.label }}</p>
+            <p>{{ form.include_revisions }} {{ form.include_revisions.label }}</p>
             <p>
                 <input class="btn waves-effect waves-light" type="submit" value="Submit">
                 <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);">
