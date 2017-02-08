@@ -1,6 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, \
+                     update_cached_users
 import pymesync
 
 
@@ -52,6 +53,8 @@ def edit_user():
             res = ts.update_user(user=user, username=form.username.data)
 
             if not error_message(res):
+                update_cached_users
+
                 flash("User successfully submitted.")
 
             return redirect(url_for('view_users'))

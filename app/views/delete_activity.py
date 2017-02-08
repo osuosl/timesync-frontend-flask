@@ -1,7 +1,8 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, \
+                     update_cached_activities
 
 
 @app.route('/activities/delete', methods=['GET', 'POST'])
@@ -42,6 +43,8 @@ def delete_activity():
 
         slug = request.form['ts_object']
         response = ts.delete_activity(slug=slug)
+
+        update_cached_activities()
 
         if not error_message(response):
             flash('Deletion successful')

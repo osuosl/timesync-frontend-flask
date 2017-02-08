@@ -1,7 +1,8 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, \
+                     update_cached_activities
 
 
 @app.route('/activities/create/', methods=['GET', 'POST'])
@@ -43,6 +44,8 @@ def create_activity():
         res = ts.create_activity(activity=activity)
 
         if not error_message(res):
+            update_cached_activities()
+
             flash('Activity successfully created')
             return redirect(url_for('create_activity'))
 

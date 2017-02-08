@@ -1,7 +1,8 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, \
+                     update_cached_activities
 
 
 @app.route('/activities/edit/', methods=['GET', 'POST'])
@@ -59,6 +60,8 @@ def edit_activity():
             res = ts.update_activity(activity=activity_update, slug=old_slug)
 
             error_message(res)
+
+            update_cached_activities()
 
             return redirect(url_for('view_activities'))
 

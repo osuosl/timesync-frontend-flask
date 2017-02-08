@@ -2,7 +2,7 @@ from flask import session, flash
 from app import app
 from app.views.logout import logout
 from cgi import escape
-from datetime import datetime
+from datetime import datetime, timedelta
 from Crypto.Cipher import AES
 import pymesync
 
@@ -81,7 +81,7 @@ def get_projects(username=None):
     return user_projects
 
 
-def get_activities(username):
+def get_activities():
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -99,6 +99,65 @@ def get_activities(username):
         return []
 
     return activities
+
+
+def update_cached_projects():
+    """Updates the projects in the session cache"""
+
+    if not is_logged_in():
+        return
+
+    session["user"]["projects"] = get_projects(session["user"]["username"])
+    session["projects"] = get_projects()
+
+
+def update_cached_activities():
+    """Updates the activities in the session cache"""
+
+    if not is_logged_in():
+        return
+
+    session["user"]["activities"] = get_activities()
+
+
+def update_cached_users(username=None):
+    """Updates the users in the session cache"""
+
+    if not is_logged_in():
+        return
+
+    # Update the current user
+    if not username:
+        username = session["user"]["username"]
+
+    user = get_user(username)
+
+    if "user" in session:
+        user_projects = session["user"]["projects"]
+        activities = session["user"]["activities"]
+
+        user["projects"] = user_projects
+        user["activities"] = activities
+
+    session["user"] = user
+
+    # Update the cache of all users
+    session["users"] = get_users()
+
+
+def build_cache(username=None):
+    """Rebuilds the session cache of projects, activities, and users"""
+
+    if not is_logged_in():
+        return
+
+    update_cached_users(username)
+    update_cached_activities()
+    update_cached_projects()
+
+    # Add expiration time before next cache update
+    session["next_update"] = \
+        datetime.now() + timedelta(minutes=app.config["CACHE_EXP"])
 
 
 def is_logged_in():

@@ -1,7 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import (is_logged_in, error_message, project_user_permissions,
-                      decrypter)
+from app.util import is_logged_in, error_message, project_user_permissions, \
+                      decrypter, update_cached_projects
 import pymesync
 
 
@@ -56,6 +56,8 @@ def create_project():
 
         res = ts.create_project(project=project)
         if not error_message(res):
+            update_cached_projects()
+
             flash("Project successfully submitted.")
 
         return redirect(url_for('create_project'))

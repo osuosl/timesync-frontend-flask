@@ -1,7 +1,6 @@
 from flask import session, url_for, request, render_template, flash, redirect
 from app import app, forms
-from app.util import get_user, error_message, get_users, get_projects, \
-                     get_activities, encrypter, is_logged_in
+from app.util import error_message, encrypter, is_logged_in, build_cache
 import pymesync
 
 
@@ -27,23 +26,7 @@ def login():
         if not error_message(token):
             session['token'] = encrypter(token['token'])
 
-            user = get_user(username)
-
-            if not user:
-                error_message(user)
-                return 'There was an error.', 500
-
-            all_projects = get_projects()
-            projects = get_projects(username)
-            activities = get_activities(username)
-            users = get_users()
-
-            user['projects'] = projects
-            user['activities'] = activities
-
-            session['projects'] = all_projects
-            session['users'] = users
-            session['user'] = user
+            build_cache(username)
 
             # Preserve query values from redirecting page
             redirect_args = dict(request.args)
