@@ -43,14 +43,9 @@ def delete_project():
     project = project[0]
 
     # Convert project user permissions into a more useful format
-    if 'users' in project:
-        project['members'] = project_members(project)
-        project['managers'] = project_managers(project)
-        project['spectators'] = project_spectators(project)
-    else:
-        project['members'] = []
-        project['managers'] = []
-        project['spectators'] = []
+    project['members'] = project_members(project)
+    project['managers'] = project_managers(project)
+    project['spectators'] = project_spectators(project)
 
     if not user['site_admin'] and username not in project['managers']:
         return 'You cannot access this page.', 403
