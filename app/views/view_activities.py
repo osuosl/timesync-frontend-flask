@@ -1,4 +1,4 @@
-from flask import session, redirect, url_for, request, render_template
+from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
 import pymesync
 from app.util import is_logged_in, error_message, decrypter
@@ -37,6 +37,11 @@ def view_activities():
             query["include_deleted"] = include_deleted
         if include_revisions:
             query["include_revisions"] = include_revisions
+
+    if 'slug' in query and 'include_deleted' in query:
+        flash('Invalid query: Cannot use "Activity Slug" and "Include Deleted" \
+               at the same time')
+        query = {}
 
     activities = ts.get_activities(query_parameters=query)
 
