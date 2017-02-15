@@ -87,7 +87,11 @@ Flask sessions are used to store persistent information such as TimeSync tokens
 and user-specific project permissions. Session objects persist on the server side,
 although TimeSync tokens are set to expire 30 minutes after they are issued.
 
-Session encryption is currently a work-in-progress.
+Server-side sessions are provided by the `Flask-Session`_ extension and encrypted
+with AES using the encryption key and initialization vector specified in the
+configuration file.
+
+.. _Flask-Session: https://pythonhosted.org/Flask-Session/
 
 Template Layout
 '''''''''''''''
@@ -106,7 +110,18 @@ scripts    Both imported scripts and inline scripts
 body       The body of the webpage
 ========== ===============================================
 
-Other static page elements go in the :code:`app/static/` folder.
+Static Assets
+'''''''''''''
+
+Static assets are managed using the `Flask-Assets`_ extension. At startup, the
+application compiles and minifies CSS and Javascript assets, and places them
+in the :code:`app/static/` directory. Also located in :code:`app/static/` are
+various libraries and frameworks that are used on the front end such as
+`jQuery`_ and the `Materialize`_ CSS framework.
+
+.. _Flask-Assets: http://flask-assets.readthedocs.io/en/latest/
+.. _jQuery: http://jquery.com/
+.. _Materialize: http://materializecss.com/
 
 Style Guidelines
 ----------------

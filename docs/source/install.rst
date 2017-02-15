@@ -45,6 +45,25 @@ docker daemon running, run the following command to build the container:
 .. _docker: http://www.docker.com/
 .. _docker-compose: https://docs.docker.com/compose/
 
+Configuring Timesync-Frontend-Flask
+-----------------------------------
+
+===================== =========================================================
+     Option Name                             Description
+===================== =========================================================
+DEBUG                 Set to :code:`True` to enable the built-in Flask debugger
+TESTING               Used by unit tests for testing convenience. **Do not set**
+BASE_DIR              Path to the project directory
+SECRET_KEY            Secret key used to generate CSRF tokens
+ENCRYPTION_KEY        Encryption key used to encrypt server-side sessions
+INITIALIZATION_VECTOR Initialization vector used with the encryption key
+SESSION_TYPE          Type of session store used by Flask-Session
+CACHE_EXP             Number of minutes before the session cache expires
+HOST                  Server Host IP
+PORT                  Server Port
+TIMESYNC_URL          URL of the TimeSync server to be used
+===================== =========================================================
+
 Running Timesync-Frontend-Flask
 -------------------------------
 
