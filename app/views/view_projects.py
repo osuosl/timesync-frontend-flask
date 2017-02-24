@@ -1,6 +1,7 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, project_members, \
+                     project_managers, project_spectators
 import pymesync
 
 
@@ -41,14 +42,9 @@ def view_projects():
 
     for project in projects:
         if 'users' in project:
-            users = project['users']
-            project['members'] = [user for user, permissions in
-                                  users.iteritems() if permissions['member']]
-            project['managers'] = [user for user, permissions in
-                                   users.iteritems() if permissions['manager']]
-            project['spectators'] = [user for user, permissions in
-                                     users.iteritems() if
-                                     permissions['spectator']]
+            project['members'] = project_members(project)
+            project['managers'] = project_managers(project)
+            project['spectators'] = project_spectators(project)
 
     return render_template('view_projects.html', form=form, projects=projects,
                            user=session_user, is_logged_in=True,

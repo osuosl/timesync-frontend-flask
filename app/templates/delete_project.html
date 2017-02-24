@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %} Delete Project {% endblock %}
+
+{% block body %}
+    <div class="project-info">
+        <p>Project info:</p>
+        <p>
+            Name: {{ project['name'] }}<br />
+            Slugs: {{ project['slugs'] | join(' ') }}<br />
+            Members: {{ project['members'] | join(' ') }}<br />
+            Managers: {{ project['managers'] | join(' ') }}<br />
+            Spectators: {{ project['spectators'] | join(' ') }}<br />
+            Default Activity: {{ project['default_activity'] }}<br />
+            Project URI: {{ project['uri'] }}<br />
+        </p>
+    </div>
+
+    <div class="confirm-delete">
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.ts_object }}
+            <input type="submit" value="Yes, delete this project">
+            <input type="button" name="no" value="No" onClick="location.href='{{ url_for('view_projects') }}'">
+        </form>
+    </div>
+{% endblock %}
