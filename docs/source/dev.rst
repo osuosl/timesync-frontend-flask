@@ -93,6 +93,20 @@ configuration file.
 
 .. _Flask-Session: https://pythonhosted.org/Flask-Session/
 
+Caching
+'''''''
+
+The frontend uses many dropdown and other selection boxes inside of forms.
+These selection boxes usually present the user with a choice of various objects
+(such as project and activity slugs) that must be retrieved from the TimeSync
+backend.
+
+In order to improve performance and reduce the number of calls that are made to
+the TimeSync API, some of these objects are automatically cached at login. The
+cache is specific to each user session, and is automatically updated at a time
+interval that can be set using the ``CACHE_EXP`` configuration option. Cache
+update checks take place inside ``app/middleware.py``.
+
 Template Layout
 '''''''''''''''
 
