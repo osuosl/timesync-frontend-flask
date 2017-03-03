@@ -13,7 +13,7 @@ Contents:
 
     install
     usage
-    devvin
+    dev
 
 
 Indices and tables
