@@ -8,6 +8,7 @@ import pymesync
 
 
 def get_user(username):
+    """Queries TimeSync for a specific User object"""
     if not is_logged_in():
         print "Error: Not logged in"
         return {}
@@ -32,6 +33,7 @@ def get_user(username):
 
 
 def get_users():
+    """Queries TimeSync for a list of all User objects"""
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -52,6 +54,8 @@ def get_users():
 
 
 def get_projects(username=None):
+    """Queries TimeSync for a list of all Project objects. If username is not
+    None, only returns projects which that user can access."""
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -82,6 +86,7 @@ def get_projects(username=None):
 
 
 def get_activities():
+    """Queries TimeSync for a list of all Activity objects"""
     if not is_logged_in():
         print "Error: Not logged in"
         return []
@@ -146,7 +151,7 @@ def update_cached_users(username=None):
 
 
 def build_cache(username=None):
-    """Rebuilds the session cache of projects, activities, and users"""
+    """Rebuilds the entire session cache of projects, activities, and users"""
 
     if not is_logged_in():
         return
@@ -155,7 +160,7 @@ def build_cache(username=None):
     update_cached_activities()
     update_cached_projects()
 
-    # Add expiration time before next cache update
+    # set expiration time before next cache update
     session["next_update"] = \
         datetime.now() + timedelta(minutes=app.config["CACHE_EXP"])
 
@@ -187,10 +192,12 @@ def is_logged_in():
 
 
 def format_error_message(err):
+    """Formats TimeSync error messages nicely"""
     if 'error' in err:
         error_type = err.get('error')
         error_text = err.get('text')
 
+        # Escape error text to prevent code injection attacks
         if error_type:
             error_type = escape(error_type)
 
@@ -258,7 +265,6 @@ def format_error_message(err):
             msg = 'Error: {}'.format(error_type)
         else:
             msg = 'Error: {} - {}'.format(error_type, error_text)
-
     elif 'pymesync error' in err:
         msg = '{pymesync error}'.format(**err)
     else:
@@ -268,6 +274,7 @@ def format_error_message(err):
 
 
 def error_message(obj):
+    """Checks a response from TimeSync to see if it contains an error"""
     # obj is empty, no error
     if not obj:
         return False
@@ -284,6 +291,7 @@ def error_message(obj):
 
 
 def to_readable_time(seconds):
+    """Converts a time value in seconds to a human-readable time"""
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
 
@@ -291,6 +299,8 @@ def to_readable_time(seconds):
 
 
 def project_user_permissions(form):
+    """Converts separate lists of project members, managers, and spectators to
+    a single project permissions dict usable by TimeSync"""
     users = form['members'].data + \
         form['managers'].data + \
         form['spectators'].data

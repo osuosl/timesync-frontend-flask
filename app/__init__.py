@@ -14,10 +14,10 @@ except ImportError as e:
     print 'Does the file exist?'
     sys.exit(1)
 
-# Server-side sessions
+# Initialize server-side sessions
 Session(app)
 
-# Do some config checks
+# Check certain values in the config file to make sure they're valid
 if app.config.get('TIMESYNC_URL') == 'http://timesync.example.com/':
     print 'ERROR: Configuration option "TIMESYNC_URL" not set'
     print '       Please set "TIMESYNC_URL" to the URL of your TimeSync server'
@@ -41,6 +41,7 @@ if app.config.get('INITIALIZATION_VECTOR') == iv:
     print 'WARNING: The initialization vector has not been changed from the'
     print '         default. This is insecure, please generate a new one'
 
+# Initialize static asset bundler
 assets = Environment(app)
 indexjs = Bundle('../js/index.js', filters='rjsmin', output='js/index.min.js')
 formjs = Bundle('../js/clear_form.js', '../js/table_sort.js', filters='rjsmin',

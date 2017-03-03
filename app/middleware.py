@@ -6,5 +6,7 @@ from util import build_cache, is_logged_in
 
 @app.before_request
 def check_cache_autoupdate():
+    """Checks if the user's cache is outdated and needs to be updated before
+    their request is processed"""
     if is_logged_in() and datetime.now() >= session["next_update"]:
         build_cache()
