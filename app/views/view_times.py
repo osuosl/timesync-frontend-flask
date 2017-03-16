@@ -1,6 +1,6 @@
 from flask import session, redirect, url_for, request, render_template, flash
 from app import app, forms
-from app.util import is_logged_in, error_message, decrypter
+from app.util import is_logged_in, error_message, decrypter, get_users
 import pymesync
 
 
@@ -28,6 +28,9 @@ def view_times():
 
     # List of times
     times = []
+
+    # Dictionary of users
+    users = {}
 
     # Dictionary to store summary information
     summary = {}
@@ -66,6 +69,10 @@ def view_times():
         if error_message(times):
             times = []
 
+        # Add users with the usernames as keys
+        for user in get_users():
+            users[user['username']] = user
+
         # Generate summary information
         if times:
             total_time = 0
@@ -99,5 +106,5 @@ def view_times():
     # error_message(times)
 
     return render_template('view_times.html', form=form, times=times,
-                           summary=summary, user=user['username'],
+                           summary=summary, user=user, users=users,
                            is_admin=user['site_admin'], is_logged_in=True)
