@@ -55,7 +55,7 @@ assets.register('js_forms', formjs)
 assets.register('css', css)
 
 from app.middleware import check_cache_autoupdate  # NOQA flake8 ignore
-from app.views import index, create_time, delete_time  # NOQA flake8 ignore
+from app.views import index, create_time, delete_time, clock  # NOQA flake8 ignore
 from app.views import login, logout, view_times, view_user_times, edit_time  # NOQA flake8 ignore
 from app.views import create_project, edit_project, view_projects, delete_project  # NOQA flake8 ignore
 from app.views import create_activity, edit_activity, view_activities, delete_activity  # NOQA flake8 ignore
