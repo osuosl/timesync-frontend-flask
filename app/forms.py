@@ -108,6 +108,9 @@ class FilterTimesForm(Form):
                       description='yyyy-mm-dd', validators=[Optional()])
     end = DateField('End Date:', format="%Y-%m-%d",
                     description='yyyy-mm-dd', validators=[Optional()])
+    include_deleted = BooleanField('Include Deleted', validators=[Optional()])
+    include_revisions = BooleanField('Include Revisions',
+                                     validators=[Optional()])
 
 
 class CreateActivityForm(Form):
@@ -135,6 +138,9 @@ class FilterProjectsForm(Form):
 class FilterActivitiesForm(Form):
     # Optional
     slug = StringField('Activity Slug:')
+    include_deleted = BooleanField('Include Deleted', validators=[Optional()])
+    include_revisions = BooleanField('Include Revisions',
+                                     validators=[Optional()])
 
 
 class CreateUserForm(Form):

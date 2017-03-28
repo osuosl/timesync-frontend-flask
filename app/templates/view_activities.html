@@ -12,6 +12,8 @@
         <form method="POST">
             {{ form.csrf_token }}
             <p>{{ form.slug.label }} {{ form.slug }}</p>
+            <p>{{ form.include_deleted }} {{ form.include_deleted.label }}</p>
+            <p>{{ form.include_revisions }} {{ form.include_revisions.label }}</p>
             <p>
                 <input class="btn waves-effect waves-light" type="submit" value="Submit">
                 <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form);">
@@ -35,7 +37,7 @@
             <tbody>
                 {% for a in activities %}
                 <tr>
-                {% if is_admin %}
+                {% if is_admin and not a['deleted_at'] %}
                     <td><a href="{{ url_for('delete_activity', slug=a['slug']) }}">DELETE</a></td>
                     <td><a href="{{ url_for('edit_activity', slug=a['slug']) }}">EDIT</a></td>
                 {% else %}

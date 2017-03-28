@@ -31,7 +31,8 @@ def view_projects():
         flash("Invalid form input")
 
     if 'slug' in query and 'include_deleted' in query:
-        flash("Cannot have slug and include deleted filtered at the same time")
+        flash('Invalid query: Cannot use "Slug" and "Include Deleted" at the \
+               same time')
         query = {}
 
     projects = ts.get_projects(query_parameters=query)

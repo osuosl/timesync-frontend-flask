@@ -50,6 +50,8 @@ def view_times():
         activities = form.activities.data
         start = form.start.data
         end = form.end.data
+        include_deleted = form.include_deleted.data
+        include_revisions = form.include_revisions.data
 
         # Only using filter parameters that have been supplied
         if username:
@@ -62,6 +64,10 @@ def view_times():
             query['start'] = [start]
         if end:
             query['end'] = [end]
+        if include_deleted:
+            query['include_deleted'] = include_deleted
+        if include_revisions:
+            query['include_revisions'] = include_revisions
 
         times = ts.get_times(query_parameters=query)
 
