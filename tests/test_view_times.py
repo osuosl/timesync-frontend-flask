@@ -118,7 +118,6 @@ class ReportTestCase(unittest.TestCase):
         total_time_line = [l for l in lines if "0 h, 0 m, 39 s" in l]
 
         # Assert that the line exists and contains the total time
-        print total_time_line
         assert total_time_line
 
     def test_summary_num_unique_users(self):
@@ -129,8 +128,8 @@ class ReportTestCase(unittest.TestCase):
         # Get the line that the number of unique users is in
         lines = res.data.split('\n')
         unique_users_line = [l for l in lines if "3" in l]
+
         # Assert that the line exists and contains the number of unique users
-        print "this is unique_users_line ", unique_users_line
         assert unique_users_line
 
     def test_summary_users_list(self):

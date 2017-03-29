@@ -60,7 +60,6 @@ class SubmitTestCase(unittest.TestCase):
             users="{'tschuy': {'member': True, 'spectator': False, 'manager': \
                 True}}"
         ), follow_redirects=True)
-        print res
         return res
 
     def test_url_endpoint(self):
@@ -97,7 +96,6 @@ class SubmitTestCase(unittest.TestCase):
         fields = ['uri', 'name', 'slugs', 'default_activity', 'members',
                   'managers', 'spectators']
 
-        print res.get_data()
         for field in fields:
             assert field in res.get_data()
 

@@ -141,8 +141,6 @@ class DeleteProjectTestCase(unittest.TestCase):
         """Test deleting a project as a regular user"""
         self.login_nonadmin()
         res = self.delete_project()
-        print res.status_code
-        print res.data
 
         assert res.status_code == 403
 

@@ -92,15 +92,11 @@ class CreateActivityTestCase(unittest.TestCase):
         self.login_admin()
         res = self.create_activity()
 
-        print res.status_code
-
         assert res.status_code == 200
 
     def test_unauthorized_submit(self):
         """Tests submission without logging in first."""
         self.login_user()
         res = self.create_activity()
-
-        print res.status_code
 
         assert res.status_code == 401
