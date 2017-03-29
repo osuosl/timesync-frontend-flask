@@ -1,59 +1,17 @@
-import unittest
-from app import app
-from flask import url_for
-import pymesync
 import datetime
+import pymesync
+import unittest
+from flask import url_for
+from tests.util import setUp, tearDown, login
 
 
 class LoginTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
-
-        self.baseurl = app.config['TIMESYNC_URL']
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def login(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def bad_login(self):
-        """Attempts login without a password, causing an error."""
-        username = 'test'
-        password = ''
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=username,
-            password=password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
+        tearDown(self)
 
     def logout(self):
         res = self.client.get(url_for('logout'))
@@ -84,13 +42,13 @@ class LoginTestCase(unittest.TestCase):
 
     def test_login(self):
         """Tests successful login on form submission."""
-        res = self.login()
+        res = login(self)
 
         assert res.status_code == 200
 
     def test_session_creation(self):
         """Makes sure the login creates a session cookie."""
-        self.login()
+        login(self)
 
         # Make sure username and token stored in session
         assert 'user' in self.sess
@@ -110,7 +68,7 @@ class LoginTestCase(unittest.TestCase):
 
     def test_invalid_login(self):
         """Tests invalid login on bad form submission."""
-        res = self.bad_login()
+        res = login(self, password='')
 
         assert res.status_code == 401
         assert 'Invalid submission.' in res.get_data()
@@ -123,7 +81,7 @@ class LoginTestCase(unittest.TestCase):
 
     def test_session_destruction(self):
         """Make sure the logout removes any session cookies."""
-        self.login()
+        login(self)
         self.logout()
 
         assert 'username' not in self.sess

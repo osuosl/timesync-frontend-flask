@@ -1,40 +1,17 @@
 import unittest
-from app import app, forms
+from app import forms
 from flask import url_for
 from urlparse import urlparse
+from tests.util import setUp, tearDown, login
 
 
 class ReportTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
-
-        self.baseurl = app.config['TIMESYNC_URL']
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def login(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
+        tearDown(self)
 
     def view_times(self, data=None):
         """Submits a POST request to filter times"""
@@ -61,7 +38,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login()
+        login(self)
 
         res = self.client.get(url_for('view_times'))
         assert res.status_code == 200
@@ -84,21 +61,21 @@ class ReportTestCase(unittest.TestCase):
 
     def test_report(self):
         """Tests successful time query"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         assert res.status_code == 200
 
     def test_summary_exists(self):
         """Tests that the times summary exists on the page"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         assert "<div class=\"times-summary\">" in res.data
 
     def test_summary_fields(self):
         """Tests that the times summary has the correct fields"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         fields = ["Total Time", "Unique Users", "Users List",
@@ -110,7 +87,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_summary_total_time(self):
         """Tests that the total time in the summary is correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line that the total time is in
@@ -122,7 +99,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_summary_num_unique_users(self):
         """Tests that the number of unique users in the summary is correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line that the number of unique users is in
@@ -134,7 +111,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_summary_users_list(self):
         """Tests that the list of users in the summary is correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line of the div that the users list is in
@@ -146,7 +123,7 @@ class ReportTestCase(unittest.TestCase):
     def test_summary_unique_projects(self):
         """Tests that the number of unique projects in the summary is
         correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line that the number of unique projects is in
@@ -159,7 +136,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_summary_projects_list(self):
         """Tests that the list of projects in the summary is correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line of the project list div
@@ -172,7 +149,7 @@ class ReportTestCase(unittest.TestCase):
     def test_summary_unique_activities(self):
         """Tests that the number of unique activities in the summary is
         correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line that the number of unique activities is in
@@ -185,7 +162,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_summary_activities_list(self):
         """Tests that the list of activities in the summary is correct"""
-        self.login()
+        login(self)
         res = self.view_times()
 
         # Get the line of the activity list div

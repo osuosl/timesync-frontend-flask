@@ -1,56 +1,17 @@
 import unittest
-from app import app
 from app import forms
 from flask import url_for
 from urlparse import urlparse
+from tests.util import setUp, tearDown, login
 
 
 class CreateActivityTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def login_admin(self):
-        self.username = 'admin'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def login_user(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
+        tearDown(self)
 
     def create_activity(self):
         return self.client.post(url_for('create_activity'), data=dict(
@@ -65,7 +26,7 @@ class CreateActivityTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login_admin()
+        login(self, username='admin')
 
         res = self.client.get(url_for('create_activity'))
         assert res.status_code == 200
@@ -79,7 +40,7 @@ class CreateActivityTestCase(unittest.TestCase):
 
     def test_form_fields(self):
         """Tests the submit page for correct form fields."""
-        self.login_admin()
+        login(self, username='admin')
 
         form = forms.CreateActivityForm()
         fields = ['name', 'slug']
@@ -89,14 +50,14 @@ class CreateActivityTestCase(unittest.TestCase):
 
     def test_submit(self):
         """Tests successful time submission."""
-        self.login_admin()
+        login(self, username='admin')
         res = self.create_activity()
 
         assert res.status_code == 200
 
     def test_unauthorized_submit(self):
         """Tests submission without logging in first."""
-        self.login_user()
+        login(self)
         res = self.create_activity()
 
         assert res.status_code == 401

@@ -1,40 +1,17 @@
 import unittest
-from app import app, forms
+from app import forms
 from flask import url_for
 from urlparse import urlparse
+from tests.util import setUp, tearDown, login
 
 
 class ReportTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
-
-        self.baseurl = app.config['TIMESYNC_URL']
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def login(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
+        tearDown(self)
 
     def view_users(self):
         res = self.client.post(url_for('view_users'), data=dict(
@@ -51,7 +28,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login()
+        login(self)
 
         res = self.client.get(url_for('view_users'))
         assert res.status_code == 200
@@ -74,7 +51,7 @@ class ReportTestCase(unittest.TestCase):
 
     def test_report(self):
         """Tests successful user query"""
-        self.login()
+        login(self)
         res = self.view_users()
 
         assert res.status_code == 200

@@ -1,61 +1,17 @@
 import unittest
-from app import app, forms
+from app import forms
 from flask import url_for
 from urlparse import urlparse
+from tests.util import setUp, tearDown, login, get_page
 
 
 class ViewActivitiesTestCase(unittest.TestCase):
 
     def setUp(self):
-
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
-
-        self.baseurl = app.config['TIMESYNC_URL']
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def login_admin(self):
-        self.username = 'admin'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def login_user(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def get_view_activities(self):
-        res = self.client.get(url_for('view_activities'))
-
-        return res
+        tearDown(self)
 
     def view_activities(self):
         res = self.client.post(url_for('view_activities'), data={
@@ -71,14 +27,14 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login_admin()
+        login(self, username='admin')
 
-        res = self.get_view_activities()
+        res = get_page(self, 'view_activities')
         assert res.status_code == 200
 
     def test_login_redirect(self):
         """Make sure people who aren't logged in are redirected to login"""
-        res = self.get_view_activities()
+        res = get_page(self, 'view_activities')
         endpoint = urlparse(res.location).path
 
         assert endpoint == url_for('login')
@@ -94,16 +50,16 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
     def test_page_layout(self):
         """Make sure that the proper divs are on the page"""
-        self.login_user()
+        login(self)
 
-        res = self.get_view_activities()
+        res = get_page(self, 'view_activities')
 
         assert 'filter-params' in res.data
         assert 'view-activities' in res.data
 
     def test_submit_filter_form(self):
         """Make sure that the filter form functions properly"""
-        self.login_user()
+        login(self)
 
         res = self.view_activities()
 
@@ -111,18 +67,18 @@ class ViewActivitiesTestCase(unittest.TestCase):
 
     def test_admin_links(self):
         """Make sure that admins can view and access the edit page"""
-        self.login_admin()
+        login(self, username='admin')
 
-        res = self.get_view_activities()
+        res = get_page(self, 'view_activities')
 
         assert res.status_code == 200
         assert url_for('edit_activity') in res.data
 
     def test_unauthorized_user(self):
         """Make sure unauthorized users can view, but not edit"""
-        self.login_user()
+        login(self)
 
-        res = self.get_view_activities()
+        res = get_page(self, 'view_activities')
 
         assert res.status_code == 200
         assert url_for('edit_activity') not in res.data

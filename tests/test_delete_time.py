@@ -1,89 +1,21 @@
+import pymesync
 import unittest
-from app import app, filters
+from app import filters
 from flask import url_for
 from urlparse import urlparse
-import pymesync
+from tests.util import setUp, tearDown, login, get_page
 
 
 class DeleteTimeTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        self.ctx = app.test_request_context()
-        self.ctx.push()
-
-        self.baseurl = app.config['TIMESYNC_URL']
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
+        tearDown(self)
 
-    def login_unauthorized(self):
-        self.username = 'unauthorized'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def login_user(self):
-        self.username = 'userone'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def login_admin(self):
-        self.username = 'admin'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def get_page(self):
-        res = self.client.get(url_for('delete_time', uuid='test'))
-
-        return res
-
-    def get_page_no_uuid(self):
-        res = self.client.get(url_for('delete_time', uuid=''))
-
-        return res
-
-    def delete_time(self):
-        res = self.client.post(url_for('delete_time', uuid='test'),
-                               follow_redirects=True)
-
-        return res
-
-    def delete_time_no_uuid(self):
-        res = self.client.post(url_for('delete_time', uuid=''),
+    def delete_time(self, uuid='test'):
+        res = self.client.post(url_for('delete_time', uuid=uuid),
                                follow_redirects=True)
 
         return res
@@ -95,43 +27,43 @@ class DeleteTimeTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login_admin()
-        res = self.get_page()
+        login(self, username='admin')
+        res = get_page(self, 'delete_time', uuid='test')
 
         assert res.status_code == 200
 
     def test_login_redirect(self):
         """Make sure users who aren't logged in are redirected to log in"""
-        res = self.get_page()
+        res = get_page(self, 'delete_time', uuid='test')
         endpoint = urlparse(res.location).path
 
         assert endpoint == url_for('login')
 
     def test_get_page_admin(self):
         """Make sure that site admins are allowed to acces the page"""
-        self.login_admin()
-        res = self.get_page()
+        login(self, username='admin')
+        res = get_page(self, 'delete_time', uuid='test')
 
         assert res.status_code == 200
 
     def test_get_page_user(self):
         """Make sure that users that own the time have access"""
-        self.login_user()
-        res = self.get_page()
+        login(self, username='userone')
+        res = get_page(self, 'delete_time', uuid='test')
 
         assert res.status_code == 200
 
     def test_get_page_unauthorized(self):
         """Make sure unauthorized users are denied access"""
-        self.login_unauthorized()
-        res = self.get_page()
+        login(self, username='unauthorized')
+        res = get_page(self, 'delete_time', uuid='test')
 
         assert res.status_code == 500
 
     def test_get_page(self):
         """Make sure that the page is correct"""
-        self.login_admin()
-        res = self.get_page()
+        login(self, username='admin')
+        res = get_page(self, 'delete_time', uuid='test')
         page_data = res.data
 
         assert 'time-info' in page_data
@@ -153,35 +85,35 @@ class DeleteTimeTestCase(unittest.TestCase):
 
     def test_get_page_no_uuid(self):
         """Make sure that trying to get the page without a UUID fails"""
-        self.login_admin()
-        res = self.get_page_no_uuid()
+        login(self, username='admin')
+        res = get_page(self, 'delete_time', uuid='')
 
         assert res.status_code == 404
 
     def test_delete_time_admin(self):
         """Test deleting a time as an admin"""
-        self.login_admin()
+        login(self, username='admin')
         res = self.delete_time()
 
         assert 'Deletion successful' in res.data
 
     def test_delete_time_user(self):
         """Test deleting a time as the user that owns the time"""
-        self.login_user()
+        login(self, username='userone')
         res = self.delete_time()
 
         assert 'Deletion successful' in res.data
 
     def test_delete_time_unauthorized(self):
         """Test deleting a time as an unauthorized user"""
-        self.login_unauthorized()
+        login(self, username='unauthorized')
         res = self.delete_time()
 
         assert res.status_code == 500
 
     def test_delete_time_no_uuid(self):
         """Test deleting a time without putting a UUID in the query string"""
-        self.login_admin()
-        res = self.delete_time_no_uuid()
+        login(self, username='admin')
+        res = self.delete_time(uuid='')
 
         assert res.status_code == 404

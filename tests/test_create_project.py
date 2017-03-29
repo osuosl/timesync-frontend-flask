@@ -1,39 +1,16 @@
 import unittest
-from app import app
 from flask import url_for
 from urlparse import urlparse
+from tests.util import setUp, tearDown, login
 
 
 class SubmitTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def login(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
+        tearDown(self)
 
     def submit(self):
         return self.client.post(url_for('create_project'), data=dict(
@@ -52,7 +29,7 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.login()
+        login(self)
 
         res = self.client.get(url_for('create_project'))
         assert res.status_code == 200
@@ -66,7 +43,7 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_form_fields(self):
         """Tests the submit page for correct form fields."""
-        self.login()
+        login(self)
 
         res = self.client.get(url_for('create_project'))
         fields = ['form', 'input', 'URI', 'Name', 'Slugs', 'Default Activity',
@@ -77,7 +54,7 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_submit(self):
         """Tests successful time submission."""
-        self.login()
+        login(self)
         res = self.submit()
 
         assert res.status_code == 200

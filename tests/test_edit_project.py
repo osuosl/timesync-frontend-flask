@@ -1,55 +1,16 @@
 import unittest
-from app import app
 from flask import url_for
 from urlparse import urlparse
+from tests.util import setUp, tearDown, login
 
 
 class SubmitTestCase(unittest.TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED'] = False
-
-        self.client = app.test_client()
-
-        # Application context
-        self.ctx = app.test_request_context()
-        self.ctx.push()
+        setUp(self)
 
     def tearDown(self):
-        self.ctx.pop()
-
-    def not_admin_login(self):
-        self.username = 'test'
-        self.password = 'test'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
-
-    def admin_login(self):
-        self.username = 'admin'
-        self.password = 'timesync-staging'
-
-        res = self.client.post(url_for('login'), data=dict(
-            username=self.username,
-            password=self.password,
-            auth_type="password"
-        ), follow_redirects=True)
-
-        # Get session object
-        with self.client.session_transaction() as sess:
-            self.sess = sess
-
-        return res
+        tearDown(self)
 
     def submit(self):
         res = self.client.post(url_for('edit_project'), data=dict(
@@ -69,14 +30,14 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_success_response(self):
         """Make sure the page responds with '200 OK'"""
-        self.admin_login()
+        login(self, username='admin')
 
         res = self.client.get(url_for('edit_project'))
         assert res.status_code == 200
 
     def test_non_admin_response(self):
         """Make sure non-admins can't access projects they're not in"""
-        self.not_admin_login()
+        login(self)
 
         res = self.client.get(url_for('edit_project'))
         assert res.status_code == 403
@@ -90,7 +51,7 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_form_fields(self):
         """Tests the submit page for correct form fields."""
-        self.admin_login()
+        login(self, username='admin', password='timesync-staging')
 
         res = self.client.get(url_for('edit_project'))
         fields = ['uri', 'name', 'slugs', 'default_activity', 'members',
@@ -101,7 +62,7 @@ class SubmitTestCase(unittest.TestCase):
 
     def test_submit(self):
         """Tests successful project submission."""
-        self.admin_login()
+        login(self, username='admin', password='timesync-staging')
         res = self.submit()
 
         assert res.status_code == 200
