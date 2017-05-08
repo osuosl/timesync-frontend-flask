@@ -60,7 +60,7 @@ class IndexPageTestCase(unittest.TestCase):
         """Tests the index page for correct menu links."""
         self.login()
 
-        links = ['Logout', 'Submit Time', 'View Times', 'Projects']
+        links = ['Logout', 'Submit Time', 'View Times']
         bad_link = 'Admin'  # Test user shouldn't see link
 
         res = self.client.get(url_for('index'))
