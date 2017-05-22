@@ -22,7 +22,8 @@
         </form>
     </div>
 
-    <div id="paginator"></div>
+    <ul class="pagination">
+    </ul>
 
     <div id="view-activities">
         <table>
@@ -63,10 +64,11 @@
 
 <script>
 $(document).ready(function() {
+    var listSelector = "ul.pagination";
     var tableSelector = "#view-activities table";
-    var perPage = 10
+    var perPage = 10;
 
-    addPagination(tableSelector, perPage);
+    pagination(listSelector, tableSelector, perPage);
     makeSortable(tableSelector, perPage, 1, "asc");
 });
 </script>

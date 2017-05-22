@@ -61,7 +61,9 @@
     </div>
     {% endif %}
 
-    <div id="paginator"></div>
+    <ul class="pagination">
+    </ul>
+
     <div id="view-times">
         <table>
             <thead>
@@ -118,11 +120,11 @@
         $('.datepicker').pickadate({
             format: 'yyyy-mm-dd'
         });
-
+        var listSelector = "ul.pagination";
         var tableSelector = "#view-times table";
         var perPage = 20;
 
-        addPagination(tableSelector, perPage);
+        pagination(listSelector, tableSelector, perPage);
         makeSortable(tableSelector, perPage, 5, "desc");
     });
 </script>

@@ -21,7 +21,8 @@
         </form>
     </div>
 
-    <div id="paginator"></div>
+    <ul class="pagination">
+    </ul>
 
     <div id="view-users">
         <table>
@@ -70,11 +71,12 @@
 
 <script>
     $(document).ready(function() {
+        var listSelector = "ul.pagination";
         var tableSelector = "#view-users table";
         var perPage = 10;
         var view_user_times_root = "{{ url_for('view_user_times') }}";
 
-        addPagination(tableSelector, perPage);
+        pagination(listSelector, tableSelector, perPage);
         makeSortable(tableSelector, perPage, 0, "asc");
     });
 </script>

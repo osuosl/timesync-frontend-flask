@@ -95,6 +95,9 @@
                 integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="
                 crossorigin="anonymous"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/lib/materialize.min.js') }}"></script>
+        {% assets "index_js" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
         {% block scripts %}{% endblock %}
     </body>
 </html>

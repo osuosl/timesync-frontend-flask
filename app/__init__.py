@@ -43,8 +43,8 @@ if app.config.get('INITIALIZATION_VECTOR') == iv:
 
 assets = Environment(app)
 indexjs = Bundle('../js/index.js', filters='rjsmin', output='js/index.min.js')
-formjs = Bundle('../js/clear_form.js', '../js/table_sort.js', filters='rjsmin',
-                output='js/tableform.min.js')
+formjs = Bundle('../js/pagination.js', '../js/clear_form.js', '../js/table_sort.js',
+                filters='rjsmin', output='js/tableform.min.js')
 
 assets.config['LIBSASS_STYLE'] = 'compressed'
 css = Bundle('../css/style.scss', filters='libsass',
