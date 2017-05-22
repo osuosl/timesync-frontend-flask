@@ -93,8 +93,9 @@ function sortTable(tableSelector, perPage, column, order) {
             return 0; // Can't sort otherwise
         }
     }).appendTo(tableBody);
-
-    paginateTable(tableSelector, perPage, pageNum);
+    if (headerClass != "alpha" || "hms" || "date" || "list") {
+        paginateTable(tableSelector, perPage, pageNum);
+    }
 }
 
 function makeSortable(tableSelector, perPage, initColumn, initDirection) {
@@ -108,7 +109,9 @@ function makeSortable(tableSelector, perPage, initColumn, initDirection) {
     // Add click handler to table headers
     $(columnSelector).click(function() {
         $(columnSelector).not($(this)).removeClass("sorted-asc sorted-desc");
-
+        if ($(this)[0].className == "") {
+            return;
+        }
         if ($(this).hasClass("sorted-asc") || $(this).hasClass("sorted-desc")) {
             $(this).toggleClass("sorted-asc sorted-desc");
         } else {
