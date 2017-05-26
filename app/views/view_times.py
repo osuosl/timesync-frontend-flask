@@ -42,10 +42,10 @@ def view_times():
                           for u in session['users']]
     if is_admin:
         form.projects.choices = [(p['slugs'][0], p['name'])
-                                    for p in session['projects']]
+                                 for p in session['projects']]
     else:
         form.projects.choices = [(p['slugs'][0], p['name'])
-                                    for p in session['user']['projects']]
+                                 for p in session['user']['projects']]
     form.activities.choices = [(a['slug'], a['name'])
                                for a in session['user']['activities']]
 
