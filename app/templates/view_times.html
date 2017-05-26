@@ -20,7 +20,7 @@
             <p>{{ form.include_revisions }} {{ form.include_revisions.label }}</p>
             <p>
                 <input class="btn waves-effect waves-light" type="submit" value="Submit">
-                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);">
+                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear">
             </p>
             <br>
         </form>
@@ -122,10 +122,14 @@
         });
         var listSelector = "ul.pagination";
         var tableSelector = "#view-times table";
+        var form = $("form");
+        var clearButton = form.find("input[value='Clear']");
+        var reload = false;
         var perPage = 20;
 
         pagination(listSelector, tableSelector, perPage);
         makeSortable(tableSelector, perPage, 5, "desc");
+        clearButtonListener(listSelector, clearButton, form, reload);
     });
 </script>
 {% endblock %}

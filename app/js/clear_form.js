@@ -1,16 +1,18 @@
-function clearForm(form, reload = true) {
+function clearForm(listSelector, form, reload) {
 
-    $(form).find("input[type=text]").val("");
-
-
+    form.find("input[type=text]").val("");
+    form.find("input[type=checkbox]").prop("checked", false);
     if (reload) {
-        $(form).submit();
+        form.submit();
     }
     else {
         $("table").empty();
-        $("#paginator").pagination({
-            items: 0,
-            cssStyle: "compact-theme"
-        });
+        $(listSelector).empty();
     }
+}
+
+function clearButtonListener(listSelector, clearButton, form, reload) {
+    $(clearButton).click(function(){
+        clearForm(listSelector, form, reload);
+    });
 }
