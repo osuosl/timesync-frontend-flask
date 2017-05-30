@@ -85,7 +85,8 @@ class LoginForm(Form):
 
 
 class CreateTimeForm(Form):
-    duration = StringField('Duration: (Format: #h#m, e.g. 1h15m)', validators=[DataRequired()])
+    duration = StringField('Duration: (Format: #h#m, e.g. 1h15m)',
+                           validators=[DataRequired()])
     project = SelectFieldWithDisable('Project:', choices=[],
                                      validators=[DataRequired()])
     date_worked = DateField('Date Worked:', format='%Y-%m-%d',
