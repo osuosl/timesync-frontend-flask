@@ -51,17 +51,6 @@ function paginateTable(tableSelector, perPage, pageNum) {
     $(tableSelector + " tbody tr").hide().slice(showStart, showEnd).show();
 }
 
-function addPagination(tableSelector, perPage) {
-    $("#paginator").pagination({
-        items: $(tableSelector + " tbody tr").length,
-        itemsOnPage: perPage,
-        cssStyle: "compact-theme",
-        onPageClick: function(pageNumber) {
-            paginateTable(tableSelector, perPage, pageNumber);
-        }
-    });
-}
-
 function sortTable(tableSelector, perPage, column, order) {
     var table = $(tableSelector);
     var tableBody = table.find("tbody");
@@ -125,7 +114,7 @@ function makeSortable(tableSelector, perPage, initColumn, initDirection) {
     });
 
     $(columnSelector).eq(initColumn).addClass("sorted-" + initDirection);
-
+    console.log($(columnSelector).eq(initColumn).value);
     sortTable(tableSelector,
               perPage,
               initColumn,
