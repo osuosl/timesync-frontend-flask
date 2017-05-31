@@ -28,7 +28,10 @@ def create_user():
 
         for field in form:
             if field.data and field.name is not 'csrf_token':
-                user[field.name] = field.data
+                if field.name == "metainfo":
+                    user["meta"] = field.data
+                else:
+                    user[field.name] = field.data
 
         res = ts.create_user(user=user)
 

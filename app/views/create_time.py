@@ -22,8 +22,16 @@ def create_time():
                            test=app.config['TESTING'],
                            token=token)
 
-    form.project.choices = [(p['slugs'][0], p['name'])
-                            for p in session['user']['projects']]
+    user = session['user']
+
+    is_admin = user['site_admin']
+
+    if is_admin:
+        form.project.choices = [(p['slugs'][0], p['name'])
+                                for p in session['projects']]
+    else:
+        form.project.choices = [(p['slugs'][0], p['name'])
+                                for p in session['user']['projects']]
     form.activities.choices = [(a['slug'], a['name'])
                                for a in session['user']['activities']]
 

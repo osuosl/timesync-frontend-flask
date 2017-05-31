@@ -4,7 +4,6 @@
 
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
 {% endblock %}
 
 {% block scripts %}
@@ -17,12 +16,16 @@
 <script>
     $(document).ready(function() {
         $('select').material_select();
-
+        var listSelector = "ul.pagination";
         var tableSelector = "#view-projects table";
         var perPage = 10;
+        var form = $("form");
+        var clearButton = form.find("input[value='Clear']");
+        var reload = false;
 
-        addPagination(tableSelector, perPage);
-        makeSortable(tableSelector, perPage, 1, "asc");
+        pagination(listSelector, tableSelector, perPage);
+        makeSortable(tableSelector, perPage, 2, "asc");
+        clearButtonListener(listSelector, clearButton, form, reload);
     });
 </script>
 {% endblock %}
@@ -34,15 +37,17 @@
             <p>{{ form.username.label }} {{ form.username }}</p>
             <p>{{ form.slug.label }} {{ form.slug }}</p>
             <p>{{ form.include_deleted }} {{ form.include_deleted.label }}</p>
-            <p>{{ form.include_revisions }} {{ form.include_revisions.label }}</p>
+            <p>{{ form.include_reevisions }} {{ form.include_revisions.label }}</p>
             <p>
                 <input class="btn waves-effect waves-light" type="submit" value="Submit">
-                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);">
+                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear">
             </p>
+            <br>
         </form>
     </div>
 
-    <div id="paginator"></div>
+<ul class="pagination">
+</ul>
 
     <div id="view-projects">
         <table>

@@ -17,6 +17,8 @@ def view_times():
 
     user = session['user']
 
+    is_admin = user['site_admin']
+
     if not user:
         return 'There was an error.', 500
 
@@ -38,8 +40,12 @@ def view_times():
     # Set up form choices
     form.users.choices = [(u['username'], u['username'])
                           for u in session['users']]
-    form.projects.choices = [(p['slugs'][0], p['name'])
-                             for p in session['user']['projects']]
+    if is_admin:
+        form.projects.choices = [(p['slugs'][0], p['name'])
+                                 for p in session['projects']]
+    else:
+        form.projects.choices = [(p['slugs'][0], p['name'])
+                                 for p in session['user']['projects']]
     form.activities.choices = [(a['slug'], a['name'])
                                for a in session['user']['activities']]
 

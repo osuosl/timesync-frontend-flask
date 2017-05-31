@@ -15,17 +15,20 @@
 
 <script>
     $(document).ready(function() {
+        var listSelector = "ul.pagination";
         var tableSelector = "#view-user-times table";
         var perPage = 20;
 
-        addPagination(tableSelector, perPage);
+        pagination(listSelector, tableSelector, perPage);
         makeSortable(tableSelector, perPage, 4, "desc");
     });
 </script>
 {% endblock %}
 
 {% block body %}
-    <div id="paginator"></div>
+
+    <ul class="pagination">
+    </ul>
 
     <div id="view-user-times">
         <table class="tablesorter">

@@ -4,7 +4,6 @@
 
 {% block imports %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lib/simplePagination/simplePagination.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/view_object.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -20,8 +19,9 @@
             <p>{{ form.include_revisions }} {{ form.include_revisions.label }}</p>
             <p>
                 <input class="btn waves-effect waves-light" type="submit" value="Submit">
-                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear" onclick="clearForm(this.form, false);">
+                <input class="btn waves-effect waves-light" type="button" name="clear" value="Clear">
             </p>
+            <br>
         </form>
     </div>
 
@@ -60,7 +60,9 @@
     </div>
     {% endif %}
 
-    <div id="paginator"></div>
+    <ul class="pagination">
+    </ul>
+
     <div id="view-times">
         <table>
             <thead>
@@ -117,12 +119,16 @@
         $('.datepicker').pickadate({
             format: 'yyyy-mm-dd'
         });
-
+        var listSelector = "ul.pagination";
         var tableSelector = "#view-times table";
+        var form = $("form");
+        var clearButton = form.find("input[value='Clear']");
+        var reload = false;
         var perPage = 20;
 
-        addPagination(tableSelector, perPage);
+        pagination(listSelector, tableSelector, perPage);
         makeSortable(tableSelector, perPage, 5, "desc");
+        clearButtonListener(listSelector, clearButton, form, reload);
     });
 </script>
 {% endblock %}

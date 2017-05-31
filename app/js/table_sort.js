@@ -51,17 +51,6 @@ function paginateTable(tableSelector, perPage, pageNum) {
     $(tableSelector + " tbody tr").hide().slice(showStart, showEnd).show();
 }
 
-function addPagination(tableSelector, perPage) {
-    $("#paginator").pagination({
-        items: $(tableSelector + " tbody tr").length,
-        itemsOnPage: perPage,
-        cssStyle: "compact-theme",
-        onPageClick: function(pageNumber) {
-            paginateTable(tableSelector, perPage, pageNumber);
-        }
-    });
-}
-
 function sortTable(tableSelector, perPage, column, order) {
     var table = $(tableSelector);
     var tableBody = table.find("tbody");
@@ -93,8 +82,9 @@ function sortTable(tableSelector, perPage, column, order) {
             return 0; // Can't sort otherwise
         }
     }).appendTo(tableBody);
-
-    paginateTable(tableSelector, perPage, pageNum);
+    if (headerClass != "alpha" || "hms" || "date" || "list") {
+        paginateTable(tableSelector, perPage, pageNum);
+    }
 }
 
 function makeSortable(tableSelector, perPage, initColumn, initDirection) {
@@ -108,7 +98,9 @@ function makeSortable(tableSelector, perPage, initColumn, initDirection) {
     // Add click handler to table headers
     $(columnSelector).click(function() {
         $(columnSelector).not($(this)).removeClass("sorted-asc sorted-desc");
-
+        if ($(this)[0].className == "") {
+            return;
+        }
         if ($(this).hasClass("sorted-asc") || $(this).hasClass("sorted-desc")) {
             $(this).toggleClass("sorted-asc sorted-desc");
         } else {
@@ -122,7 +114,7 @@ function makeSortable(tableSelector, perPage, initColumn, initDirection) {
     });
 
     $(columnSelector).eq(initColumn).addClass("sorted-" + initDirection);
-
+    console.log($(columnSelector).eq(initColumn).value);
     sortTable(tableSelector,
               perPage,
               initColumn,
