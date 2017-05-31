@@ -149,6 +149,7 @@ class CreateUserForm(Form):
     password = PasswordField('Password:', validators=[DataRequired()])
     display_name = StringField('Display Name:')
     email = StringField('Email:')
+    metainfo = StringField('meta-information')
     site_admin = BooleanField('Site Admin')
     site_spectator = BooleanField('Site Spectator')
     site_manager = BooleanField('Site Manager')
